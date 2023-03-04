@@ -70,6 +70,7 @@ public class ImageUtil {
           filename = "sample.ppm";
       }
 
+      ImageUtil.readPPM(filename);
   }
 }
 
