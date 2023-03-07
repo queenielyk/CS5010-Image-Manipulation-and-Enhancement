@@ -23,12 +23,12 @@ public interface ImageProcessor {
   /**
    * A method to convert specified image to greyscale based on specified mode.
    * Modes to convert image to greyscale:
-   * - red component
-   * - green component
-   * - blue component
-   * - value component
-   * - intensity component
-   * - luma component
+   * - red-component
+   * - green-component
+   * - blue-component
+   * - value-component
+   * - intensity-component
+   * - luma-component
    *
    * @param mode mode to be adopted to convert image to greyscale
    * @param from name of image to be converted
@@ -81,8 +81,7 @@ public interface ImageProcessor {
    *
    * @param from name of the image to be export
    * @param path path to save the image at local
-   * @throws IllegalArgumentException the image to be exported is not exist
    * @throws IOException unable to write file
    */
-  public void save(String from, String path) throws IllegalArgumentException, IOException;
+  public void save(String from, String path) throws IOException;
 }
