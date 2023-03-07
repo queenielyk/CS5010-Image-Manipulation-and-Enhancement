@@ -1,3 +1,5 @@
+package IME;
+
 import org.junit.Test;
 
 import IME.model.ImageComp;
