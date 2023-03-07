@@ -60,5 +60,17 @@ public class PpmProcessorTest {
     }
   }
 
+  @Test
+  public void testFlipHorizontal() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/flowers.ppm", "original");
+    ppm.horizontalFlip("original", "horizontal");
+    ppm.save("horizontal", System.getProperty("user.dir") + "/test/IME/customHorizontalFlowers.ppm");
+
+    List<String> sample = readPPM(System.getProperty("user.dir") + "/test/IME/flowers-horizontal.ppm");
+    List<String> custom = readPPM(System.getProperty("user.dir") + "/test/IME/customHorizontalFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
 
 }

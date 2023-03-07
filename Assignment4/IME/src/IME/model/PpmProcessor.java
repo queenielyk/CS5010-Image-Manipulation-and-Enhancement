@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Map;
 
@@ -82,7 +84,41 @@ public class PpmProcessor implements ImageProcessor {
 
   @Override
   public void horizontalFlip(String from, String to) {
+    ImageComp fromChain = images.get(from);
+    ImageComp toChain = null;
+    Queue<ImageComp> prevRowEnds = new LinkedList<>();
+    ImageComp prevCol = null;
+    int column = 0;
 
+    while (fromChain != null) {
+      int[] RGB = fromChain.getRGB();
+      ImageComp current = new ImageCompImp(RGB[0], RGB[1], RGB[2]);
+      column += 1;
+      if (prevCol != null) {
+        current.setNext(prevCol);
+      } else {
+        prevRowEnds.add(current);
+      }
+      prevCol = current;
+
+      if (column == this.width) {
+        column = 0;
+        if (toChain == null) {
+          toChain = current;
+        }
+        prevCol = null;
+
+        if (toChain != current) {
+          ImageComp ending = prevRowEnds.poll();
+          if (ending != null) {
+            ending.setNext(current);
+          }
+        }
+      }
+
+      fromChain = fromChain.getNext();
+    }
+    images.put(to, toChain);
   }
 
   @Override
@@ -127,22 +163,19 @@ public class PpmProcessor implements ImageProcessor {
       throw new IllegalArgumentException("This image is not exist!");
     }
 
-    StringBuilder builder = new StringBuilder();
-    builder.append("P3").append(System.lineSeparator());
-    builder.append(this.width).append(" ").append(this.height).append(System.lineSeparator());
-    builder.append(this.maxValue).append(System.lineSeparator());
+    FileWriter imageWriter = new FileWriter(path);
+    imageWriter.write("P3" + System.lineSeparator());
+    imageWriter.write(this.width + " " + this.height + System.lineSeparator());
+    imageWriter.write(this.maxValue + System.lineSeparator());
 
     ImageComp temp = images.get(from);
     while (temp != null) {
       int[] RGB = temp.getRGB();
-      builder.append(RGB[0]).append(System.lineSeparator());
-      builder.append(RGB[1]).append(System.lineSeparator());
-      builder.append(RGB[2]).append(System.lineSeparator());
+      imageWriter.write(RGB[0] + System.lineSeparator());
+      imageWriter.write(RGB[1] + System.lineSeparator());
+      imageWriter.write(RGB[2] + System.lineSeparator());
       temp = temp.getNext();
     }
-
-    FileWriter imageWriter = new FileWriter(path);
-    imageWriter.write(builder.toString());
     imageWriter.close();
   }
 }
