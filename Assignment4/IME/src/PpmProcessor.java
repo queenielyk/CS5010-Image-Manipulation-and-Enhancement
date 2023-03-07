@@ -91,6 +91,26 @@ public class PpmProcessor implements ImageProcessor {
   @Override
   public void adjustBrightness(String from, int add, String to) {
 
+    ImageComp fromChain = images.get(from);
+    ImageComp toChain = null;
+    ImageComp prev = null;
+
+    while (fromChain != null) {
+      int[] RGB = fromChain.getRGB();
+      ImageComp current = new ImageCompImp(
+              Math.min(RGB[0] + add, this.maxValue),
+              Math.min(RGB[1] + add, this.maxValue),
+              Math.min(RGB[2] + add, this.maxValue)
+      );
+      if (toChain == null) {
+        toChain = current;
+      } else {
+        prev.setNext(current);
+      }
+      prev = current;
+      fromChain = fromChain.getNext();
+    }
+    images.put(to, toChain);
   }
 
   @Override
