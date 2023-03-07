@@ -1,3 +1,5 @@
+package IME;
+
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -30,27 +32,27 @@ public class PpmProcessorTest {
   @Test
   public void testLoad5x5() throws FileNotFoundException, IllegalArgumentException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage(System.getProperty("user.dir") + "/test/smallBackground.ppm", "original");
-    ppm.save("original", System.getProperty("user.dir") + "/test/newSmallBackground.ppm");
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/smallBackground.ppm", "original");
+    ppm.save("original", System.getProperty("user.dir") + "/test/IME/newSmallBackground.ppm");
   }
 
   @Test
   public void testLoadKoala() throws FileNotFoundException, IllegalArgumentException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage(System.getProperty("user.dir") + "/test/Koala.ppm", "original");
-    ppm.save("original", System.getProperty("user.dir") + "/test/newKoala.ppm");
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/Koala.ppm", "original");
+    ppm.save("original", System.getProperty("user.dir") + "/test/IME/newKoala.ppm");
   }
 
   @Test
   public void testAdjustBrightnessPos() throws FileNotFoundException, IOException {
     int brightness = 18;
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage(System.getProperty("user.dir") + "/test/Koala.ppm", "original");
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/Koala.ppm", "original");
     ppm.adjustBrightness("original", brightness, "brighter");
-    ppm.save("brighter", System.getProperty("user.dir") + "/test/brighterKoala.ppm");
+    ppm.save("brighter", System.getProperty("user.dir") + "/test/IME/brighterKoala.ppm");
 
-    List<String> ppmBefore = readPPM(System.getProperty("user.dir") + "/test/Koala.ppm");
-    List<String> ppmAfter = readPPM(System.getProperty("user.dir") + "/test/brighterKoala.ppm");
+    List<String> ppmBefore = readPPM(System.getProperty("user.dir") + "/test/IME/Koala.ppm");
+    List<String> ppmAfter = readPPM(System.getProperty("user.dir") + "/test/IME/brighterKoala.ppm");
 
     int maxValue = Integer.parseInt(ppmAfter.get(2));
     for (int channel = 3; channel < ppmAfter.size(); channel++) {
