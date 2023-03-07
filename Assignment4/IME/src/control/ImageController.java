@@ -3,13 +3,22 @@ package control;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Objects;
 import java.util.Scanner;
 
 import IME.model.ImageProcessor;
+import IME.model.PpmProcessor;
 import control.command.Brighten;
 import control.command.Greyscale;
+import control.command.Hflip;
 import control.command.Load;
+import control.command.RgbCombine;
+import control.command.RgbSplit;
+import control.command.Save;
+import control.command.Vflip;
 
 public class ImageController implements IController {
   private ImageProcessor model;
@@ -27,6 +36,8 @@ public class ImageController implements IController {
     Scanner s = new Scanner(command);
     ImageCommand cmd = null;
 
+    System.out.println("cmd+" + command);
+
     while (s.hasNext()) {
       String in = s.next();
 
@@ -38,23 +49,41 @@ public class ImageController implements IController {
         case "load":
           cmd = new Load(s.next(), s.next());
           break;
+        case "save":
+          cmd = new Save(s.next(), s.next());
+          break;
+        case "rgb-split":
+          cmd = new RgbSplit(s.next(), s.next(), s.next(), s.next());
+          break;
+        case "rgb-combine":
+          cmd = new RgbCombine(s.next(), s.next(), s.next(), s.next());
+          break;
         case "brighten":
           cmd = new Brighten(s.nextInt(), s.next(), s.next());
           break;
         case "greyscale":
           cmd = new Greyscale(s.next(), s.next(), s.next());
+          break;
         case "vertical-flip":
-
-
+          cmd = new Vflip(s.next(), s.next());
+          break;
+        case "horizontal-flip":
+          cmd = new Hflip(s.next(), s.next());
+          break;
+        default:
+          output.append(String.format("Unknown command %s", in));
+          System.out.println(String.format("Unknown command %s", in));
+          cmd = null;
+          break;
       }
-
       if (cmd != null) {
         cmd.go(model);
         output.append("\nExecuted: " + command);
+        System.out.println("\nExecuted: " + command);
       }
 
     }
-    return null;
+    return output.toString();
   }
 
   public String processFileScript(Scanner fileScan) throws IOException {
@@ -76,12 +105,24 @@ public class ImageController implements IController {
   @Override
   public void go(ImageProcessor model) throws IOException {
     Objects.requireNonNull(model);
+    this.model = model;
+
     Scanner scan = new Scanner(this.in);
 
+    System.out.println("Please enter cmd follow by param:");
     //Keep asking for cmd
-    while (scan.hasNext()) {
-      processCommand(scan.next());
+    while (scan.hasNextLine()) {
+      processCommand(scan.nextLine());
+      System.out.println("Please enter cmd follow by param:");
     }
+  }
+
+  public static void main(String[] args) throws IOException {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("+ 3 4 + 8 9 q");
+    IController ctrl = new ImageController(new InputStreamReader(System.in), out);
+    ctrl.go(new PpmProcessor());
+
   }
 
 

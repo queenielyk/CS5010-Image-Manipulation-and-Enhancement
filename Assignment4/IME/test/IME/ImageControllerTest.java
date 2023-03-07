@@ -16,4 +16,13 @@ public class ImageControllerTest {
     System.out.println(olds);
     System.out.println(news);
   }
+
+//  @Test
+//  public void testCtrl() throws IOException {
+//    StringBuffer out = new StringBuffer();
+//    Reader in = new StringReader("+ 3 4 + 8 9 q");
+//    IController ctrl= new ImageController(new InputStreamReader(System.in),out);
+//    ctrl.go(new PpmProcessor());
+//
+//  }
 }

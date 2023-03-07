@@ -1,6 +1,6 @@
 package control.command;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 
 import IME.model.ImageProcessor;
 import control.ImageCommand;
@@ -15,7 +15,10 @@ public class Load implements ImageCommand {
   }
 
   @Override
-  public void go(ImageProcessor model) throws IOException {
+  public void go(ImageProcessor model) throws FileNotFoundException {
+
+    System.out.println("Path" + this.path);
+    System.out.println("Name" + this.imgName);
     model.loadImage(this.path, this.imgName);
   }
 }
