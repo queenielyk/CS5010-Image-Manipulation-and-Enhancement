@@ -28,3 +28,9 @@ replay_pid*
 
 # out
 out/
+
+# .ppm from Assignment4 test cases
+*.ppm
+
+# MacOS file
+.DS_Store
