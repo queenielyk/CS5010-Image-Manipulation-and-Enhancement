@@ -77,6 +77,12 @@ public class PpmProcessor implements ImageProcessor {
     return builder.toString();
   }
 
+  private void checkImageExistence(String name) throws IllegalStateException {
+    if (!images.containsKey(name)) {
+      throw new IllegalStateException("This image is not exist!");
+    }
+  }
+
   @Override
   public void greyscale(String mode, String from, String to) {
 
@@ -84,6 +90,9 @@ public class PpmProcessor implements ImageProcessor {
 
   @Override
   public void horizontalFlip(String from, String to) {
+
+    checkImageExistence(from);
+
     ImageComp fromChain = images.get(from);
     ImageComp toChain = null;
     Queue<ImageComp> prevRowEnds = new LinkedList<>();
@@ -129,6 +138,8 @@ public class PpmProcessor implements ImageProcessor {
   @Override
   public void adjustBrightness(String from, int add, String to) {
 
+    checkImageExistence(from);
+
     ImageComp fromChain = images.get(from);
     ImageComp toChain = null;
     ImageComp prev = null;
@@ -136,9 +147,9 @@ public class PpmProcessor implements ImageProcessor {
     while (fromChain != null) {
       int[] RGB = fromChain.getRGB();
       ImageComp current = new ImageCompImp(
-              Math.min(RGB[0] + add, this.maxValue),
-              Math.min(RGB[1] + add, this.maxValue),
-              Math.min(RGB[2] + add, this.maxValue)
+              Math.max(0, Math.min(RGB[0] + add, this.maxValue)),
+              Math.max(0, Math.min(RGB[1] + add, this.maxValue)),
+              Math.max(0, Math.min(RGB[2] + add, this.maxValue))
       );
       if (toChain == null) {
         toChain = current;
@@ -157,11 +168,9 @@ public class PpmProcessor implements ImageProcessor {
   }
 
   @Override
-  public void save(String from, String path) throws IllegalArgumentException, IOException {
+  public void save(String from, String path) throws IOException {
 
-    if (images.get(from) == null) {
-      throw new IllegalArgumentException("This image is not exist!");
-    }
+    checkImageExistence(from);
 
     FileWriter imageWriter = new FileWriter(path);
     imageWriter.write("P3" + System.lineSeparator());
