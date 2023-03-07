@@ -110,23 +110,12 @@ public class PpmProcessor implements ImageProcessor {
     builder.append(this.width).append(" ").append(this.height).append(System.lineSeparator());
     builder.append(this.maxValue).append(System.lineSeparator());
 
-    int columnCount = 0;
-    int componentCount = 0;
     ImageComp temp = images.get(from);
     while (temp != null) {
       int[] RGB = temp.getRGB();
-      String sRGB = RGB[0] + " " + RGB[1] + " " + RGB[2];
-      if (columnCount + sRGB.length() > 70 || componentCount == this.width) {
-        builder.append(System.lineSeparator());
-        columnCount = 0;
-        componentCount = 0;
-      } else if (columnCount != 0) {
-        builder.append(" ");
-      }
-      columnCount += sRGB.length();
-      componentCount += 1;
-      builder.append(sRGB);
-
+      builder.append(RGB[0]).append(System.lineSeparator());
+      builder.append(RGB[1]).append(System.lineSeparator());
+      builder.append(RGB[2]).append(System.lineSeparator());
       temp = temp.getNext();
     }
 
