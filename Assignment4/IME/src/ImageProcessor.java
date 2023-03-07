@@ -13,8 +13,10 @@ public interface ImageProcessor {
    *
    * @param path path of image, in class dependent format
    * @param name name of image to be called throughout the command line
+   * @throws FileNotFoundException the provided file is not exist
+   * @throws IllegalStateException the magic number of the image is not P3
    */
-  public void loadImage(String path, String name) throws FileNotFoundException;
+  public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException;
 
   /**
    * A method to convert specified image to greyscale based on specified mode.
@@ -73,9 +75,12 @@ public interface ImageProcessor {
 
   /**
    * A method to export image to class dependent format and save at local.
+   * This method will overwrite the existing file if this path already exist.
    *
    * @param from name of the image to be export
    * @param path path to save the image at local
+   * @throws IllegalArgumentException the image to be exported is not exist
+   * @throws IOException unable to write file
    */
   public void save(String from, String path) throws IllegalArgumentException, IOException;
 }
