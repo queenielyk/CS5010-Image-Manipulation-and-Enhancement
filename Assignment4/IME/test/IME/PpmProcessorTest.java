@@ -30,17 +30,24 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testLoad5x5() throws FileNotFoundException, IllegalArgumentException, IOException {
+  public void testLoad5x5() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(System.getProperty("user.dir") + "/test/IME/smallBackground.ppm", "original");
     ppm.save("original", System.getProperty("user.dir") + "/test/IME/newSmallBackground.ppm");
   }
 
   @Test
-  public void testLoadKoala() throws FileNotFoundException, IllegalArgumentException, IOException {
+  public void testLoadKoala() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(System.getProperty("user.dir") + "/test/IME/Koala.ppm", "original");
     ppm.save("original", System.getProperty("user.dir") + "/test/IME/newKoala.ppm");
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testAdjustBrightnessNotExist() throws FileNotFoundException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/Koala.ppm", "original");
+    ppm.adjustBrightness("origin", 0, "brighter");
   }
 
   @Test
@@ -61,7 +68,26 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testFlipHorizontal() throws FileNotFoundException, IOException {
+  public void testAdjustBrightnessPoNeg() throws FileNotFoundException, IOException {
+    int brightness = -30;
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/Koala.ppm", "original");
+    ppm.adjustBrightness("original", brightness, "brighter");
+    ppm.save("brighter", System.getProperty("user.dir") + "/test/IME/dimmerKoala.ppm");
+
+    List<String> ppmBefore = readPPM(System.getProperty("user.dir") + "/test/IME/Koala.ppm");
+    List<String> ppmAfter = readPPM(System.getProperty("user.dir") + "/test/IME/dimmerKoala.ppm");
+
+    int maxValue = Integer.parseInt(ppmAfter.get(2));
+    for (int channel = 3; channel < ppmAfter.size(); channel++) {
+      assertEquals(Math.max(0, Math.min(Integer.parseInt(ppmBefore.get(channel)) + brightness, maxValue)),
+              Integer.parseInt(ppmAfter.get(channel))
+      );
+    }
+  }
+
+  @Test
+  public void testHorizontalFlip() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(System.getProperty("user.dir") + "/test/IME/flowers.ppm", "original");
     ppm.horizontalFlip("original", "horizontal");
