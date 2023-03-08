@@ -13,7 +13,7 @@ public interface ImageProcessor {
   /**
    * A method to read image from specified path, name it to given name
    *
-   * @param path path of image, in class dependent format
+   * @param path relative path of image, in class dependent format
    * @param name name of image to be called throughout the command line
    * @throws FileNotFoundException the provided file is not exist
    * @throws IllegalStateException the magic number of the image is not P3
@@ -80,8 +80,9 @@ public interface ImageProcessor {
    * This method will overwrite the existing file if this path already exist.
    *
    * @param from name of the image to be export
-   * @param path path to save the image at local
+   * @param path relative path to save the image at local
    * @throws IOException unable to write file
    */
   public void save(String from, String path) throws IOException;
+
 }
