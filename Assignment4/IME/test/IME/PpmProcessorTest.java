@@ -98,5 +98,17 @@ public class PpmProcessorTest {
     assertEquals(sample.toString(), custom.toString());
   }
 
+  @Test
+  public void testVerticalFlip() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage(System.getProperty("user.dir") + "/test/IME/flowers.ppm", "original");
+    ppm.verticalFlip("original", "vertical");
+    ppm.save("vertical", System.getProperty("user.dir") + "/test/IME/customVerticalFlowers.ppm");
+
+    List<String> sample = readPPM(System.getProperty("user.dir") + "/test/IME/flowers-vertical.ppm");
+    List<String> custom = readPPM(System.getProperty("user.dir") + "/test/IME/customVerticalFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
 
 }

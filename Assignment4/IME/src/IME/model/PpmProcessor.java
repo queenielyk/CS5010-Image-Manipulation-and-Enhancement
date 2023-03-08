@@ -133,6 +133,34 @@ public class PpmProcessor implements ImageProcessor {
   @Override
   public void verticalFlip(String from, String to) {
 
+    checkImageExistence(from);
+
+    ImageComp fromChain = images.get(from);
+    Queue<ImageComp> prevRowStarts = new LinkedList<>();
+    ImageComp prevStart = null;
+    int column = 0;
+
+    while (fromChain != null) {
+      int[] RGB = fromChain.getRGB();
+      ImageComp current = new ImageCompImp(RGB[0], RGB[1], RGB[2]);
+      column += 1;
+      if (prevStart != null) {
+        prevStart.setNext(current);
+      } else {
+        prevRowStarts.add(current);
+      }
+      prevStart = current;
+
+      if (column == this.width) {
+        column = 0;
+        if (prevRowStarts.size() == 2) {
+          current.setNext(prevRowStarts.poll());
+        }
+        prevStart = null;
+      }
+      fromChain = fromChain.getNext();
+    }
+    images.put(to, prevRowStarts.poll());
   }
 
   @Override
