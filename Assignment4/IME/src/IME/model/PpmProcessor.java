@@ -65,6 +65,13 @@ public class PpmProcessor implements ImageProcessor {
     images.put(name, chain);
   }
 
+  /**
+   * A helper method to read the .ppm image according to the provided path into a String.
+   *
+   * @param path path of the .ppm image
+   * @return a String of image content
+   * @throws FileNotFoundException the path and file name is not exist
+   */
   private String readPPM(String path) throws FileNotFoundException {
     Scanner sc = new Scanner(new FileInputStream(path));
 
@@ -78,6 +85,12 @@ public class PpmProcessor implements ImageProcessor {
     return builder.toString();
   }
 
+  /**
+   * A helper method to check existence of  the to be processed image.
+   *
+   * @param name image to be processed
+   * @throws IllegalStateException image is not exist
+   */
   private void checkImageExistence(String name) throws IllegalStateException {
     if (!images.containsKey(name)) {
       throw new IllegalStateException("This image is not exist!");
@@ -125,6 +138,15 @@ public class PpmProcessor implements ImageProcessor {
     }
   }
 
+  /**
+   * A helper method to loop over the component chain of the target image,
+   * meanwhile executing the specified function to each component to attain a new component.
+   * The function is passed by invoker that is specified based on the visualization mode.
+   *
+   * @param fromChain  component chain of the target image
+   * @param to         new image's name
+   * @param conversion function define how a new component to be constructed
+   */
   private void greyscaleLooper(ImageComp fromChain, String to,
                                Function<int[], ImageComp> conversion) {
     ImageComp toChain = null;
