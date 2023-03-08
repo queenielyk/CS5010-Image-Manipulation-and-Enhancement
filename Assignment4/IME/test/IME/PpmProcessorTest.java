@@ -110,5 +110,76 @@ public class PpmProcessorTest {
     assertEquals(sample.toString(), custom.toString());
   }
 
+  @Test
+  public void testGreyscaleRed() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("red-component", "original", "red");
+    ppm.save("red", "/test/IME/customRedFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers-red.ppm");
+    List<String> custom = readPPM("/test/IME/customRedFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
+  @Test
+  public void testGreyscaleGreen() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("green-component", "original", "green");
+    ppm.save("green", "/test/IME/customGreenFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers-green.ppm");
+    List<String> custom = readPPM("/test/IME/customGreenFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
+  @Test
+  public void testGreyscaleBlue() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("blue-component", "original", "blue");
+    ppm.save("blue", "/test/IME/customBlueFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers-blue.ppm");
+    List<String> custom = readPPM("/test/IME/customBlueFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
+  @Test
+  public void testGreyscaleValue() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("value-component", "original", "value");
+    ppm.save("value", "/test/IME/customValueFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers-value.ppm");
+    List<String> custom = readPPM("/test/IME/customValueFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+  
+  @Test
+  public void testGreyscaleIntensity() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("intensity-component", "original", "intensity");
+    ppm.save("intensity", "/test/IME/customIntensityFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers-intensity.ppm");
+    List<String> custom = readPPM("/test/IME/customIntensityFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
+  @Test
+  public void testGreyscaleLuma() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("luma-component", "original", "luma");
+    ppm.save("luma", "/test/IME/customLumaFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers-luma.ppm");
+    List<String> custom = readPPM("/test/IME/customLumaFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
 
 }

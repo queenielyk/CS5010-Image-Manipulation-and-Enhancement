@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * A class to implement interface IME.model.ImageProcessor than specialized to ppm format image.
@@ -86,6 +87,61 @@ public class PpmProcessor implements ImageProcessor {
   @Override
   public void greyscale(String mode, String from, String to) {
 
+    checkImageExistence(from);
+
+    ImageComp fromChain = images.get(from);
+
+    switch (mode) {
+      case "red-component":
+        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(RGB[0], RGB[0], RGB[0]));
+        break;
+      case "green-component":
+        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(RGB[1], RGB[1], RGB[1]));
+        break;
+      case "blue-component":
+        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(RGB[2], RGB[2], RGB[2]));
+        break;
+      case "value-component":
+        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
+                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
+                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
+                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]))
+        );
+        break;
+      case "intensity-component":
+        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
+                (RGB[0] + RGB[1] + RGB[2]) / 3,
+                (RGB[0] + RGB[1] + RGB[2]) / 3,
+                (RGB[0] + RGB[1] + RGB[2]) / 3)
+        );
+        break;
+      case "luma-component":
+        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
+                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
+                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
+                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]))
+        );
+        break;
+    }
+  }
+
+  private void greyscaleLooper(ImageComp fromChain, String to,
+                               Function<int[], ImageComp> conversion) {
+    ImageComp toChian = null;
+    ImageComp prevComp = null;
+    while (fromChain != null) {
+      ImageComp current = conversion.apply(fromChain.getRGB());
+      if (toChian == null) {
+        toChian = current;
+      }
+      if (prevComp != null) {
+        prevComp.setNext(current);
+      }
+      prevComp = current;
+
+      fromChain = fromChain.getNext();
+    }
+    images.put(to, toChian);
   }
 
   @Override
