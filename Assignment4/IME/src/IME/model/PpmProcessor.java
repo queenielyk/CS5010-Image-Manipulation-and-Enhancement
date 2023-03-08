@@ -6,9 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -30,7 +30,7 @@ public class PpmProcessor implements ImageProcessor {
 
   @Override
   public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
-    String imageText = readPPM(System.getProperty("user.dir") + path);
+    String imageText = readPPM(path);
 
     Scanner sc = new Scanner(imageText);
 
@@ -306,7 +306,7 @@ public class PpmProcessor implements ImageProcessor {
 
     checkImageExistence(from);
 
-    FileWriter imageWriter = new FileWriter(System.getProperty("user.dir") + path);
+    FileWriter imageWriter = new FileWriter(path);
     imageWriter.write("P3" + System.lineSeparator());
     imageWriter.write(this.width + " " + this.height + System.lineSeparator());
     imageWriter.write(this.maxValue + System.lineSeparator());

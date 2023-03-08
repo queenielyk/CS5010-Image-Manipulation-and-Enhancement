@@ -36,13 +36,11 @@ public class ImageController implements IController {
     Scanner s = new Scanner(command);
     ImageCommand cmd = null;
 
-    System.out.println("cmd+" + command);
-
     while (s.hasNext()) {
       String in = s.next();
 
       switch (in) {
-        case "Run":
+        case "run":
           Scanner fileScan = new Scanner(new FileInputStream(s.next()));
           output.append(processFileScript(fileScan));
           break;
@@ -71,32 +69,37 @@ public class ImageController implements IController {
           cmd = new Hflip(s.next(), s.next());
           break;
         default:
-          output.append(String.format("Unknown command %s", in));
-          System.out.println(String.format("Unknown command %s", in));
+          output.append(String.format("Unknown command %s", in) + "\n");
           cmd = null;
           break;
       }
       if (cmd != null) {
         cmd.go(model);
-        output.append("\nExecuted: " + command);
-        System.out.println("\nExecuted: " + command);
+        output.append("Executed: \t" + command + "\n");
       }
 
     }
     return output.toString();
   }
 
-  public String processFileScript(Scanner fileScan) throws IOException {
+  /**
+   * Helper method for taking command from script file.
+   *
+   * @param fileScan Scanner for script file
+   * @return String of execution result.
+   * @throws IOException if command in scrip file cause IOeException
+   */
+  private String processFileScript(Scanner fileScan) throws IOException {
     StringBuilder outputs = new StringBuilder();
 
     while (fileScan.hasNextLine()) {
       String line = fileScan.nextLine();
-
+      System.out.println(line);
       //ignore comments
-      if (line.charAt(0) == '#') continue;
+      if (line.isEmpty() || line.charAt(0) == '#') continue;
 
       outputs.append(
-              processCommand(fileScan.nextLine())
+              processCommand(line)
       );
     }
     return outputs.toString();
@@ -106,22 +109,23 @@ public class ImageController implements IController {
   public void go(ImageProcessor model) throws IOException {
     Objects.requireNonNull(model);
     this.model = model;
-
     Scanner scan = new Scanner(this.in);
 
-    System.out.println("Please enter cmd follow by param:");
+    out.append("Please enter cmd follow by param:");
     //Keep asking for cmd
     while (scan.hasNextLine()) {
-      processCommand(scan.nextLine());
-      System.out.println("Please enter cmd follow by param:");
+      out.append(processCommand(scan.nextLine()));
+      out.append("\nPlease enter cmd follow by param:");
     }
   }
 
   public static void main(String[] args) throws IOException {
-    StringBuffer out = new StringBuffer();
+    System.out.println(System.getProperty("user.dir"));
+    StringBuilder out = new StringBuilder();
     Reader in = new StringReader("+ 3 4 + 8 9 q");
-    IController ctrl = new ImageController(new InputStreamReader(System.in), out);
+    IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
     ctrl.go(new PpmProcessor());
+
 
   }
 

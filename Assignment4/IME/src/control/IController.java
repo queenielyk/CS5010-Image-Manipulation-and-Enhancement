@@ -12,16 +12,17 @@ import IME.model.ImageProcessor;
 public interface IController {
 
   /**
-   * Process a given string control.command and return status or error as a string
+   * Process a given string command line and return status or error as a string
    *
-   * @param command the control.command given, including any parameters (e.g. "load images/koala.ppm
+   * @param command the command given, including any parameters (e.g. "load images/koala.ppm
    *                koala")
    * @return status or error message
+   * @throws IOException if the command to related to file and caused Exception
    */
   String processCommand(String command) throws IOException;
 
   /**
-   * Start the program, i.e. give control to the controller
+   * Start the program, pass in the model and hand over the control.
    */
   void go(ImageProcessor model) throws IOException;
 }

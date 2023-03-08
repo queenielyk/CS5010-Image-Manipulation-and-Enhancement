@@ -8,7 +8,6 @@ public class Brighten implements ImageCommand {
   String oldImg;
   String newImg;
 
-
   public Brighten(int lv, String oldImg, String newImg) {
     this.level = lv;
     this.oldImg = oldImg;

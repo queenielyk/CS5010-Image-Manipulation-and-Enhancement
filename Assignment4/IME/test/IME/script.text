@@ -1,0 +1,36 @@
+#load koala.ppm and call it 'koala'
+load images/Koala.ppm koala
+
+#brighten koala by adding 10
+brighten 10 koala koala-brighter
+
+#flip koala vertically
+vertical-flip koala koala-vertical
+
+#flip the vertically flipped koala horizontally
+horizontal-flip koala-vertical koala-vertical-horizontal
+
+#save koala-vertical-horizontal
+save images/koala-v-h.ppm koala-vertical-horizontal
+
+#create a greyscale using only the value component, as an image koala-greyscale
+greyscale value-component koala koala-greyscale
+
+#save koala-brighter
+save images/koala-brighter.ppm koala-brighter
+
+#save koala-greyscale
+save images/koala-gs.ppm koala-greyscale
+
+#overwrite koala with another file
+load images/upper.ppm koala
+
+#give the koala a red tint
+rgb-split koala koala-red koala-green koala-blue
+
+#brighten just the red image
+brighten 50 koala-red koala-red
+
+#combine them back, but by using the brightened red we get a red tint
+rgb-combine koala-red-tint koala-red koala-green koala-blue
+save images/koala-red-tint.ppm koala-red-tint
