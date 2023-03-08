@@ -29,7 +29,7 @@ public class PpmProcessor implements ImageProcessor {
 
   @Override
   public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
-    String imageText = readPPM(path);
+    String imageText = readPPM(System.getProperty("user.dir") + path);
 
     Scanner sc = new Scanner(imageText);
 
@@ -200,7 +200,7 @@ public class PpmProcessor implements ImageProcessor {
 
     checkImageExistence(from);
 
-    FileWriter imageWriter = new FileWriter(path);
+    FileWriter imageWriter = new FileWriter(System.getProperty("user.dir") + path);
     imageWriter.write("P3" + System.lineSeparator());
     imageWriter.write(this.width + " " + this.height + System.lineSeparator());
     imageWriter.write(this.maxValue + System.lineSeparator());
