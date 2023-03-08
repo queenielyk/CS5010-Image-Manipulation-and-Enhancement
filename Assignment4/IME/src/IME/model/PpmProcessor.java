@@ -127,12 +127,12 @@ public class PpmProcessor implements ImageProcessor {
 
   private void greyscaleLooper(ImageComp fromChain, String to,
                                Function<int[], ImageComp> conversion) {
-    ImageComp toChian = null;
+    ImageComp toChain = null;
     ImageComp prevComp = null;
     while (fromChain != null) {
       ImageComp current = conversion.apply(fromChain.getRGB());
-      if (toChian == null) {
-        toChian = current;
+      if (toChain == null) {
+        toChain = current;
       }
       if (prevComp != null) {
         prevComp.setNext(current);
@@ -141,7 +141,7 @@ public class PpmProcessor implements ImageProcessor {
 
       fromChain = fromChain.getNext();
     }
-    images.put(to, toChian);
+    images.put(to, toChain);
   }
 
   @Override
