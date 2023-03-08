@@ -182,4 +182,19 @@ public class PpmProcessorTest {
     assertEquals(sample.toString(), custom.toString());
   }
 
+  @Test
+  public void testCombine() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.greyscale("red-component", "original", "red");
+    ppm.greyscale("green-component", "original", "green");
+    ppm.greyscale("blue-component", "original", "blue");
+    ppm.combines("red", "green", "blue", "combine");
+    ppm.save("combine", "/test/IME/customCombineFlowers.ppm");
+
+    List<String> sample = readPPM("/test/IME/flowers.ppm");
+    List<String> custom = readPPM("/test/IME/customCombineFlowers.ppm");
+    assertEquals(sample.toString(), custom.toString());
+  }
+
 }

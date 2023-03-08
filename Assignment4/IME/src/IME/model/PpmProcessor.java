@@ -249,6 +249,34 @@ public class PpmProcessor implements ImageProcessor {
   @Override
   public void combines(String redName, String greenName, String blueName, String to) {
 
+    checkImageExistence(redName);
+    checkImageExistence(greenName);
+    checkImageExistence(blueName);
+
+    ImageComp redChain = images.get(redName);
+    ImageComp greenChain = images.get(greenName);
+    ImageComp blueChain = images.get(blueName);
+    ImageComp toChain = null;
+    ImageComp prev = null;
+
+    while (redChain != null && greenChain != null && blueChain != null) {
+
+      ImageComp current = new ImageCompImp(
+              redChain.getRGB()[0], greenChain.getRGB()[1], blueChain.getRGB()[2]);
+
+      if (toChain == null) {
+        toChain = current;
+      }
+      if (prev != null) {
+        prev.setNext(current);
+      }
+      prev = current;
+
+      redChain = redChain.getNext();
+      greenChain = greenChain.getNext();
+      blueChain = blueChain.getNext();
+    }
+    images.put(to, toChain);
   }
 
   @Override
