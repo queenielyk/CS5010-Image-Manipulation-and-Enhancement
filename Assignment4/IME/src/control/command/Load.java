@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import IME.model.ImageProcessor;
 import control.ImageCommand;
 
+/**
+ * This class represent a load command.
+ */
 public class Load implements ImageCommand {
   private String path;
   private String imgName;

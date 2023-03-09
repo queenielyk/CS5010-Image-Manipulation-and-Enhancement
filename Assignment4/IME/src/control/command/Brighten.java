@@ -1,8 +1,10 @@
 package control.command;
-
 import IME.model.ImageProcessor;
 import control.ImageCommand;
 
+/**
+ * This class represent a Brighten command.
+ */
 public class Brighten implements ImageCommand {
   int level;
   String oldImg;

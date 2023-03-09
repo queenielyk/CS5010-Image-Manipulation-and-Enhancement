@@ -3,6 +3,9 @@ package control.command;
 import IME.model.ImageProcessor;
 import control.ImageCommand;
 
+/**
+ * This class represent a HorizontalFlip command.
+ */
 public class Hflip implements ImageCommand {
   String from;
   String to;

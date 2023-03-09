@@ -3,6 +3,9 @@ package control.command;
 import IME.model.ImageProcessor;
 import control.ImageCommand;
 
+/**
+ * This class represent a VerticalFlip command.
+ */
 public class Vflip implements ImageCommand {
   String from;
   String to;

@@ -5,6 +5,9 @@ import java.io.IOException;
 import IME.model.ImageProcessor;
 import control.ImageCommand;
 
+/**
+ * This class represent a save command.
+ */
 public class Save implements ImageCommand {
   String path;
   String from;

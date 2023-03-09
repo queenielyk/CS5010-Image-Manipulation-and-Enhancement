@@ -3,6 +3,9 @@ package control.command;
 import IME.model.ImageProcessor;
 import control.ImageCommand;
 
+/**
+ * This class represent a Greyscale command.
+ */
 public class Greyscale implements ImageCommand {
   String mode;
   String from;
