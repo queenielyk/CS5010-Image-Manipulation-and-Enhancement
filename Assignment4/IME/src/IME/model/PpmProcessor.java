@@ -78,6 +78,7 @@ public class PpmProcessor implements ImageProcessor {
     StringBuilder builder = new StringBuilder();
     while (sc.hasNextLine()) {
       String s = sc.nextLine();
+      if (s.isEmpty()) continue;
       if (s.charAt(0) != '#') {
         builder.append(s).append(System.lineSeparator());
       }

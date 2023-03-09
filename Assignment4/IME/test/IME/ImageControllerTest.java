@@ -68,85 +68,85 @@ public class ImageControllerTest {
   @Test
   public void mockLoadTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("load images/koala.ppm koala");
+    Reader in = new StringReader("load res/cat.ppm cat");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("Path:images/koala.ppm Name:koala\n", log.toString());
+    assertEquals("Path:res/cat.ppm Name:cat\n", log.toString());
   }
 
   @Test
   public void mockGreyscaleTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("greyscale value-component koala koala-greyscale");
+    Reader in = new StringReader("greyscale value-component cat cat-greyscale");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("Mode:value-component From:koala To:koala-greyscale\n", log.toString());
+    assertEquals("Mode:value-component From:cat To:cat-greyscale\n", log.toString());
   }
 
   @Test
   public void mockRgbSplitTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("rgb-split koala koala-red koala-green koala-blue");
+    Reader in = new StringReader("rgb-split cat cat-red cat-green cat-blue");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("Mode:red-component From:koala To:koala-red\n" +
-                    "Mode:green-component From:koala To:koala-green\n" +
-                    "Mode:blue-component From:koala To:koala-blue\n"
+    assertEquals("Mode:red-component From:cat To:cat-red\n" +
+                    "Mode:green-component From:cat To:cat-green\n" +
+                    "Mode:blue-component From:cat To:cat-blue\n"
             , log.toString());
   }
 
   @Test
   public void mockHflipTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("horizontal-flip koala-vertical koala-vertical-horizontal");
+    Reader in = new StringReader("horizontal-flip cat-vertical cat-vertical-horizontal");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("From:koala-vertical To:koala-vertical-horizontal\n", log.toString());
+    assertEquals("From:cat-vertical To:cat-vertical-horizontal\n", log.toString());
   }
 
 
   @Test
   public void mockVflipTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("vertical-flip koala koala-vertical");
+    Reader in = new StringReader("vertical-flip cat cat-vertical");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("From:koala To:koala-vertical\n", log.toString());
+    assertEquals("From:cat To:cat-vertical\n", log.toString());
   }
 
   @Test
   public void mockVBrightenTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("brighten 10 koala koala-brighter");
+    Reader in = new StringReader("brighten 10 cat cat-brighter");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("From:koala Add:10 To:koala-brighter\n", log.toString());
+    assertEquals("From:cat Add:10 To:cat-brighter\n", log.toString());
   }
 
   @Test
   public void mockCombineTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("rgb-combine koala-red-tint koala-red koala-green koala-blue");
+    Reader in = new StringReader("rgb-combine cat-red-tint cat-red cat-green cat-blue");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("R:koala-red G:koala-green B:koala-blue To:koala-red-tint\n", log.toString());
+    assertEquals("R:cat-red G:cat-green B:cat-blue To:cat-red-tint\n", log.toString());
   }
 
   @Test
   public void mockSaveTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("save images/koala-gs.ppm koala-greyscale");
+    Reader in = new StringReader("save res/cat-gs.ppm cat-greyscale");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("From:koala-greyscale Path:images/koala-gs.ppm\n", log.toString());
+    assertEquals("From:cat-greyscale Path:res/cat-gs.ppm\n", log.toString());
   }
 
   @Test(expected = FileNotFoundException.class)
@@ -161,24 +161,25 @@ public class ImageControllerTest {
   @Test
   public void RunScriptTest() throws IOException {
     StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("run IME/test/IME/script.text");
+    Reader in = new StringReader("run res/script.text");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.go(new MockModel(log));
-    assertEquals("Enter Command:" +
-                    "Executed: \tload images/Koala.ppm koala\n" +
-                    "Executed: \tbrighten 10 koala koala-brighter\n" +
-                    "Executed: \tvertical-flip koala koala-vertical\n" +
-                    "Executed: \thorizontal-flip koala-vertical koala-vertical-horizontal\n" +
-                    "Executed: \tsave images/koala-v-h.ppm koala-vertical-horizontal\n" +
-                    "Executed: \tgreyscale value-component koala koala-greyscale\n" +
-                    "Executed: \tsave images/koala-brighter.ppm koala-brighter\n" +
-                    "Executed: \tsave images/koala-gs.ppm koala-greyscale\n" +
-                    "Executed: \tload images/upper.ppm koala\n" +
-                    "Executed: \trgb-split koala koala-red koala-green koala-blue\n" +
-                    "Executed: \tbrighten 50 koala-red koala-red\n" +
-                    "Executed: \trgb-combine koala-red-tint koala-red koala-green koala-blue\n" +
-                    "Executed: \tsave images/koala-red-tint.ppm koala-red-tint\n" +
+    assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n" +
+                    "Executed: \tbrighten 30 cat cat-brighter\n" +
+                    "Executed: \tsave res/cat-brighter.ppm cat-brighter\n" +
+                    "Executed: \tbrighten -30 cat cat-darker\n" +
+                    "Executed: \tsave res/cat-darker.ppm cat-darker\n" +
+                    "Executed: \tvertical-flip cat cat-vertical\n" +
+                    "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n" +
+                    "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n" +
+                    "Executed: \tgreyscale value-component cat cat-greyscale\n" +
+                    "Executed: \tsave res/cat-gs.ppm cat-greyscale\n" +
+                    "Executed: \tload res/building.ppm cat\n" +
+                    "Executed: \trgb-split cat cat-red cat-green cat-blue\n" +
+                    "Executed: \tbrighten 50 cat-red cat-red\n" +
+                    "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n" +
+                    "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n" +
                     "\n" +
                     "Enter Command:"
             , out.toString());

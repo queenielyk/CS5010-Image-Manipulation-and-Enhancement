@@ -124,8 +124,8 @@ public class ImageController implements IController {
     }
   }
 
-  public static void main(String[] args) throws IOException {
 
+  public static void main(String[] args) throws IOException {
     //Example main program
     IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
     ctrl.go(new PpmProcessor());
