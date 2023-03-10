@@ -171,6 +171,9 @@ public class ImageControllerTest {
                     "Executed: \tbrighten -30 cat cat-darker\n" +
                     "Executed: \tsave res/cat-darker.ppm cat-darker\n" +
                     "Executed: \tvertical-flip cat cat-vertical\n" +
+                    "Executed: \tsave res/cat-vertical.ppm cat-vertical\n" +
+                    "Executed: \thorizontal-flip cat cat-horizontal\n" +
+                    "Executed: \tsave res/cat-horizontal.ppm cat-horizontal\n" +
                     "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n" +
                     "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n" +
                     "Executed: \tgreyscale value-component cat cat-greyscale\n" +
