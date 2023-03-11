@@ -15,7 +15,7 @@ In general, Controller takes input from users then ask Model to execute desired 
 
 In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model if those operations are valid, return 'unknown' to user otherwise.
 
-#### Controller
+### Controller
 ``` bash
 IME/controller
     ├── IController.java
@@ -32,9 +32,9 @@ IME/controller
         └── Vflip.java
 ```
 
-#### Model
+### Model
 
-##### Data Structure
+#### Data Structure
 Image is composed by a group of components.
 Each component is a combination of Red, Green, and Blue (RGB).
 Hence, we store a image as a Linked List: each compontent is a Node of Linked List who contains the reference of it's next component.
@@ -48,7 +48,7 @@ From our codes, `ImageComp` is the interface to indicate what a Node should be a
 
 `ImageCompImp` is a class to implement interface `ImageComp`.
 
-##### Computation
+#### Computation
 `ImageProcessor` is an interface to indicate what kind of actions a processor should have:
 - Load
 - Greyscale : red-component / green-component / blue-component / value-component / intensity-component / luma-component
