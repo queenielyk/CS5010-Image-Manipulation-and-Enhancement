@@ -1,7 +1,9 @@
 package IME;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,8 +18,18 @@ import static org.junit.Assert.assertEquals;
 
 public class PpmProcessorTest {
 
+  private final String src = "res/cat.ppm";
+  private final String dst = "res/processor.ppm";
+
+  @AfterClass
+  public static void removeDstPpm() {
+    String dst = "res/processor.ppm";
+    File myObj = new File(dst);
+    myObj.delete();
+  }
+
   private List<String> readPPM(String path) throws FileNotFoundException {
-    Scanner sc = new Scanner(new FileInputStream(System.getProperty("user.dir") + path));
+    Scanner sc = new Scanner(new FileInputStream(path));
 
     List<String> builder = new ArrayList<>();
     while (sc.hasNextLine()) {
@@ -30,170 +42,191 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testLoad5x5() throws FileNotFoundException, IOException {
+  public void testLoadCat() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/smallBackground.ppm", "original");
-    ppm.save("original", "/test/IME/newSmallBackground.ppm");
+    ppm.loadImage(src, "original");
+    ppm.save("original", dst);
+  }
+
+  @Test(expected = FileNotFoundException.class)
+  public void testLoadNotExist() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("res/nocat.ppm", "original");
   }
 
   @Test
-  public void testLoadKoala() throws FileNotFoundException, IOException {
+  public void testLoadOverwrite() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/Koala.ppm", "original");
-    ppm.save("original", "/test/IME/newKoala.ppm");
+    ppm.loadImage("res/building.ppm", "original");
+    ppm.loadImage(src, "original");
+    ppm.loadImage("res/cat-brighter.ppm", "original");
+    ppm.save("original", dst);
+
+    List<String> sample = readPPM("res/cat-brighter.ppm");
+    List<String> custom = readPPM(dst);
+    assertEquals(sample.toString(), custom.toString());
+  }
+
+  @Test
+  public void testLoadDifferentImages() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("res/cat-brighter.ppm", "brighter");
+    ppm.loadImage("res/cat-horizontal.ppm", "horizontal");
+
+    ppm.save("brighter", dst);
+    List<String> sample = readPPM("res/cat-brighter.ppm");
+    List<String> custom = readPPM(dst);
+    assertEquals(sample.toString(), custom.toString());
+
+    ppm.save("horizontal", dst);
+    sample = readPPM("res/cat-horizontal.ppm");
+    custom = readPPM(dst);
+    assertEquals(sample.toString(), custom.toString());
   }
 
   @Test(expected = IllegalStateException.class)
   public void testAdjustBrightnessNotExist() throws FileNotFoundException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/Koala.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.adjustBrightness("origin", 0, "brighter");
   }
 
   @Test
   public void testAdjustBrightnessPos() throws FileNotFoundException, IOException {
-    int brightness = 18;
+    int brightness = 30;
+
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/Koala.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.adjustBrightness("original", brightness, "brighter");
-    ppm.save("brighter", "/test/IME/brighterKoala.ppm");
+    ppm.save("brighter", dst);
 
-    List<String> ppmBefore = readPPM("/test/IME/Koala.ppm");
-    List<String> ppmAfter = readPPM("/test/IME/brighterKoala.ppm");
-
-    int maxValue = Integer.parseInt(ppmAfter.get(2));
-    for (int channel = 3; channel < ppmAfter.size(); channel++) {
-      assertEquals(Math.min(Integer.parseInt(ppmBefore.get(channel)) + brightness, maxValue), Integer.parseInt(ppmAfter.get(channel)));
-    }
+    List<String> sample = readPPM("res/cat-brighter.ppm");
+    List<String> custom = readPPM(dst);
+    assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
-  public void testAdjustBrightnessPoNeg() throws FileNotFoundException, IOException {
+  public void testAdjustBrightnessNeg() throws FileNotFoundException, IOException {
     int brightness = -30;
+
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/Koala.ppm", "original");
-    ppm.adjustBrightness("original", brightness, "brighter");
-    ppm.save("brighter", "/test/IME/dimmerKoala.ppm");
+    ppm.loadImage(src, "original");
+    ppm.adjustBrightness("original", brightness, "darker");
+    ppm.save("darker", dst);
 
-    List<String> ppmBefore = readPPM("/test/IME/Koala.ppm");
-    List<String> ppmAfter = readPPM("/test/IME/dimmerKoala.ppm");
-
-    int maxValue = Integer.parseInt(ppmAfter.get(2));
-    for (int channel = 3; channel < ppmAfter.size(); channel++) {
-      assertEquals(Math.max(0, Math.min(Integer.parseInt(ppmBefore.get(channel)) + brightness, maxValue)),
-              Integer.parseInt(ppmAfter.get(channel))
-      );
-    }
+    List<String> sample = readPPM("res/cat-darker.ppm");
+    List<String> custom = readPPM(dst);
+    assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testHorizontalFlip() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.horizontalFlip("original", "horizontal");
-    ppm.save("horizontal", "/test/IME/customHorizontalFlowers.ppm");
+    ppm.save("horizontal", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-horizontal.ppm");
-    List<String> custom = readPPM("/test/IME/customHorizontalFlowers.ppm");
+    List<String> sample = readPPM("res/cat-horizontal.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testVerticalFlip() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.verticalFlip("original", "vertical");
-    ppm.save("vertical", "/test/IME/customVerticalFlowers.ppm");
+    ppm.save("vertical", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-vertical.ppm");
-    List<String> custom = readPPM("/test/IME/customVerticalFlowers.ppm");
+    List<String> sample = readPPM("res/cat-vertical.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testGreyscaleRed() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.greyscale("red-component", "original", "red");
-    ppm.save("red", "/test/IME/customRedFlowers.ppm");
+    ppm.save("red", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-red.ppm");
-    List<String> custom = readPPM("/test/IME/customRedFlowers.ppm");
+    List<String> sample = readPPM("res/cat-red.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testGreyscaleGreen() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.greyscale("green-component", "original", "green");
-    ppm.save("green", "/test/IME/customGreenFlowers.ppm");
+    ppm.save("green", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-green.ppm");
-    List<String> custom = readPPM("/test/IME/customGreenFlowers.ppm");
+    List<String> sample = readPPM("res/cat-green.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testGreyscaleBlue() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.greyscale("blue-component", "original", "blue");
-    ppm.save("blue", "/test/IME/customBlueFlowers.ppm");
+    ppm.save("blue", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-blue.ppm");
-    List<String> custom = readPPM("/test/IME/customBlueFlowers.ppm");
+    List<String> sample = readPPM("res/cat-blue.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testGreyscaleValue() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.greyscale("value-component", "original", "value");
-    ppm.save("value", "/test/IME/customValueFlowers.ppm");
+    ppm.save("value", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-value.ppm");
-    List<String> custom = readPPM("/test/IME/customValueFlowers.ppm");
+    List<String> sample = readPPM("res/cat-value.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
-  
+
   @Test
   public void testGreyscaleIntensity() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.greyscale("intensity-component", "original", "intensity");
-    ppm.save("intensity", "/test/IME/customIntensityFlowers.ppm");
+    ppm.save("intensity", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-intensity.ppm");
-    List<String> custom = readPPM("/test/IME/customIntensityFlowers.ppm");
+    List<String> sample = readPPM("res/cat-intensity.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testGreyscaleLuma() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage(src, "original");
     ppm.greyscale("luma-component", "original", "luma");
-    ppm.save("luma", "/test/IME/customLumaFlowers.ppm");
+    ppm.save("luma", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers-luma.ppm");
-    List<String> custom = readPPM("/test/IME/customLumaFlowers.ppm");
+    List<String> sample = readPPM("res/cat-luma.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
   @Test
   public void testCombine() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage("/test/IME/flowers.ppm", "original");
+    ppm.loadImage("res/cat-brighter.ppm", "original");
     ppm.greyscale("red-component", "original", "red");
     ppm.greyscale("green-component", "original", "green");
     ppm.greyscale("blue-component", "original", "blue");
     ppm.combines("red", "green", "blue", "combine");
-    ppm.save("combine", "/test/IME/customCombineFlowers.ppm");
+    ppm.save("combine", dst);
 
-    List<String> sample = readPPM("/test/IME/flowers.ppm");
-    List<String> custom = readPPM("/test/IME/customCombineFlowers.ppm");
+    List<String> sample = readPPM("res/cat-brighter.ppm");
+    List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
   }
 
