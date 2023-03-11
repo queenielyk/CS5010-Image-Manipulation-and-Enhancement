@@ -13,14 +13,14 @@ We developed this project based on a Model + View + Controller (MVC) concept. Ho
 
 In general, Controller takes input from users then ask Model to execute desired action(s); Model is where computation takes place.
 
-In our infrastructure, Controller takes input from user. Invokes desired action(s) proviede by Model if those operations are valid, return 'unknown' to user otherwise.
+In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model if those operations are valid, return 'unknown' to user otherwise.
 
 #### Controller
 ``` bash
 IME/controller
     ├── IController.java
-    ├── ImageCommand.java
     ├── ImageController.java
+    ├── ImageCommand.java
     └── command
         ├── Brighten.java
         ├── Greyscale.java
