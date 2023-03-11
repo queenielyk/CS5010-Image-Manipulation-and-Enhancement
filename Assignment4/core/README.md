@@ -4,9 +4,9 @@ Date: March 3 2023
 Professor: Amit Shesh
 
 ## Project idea
-Develope a text-based Image Process program with MVC design idea.
+Developing a text-based Image Process program with MVC design idea.
 
-## Project Strcuture
+## Project Structure
 
 ### Overview
 We developed this project based on a Model + View + Controller (MVC) concept. However, as this is a text-based program, so View is not applicable in this case.
@@ -71,10 +71,10 @@ IME/model
 
 ## Instruciton
 1.  Run ImageController.java to start the program   
-2.  Enter command with parameters sepearte with spaces  **(ex. "Enter Command:run res/script.text")**
->This scripts will run on images files under res/folder and output will procudes to the same folder 
+2.  Enter command with parameters sepearte with spaces  **(ex. "Enter Command:run core/res/script.text")**
+>This scripts will run on images files under core/res/folder and output will produce to the same folder 
 
 ## Citation
-Copyright of following images used is owned by Cheng Shi and authrized to use for this assignment.
+Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
 - res/cat.ppm  
 - res/building.ppm
