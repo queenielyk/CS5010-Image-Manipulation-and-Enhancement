@@ -33,8 +33,9 @@ public interface ImageProcessor {
    * @param mode mode to be adopted to convert image to greyscale
    * @param from name of image to be converted
    * @param to   new image's name
+   * @throws IllegalArgumentException greyscale mode is not an option
    */
-  public void greyscale(String mode, String from, String to);
+  public void greyscale(String mode, String from, String to) throws IllegalArgumentException;
 
   /**
    * A method to flip the specified image horizontally, and named it.

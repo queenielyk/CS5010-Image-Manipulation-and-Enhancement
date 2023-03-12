@@ -99,7 +99,7 @@ public class PpmProcessor implements ImageProcessor {
   }
 
   @Override
-  public void greyscale(String mode, String from, String to) {
+  public void greyscale(String mode, String from, String to) throws IllegalArgumentException {
 
     checkImageExistence(from);
 
@@ -136,6 +136,8 @@ public class PpmProcessor implements ImageProcessor {
                 (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]))
         );
         break;
+      default:
+        throw new IllegalArgumentException("This grayscale component is not an option!");
     }
   }
 
