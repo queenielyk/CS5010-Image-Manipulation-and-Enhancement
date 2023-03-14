@@ -8,6 +8,8 @@ Developing a text-based Image Process program with MVC design idea.
 
 ## Project Structure
 
+![UML Diagram](UML.jpeg)
+
 ### Overview
 We developed this project based on a Model + View + Controller (MVC) concept. However, as this is a text-based program, so View is not applicable in this case.
 
