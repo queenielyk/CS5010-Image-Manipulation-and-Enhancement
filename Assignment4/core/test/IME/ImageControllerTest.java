@@ -30,7 +30,7 @@ public class ImageControllerTest {
     }
 
     @Override
-    public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
+    public void loadImage(String path, String name) throws IllegalStateException {
       log.append("Path:" + path + " " + "Name:" + name + "\n");
     }
 
@@ -186,6 +186,24 @@ public class ImageControllerTest {
                     "\n" +
                     "Enter Command:"
             , out.toString());
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void MissingArgumentTest() throws IOException {
+    StringBuilder out = new StringBuilder();
+    Reader in = new StringReader("run ");
+    IController controller = new ImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.go(new MockModel(log));
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void ExtraArgumentTest() throws IOException {
+    StringBuilder out = new StringBuilder();
+    Reader in = new StringReader("run script.text script2.text");
+    IController controller = new ImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.go(new MockModel(log));
   }
 
 

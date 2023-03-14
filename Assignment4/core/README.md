@@ -18,6 +18,11 @@ In general, Controller takes input from users then ask Model to execute desired 
 In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model if those operations are valid, return 'unknown' to user otherwise.
 
 ### Controller
+
+#### Design
+
+#### Control flow
+
 ``` bash
 IME/controller
     ├── IController.java
@@ -71,12 +76,12 @@ IME/model
     └── PpmProcessor.java
 ```
 
-## Instruciton
+## Instruction
 1.  Run ImageController.java to start the program   
-2.  Enter command with parameters sepearte with spaces  **(ex. "Enter Command:run core/res/script.text")**
->This scripts will run on images files under core/res/folder and output will produce to the same folder 
+2.  Enter command with parameters separated by spaces **(ex. "Enter Command:run res/script.text")**
+>This scripts will run on images files under res/folder and output file will produce to the same folder.
 
 ## Citation
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
-- res/cat.ppm  
-- res/building.ppm
+>- res/cat.ppm  
+>- res/building.ppm

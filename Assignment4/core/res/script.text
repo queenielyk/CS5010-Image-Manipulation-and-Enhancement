@@ -37,7 +37,7 @@ greyscale value-component cat cat-greyscale
 #save cat-greyscale
 save res/cat-gs.ppm cat-greyscale
 
-#overwrite cat with another file
+#overwrite cat with building file
 load res/building.ppm cat
 
 #give the cat a red tint

@@ -3,6 +3,8 @@ package IME.control;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -44,37 +46,71 @@ public class ImageController implements IController {
     StringBuilder output = new StringBuilder();
     Scanner s = new Scanner(command);
     ImageCommand cmd = null;
+    List<String> args=new ArrayList<>();
+    IllegalArgumentException wnaE=new IllegalArgumentException("Wrong number of arguments");
 
-    //Parse Input command and load to corresponding ImageCommand
+    //Parse Input command and store arguments to list
     String in = s.next();
+    while(s.hasNext()){
+      args.add(s.next());
+    }
+
+    //Create cmd
     switch (in) {
       case "run":
-        Scanner fileScan = new Scanner(new FileInputStream(s.next()));
+        if(args.size()!=1){
+          throw wnaE;
+        }
+        Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
         output.append(processFileScript(fileScan));
         break;
       case "load":
-        cmd = new Load(s.next(), s.next());
+        if(args.size()!=2){
+          throw wnaE;
+        }
+        cmd = new Load(args.get(0), args.get(1));
         break;
       case "save":
-        cmd = new Save(s.next(), s.next());
+        if(args.size()!=2){
+          throw wnaE;
+        }
+        cmd = new Save(args.get(0), args.get(1));
         break;
       case "rgb-split":
-        cmd = new RgbSplit(s.next(), s.next(), s.next(), s.next());
+        if(args.size()!=4){
+          throw wnaE;
+        }
+        cmd = new RgbSplit(args.get(0), args.get(1),args.get(2),args.get(3));
         break;
       case "rgb-combine":
-        cmd = new RgbCombine(s.next(), s.next(), s.next(), s.next());
+        if(args.size()!=4){
+          throw wnaE;
+        }
+        cmd = new RgbCombine(args.get(0), args.get(1),args.get(2),args.get(3));
         break;
       case "brighten":
-        cmd = new Brighten(s.nextInt(), s.next(), s.next());
+        if(args.size()!=3){
+          throw wnaE;
+        }
+        cmd = new Brighten(Integer.parseInt(args.get(0)), args.get(1),args.get(2));
         break;
       case "greyscale":
-        cmd = new Greyscale(s.next(), s.next(), s.next());
+        if(args.size()!=3){
+          throw wnaE;
+        }
+        cmd = new Greyscale(args.get(0), args.get(1),args.get(2));
         break;
       case "vertical-flip":
-        cmd = new Vflip(s.next(), s.next());
+        if(args.size()!=2){
+          throw wnaE;
+        }
+        cmd = new Vflip(args.get(0), args.get(1));
         break;
       case "horizontal-flip":
-        cmd = new Hflip(s.next(), s.next());
+        if(args.size()!=2){
+          throw wnaE;
+        }
+        cmd = new Hflip(args.get(0), args.get(1));
         break;
       default:
         output.append(String.format("Unknown command %s", in) + "\n");
@@ -115,7 +151,6 @@ public class ImageController implements IController {
     Objects.requireNonNull(model);
     this.model = model;
     Scanner scan = new Scanner(this.in);
-
     out.append("Enter Command:");
     //Keep asking for cmd
     while (scan.hasNextLine()) {
