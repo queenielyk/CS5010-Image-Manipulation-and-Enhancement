@@ -36,34 +36,34 @@ IME/controller
 ```
 
 ### Design
-
->The interface`IController` will only have two methods:
+The interface`IController` will only have two methods:
 - `processCommand(String command)`  takes single line of string from Input and delegate to creat command object to execute.
 - `go(ImageProcessor model)` pass the model to control and start running.
 
->Implementation `ImageController` will have extra helper method:
+Implementation `ImageController` will have extra helper method:
 - `processFileScript(Scanner fileScan)` to call processCommand line by line.
 - `main()` to run the program.
 
->The interface`ImageCommand` represent a command object, which is sequence of operation on model.
+The interface`ImageCommand` represent a command object, which is sequence of operation on model.
 
 We have several atomic commands like(`Save`,`Load`,`Greyscale` ..etc) and now we can use these command to implements other command base on sequences of these atomic command.   
 (For example, we can do RGB split by just use Greyscale three time.） This makes it easy for future extensions.
 
 ### Control flow
-The major control flow will be done inside `processCommand()` implementation which takes a String command.
-
-First, parse it into two part: commandType and List of Arguments by calling *scanner.next()* in a loop.
-
-Secondly, we make a switch to determine what kind of command object to creat and what kind of error checking to apply.
-
-Finally, If the command string fall into one case and get created successfully. We just call the `cmd.go()` to delegate the operations to the model.
+  The major control flow will be done inside `processCommand()` implementation which takes a String command.
+  
+  First, parse it into two part: commandType and List of Arguments by calling *scanner.next()* in a loop.
+  
+  Secondly, we make a switch to determine what kind of command object to creat and what kind of error checking to apply.
+  
+  Finally, If the command string fall into one case and get created successfully. We just call the `cmd.go()` to delegate the operations to the model.
 
 ### Fields
 - `private ImageProcessor model`
 - `private final Readable in`
 - `private final Appendable out`
 
+  
 Beside the `ImageProcessor` model to operate on. We also store the Input as *Readable* and Output as *Appendable*. 
 This makes the controller capable to take not just *System.in/ out* but also files or simple string.
 
