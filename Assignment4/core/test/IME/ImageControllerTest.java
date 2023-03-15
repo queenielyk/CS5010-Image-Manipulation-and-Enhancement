@@ -21,9 +21,9 @@ public class ImageControllerTest {
    * This class represent a mock of {@link ImageProcessor} to take method input and store it for
    * testing purposes.
    */
-  public class MockModel implements ImageProcessor {
+  public static class MockModel implements ImageProcessor {
 
-    private StringBuilder log;
+    private final StringBuilder log;
 
     public MockModel(StringBuilder log) {
       this.log = log;
