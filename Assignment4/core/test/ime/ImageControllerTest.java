@@ -205,5 +205,27 @@ public class ImageControllerTest {
     controller.run(new MockModel(log));
   }
 
+  @Test
+  public void UnknownCommandTest() throws IOException {
+    StringBuilder out = new StringBuilder();
+    Reader in = new StringReader("grey value-component cat cat-greyscale");
+    IController controller = new ImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MockModel(log));
+    assertEquals("Enter Command:Unknown command [grey]\n"
+        + "\n"
+        + "Enter Command:", out.toString());
+  }
+
+  @Test (expected = NumberFormatException.class)
+  public void BrightNotIntTest() throws IOException {
+    StringBuilder out = new StringBuilder();
+    Reader in = new StringReader("brighten a cat cat-a");
+    IController controller = new ImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MockModel(log));
+  }
+
+
 
 }

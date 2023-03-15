@@ -119,7 +119,7 @@ public class ImageController implements IController {
         cmd = new Hflip(args.get(0), args.get(1));
         break;
       default:
-        output.append(String.format("Unknown command %s", in) + "\n");
+        output.append(String.format("Unknown command [%s]", in) + "\n");
         cmd = null;
         break;
     }
