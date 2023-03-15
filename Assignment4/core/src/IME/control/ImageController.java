@@ -148,7 +148,6 @@ public class ImageController implements IController {
       String result=processCommand(line);
       outputs.append(result);
       if(result.contains("-EXIT-")) {
-        out.append("<<<<Program quited>>>>>");
         break;
       }
     }

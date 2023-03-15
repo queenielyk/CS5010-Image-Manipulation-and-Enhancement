@@ -34,8 +34,6 @@ save res/cat-v-h.ppm cat-vertical-horizontal
 #create a greyscale using only the value component, as an image cat-greyscale
 greyscale value-component cat cat-greyscale
 
-quit
-
 #save cat-greyscale
 save res/cat-gs.ppm cat-greyscale
 
@@ -51,3 +49,6 @@ brighten 50 cat-red cat-red
 #combine them back, but by using the brightened red we get a red tint
 rgb-combine cat-red-tint cat-red cat-green cat-blue
 save res/cat-red-tint.ppm cat-red-tint
+
+#exit the program
+quit
