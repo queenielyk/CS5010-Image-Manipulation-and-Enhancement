@@ -1,20 +1,16 @@
 # CS5010 Assignment4: Image Manipulation and Enhancement
-***
 Member: Queenie, Cheng    
 Date: March 3 2023   
 Professor: Amit Shesh
 
 ## Project idea
-***
 Developing a text-based Image Process program with MVC design idea.
 
 ## Project Structure
-***
 
 ![UML Diagram](UML.jpeg)
 
 ## Overview
-***
 We developed this project based on a Model + View + Controller (MVC) concept. However, as this is a text-based program, so View is not applicable in this case.
 
 In general, Controller takes input from users then ask Model to execute desired action(s); Model is where computation takes place.
@@ -23,7 +19,6 @@ In our infrastructure, Controller takes input from user. Invokes desired action(
 
 
 ## Controller
-***
 ``` bash
 IME/controller
     ├── IController.java
@@ -75,7 +70,6 @@ This makes the controller capable to take not just *System.in/ out* but also fil
 
 
 ## Model
-***
 ### Data Structure
 Image is composed by a group of components.
 Each component is a combination of Red, Green, and Blue (RGB).
@@ -112,13 +106,11 @@ IME/model
 ```
 
 ## Instruction
-***
 1.  Run ImageController.java to start the program   
 2.  Enter command with parameters separated by spaces **(ex. "Enter Command:run res/script.text")**
 >This scripts will run on images files under res/folder and output file will produce to the same folder.
 
 ## Citation
-***
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
 >- res/cat.ppm  
 >- res/building.ppm
