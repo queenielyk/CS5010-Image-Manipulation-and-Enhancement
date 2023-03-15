@@ -1,6 +1,7 @@
 package ime.control;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -57,75 +58,84 @@ public class ImageController implements IController {
     }
 
     //Create cmd
-    switch (in) {
-      case "q":
-      case "quit":
-      case "exit":
-        output.append("Executed: \t" + "-EXIT-" + "\n");
-        break;
-      case "run":
-        if (args.size() != 1) {
-          throw wnaE;
-        }
-        Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
-        output.append(processFileScript(fileScan));
-        break;
-      case "load":
-        if (args.size() != 2) {
-          throw wnaE;
-        }
-        cmd = new Load(args.get(0), args.get(1));
-        break;
-      case "save":
-        if (args.size() != 2) {
-          throw wnaE;
-        }
-        cmd = new Save(args.get(0), args.get(1));
-        break;
-      case "rgb-split":
-        if (args.size() != 4) {
-          throw wnaE;
-        }
-        cmd = new RgbSplit(args.get(0), args.get(1), args.get(2), args.get(3));
-        break;
-      case "rgb-combine":
-        if (args.size() != 4) {
-          throw wnaE;
-        }
-        cmd = new RgbCombine(args.get(0), args.get(1), args.get(2), args.get(3));
-        break;
-      case "brighten":
-        if (args.size() != 3) {
-          throw wnaE;
-        }
-        cmd = new Brighten(Integer.parseInt(args.get(0)), args.get(1), args.get(2));
-        break;
-      case "greyscale":
-        if (args.size() != 3) {
-          throw wnaE;
-        }
-        cmd = new Greyscale(args.get(0), args.get(1), args.get(2));
-        break;
-      case "vertical-flip":
-        if (args.size() != 2) {
-          throw wnaE;
-        }
-        cmd = new Vflip(args.get(0), args.get(1));
-        break;
-      case "horizontal-flip":
-        if (args.size() != 2) {
-          throw wnaE;
-        }
-        cmd = new Hflip(args.get(0), args.get(1));
-        break;
-      default:
-        output.append(String.format("Unknown command [%s]", in) + "\n");
-        cmd = null;
-        break;
+    try {
+      switch (in) {
+        case "q":
+        case "quit":
+        case "exit":
+          output.append("Executed: \t" + "-EXIT-" + "\n");
+          break;
+        case "run":
+          if (args.size() != 1) {
+            throw wnaE;
+          }
+          Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
+          output.append(processFileScript(fileScan));
+          break;
+        case "load":
+          if (args.size() != 2) {
+            throw wnaE;
+          }
+          cmd = new Load(args.get(0), args.get(1));
+          break;
+        case "save":
+          if (args.size() != 2) {
+            throw wnaE;
+          }
+          cmd = new Save(args.get(0), args.get(1));
+          break;
+        case "rgb-split":
+          if (args.size() != 4) {
+            throw wnaE;
+          }
+          cmd = new RgbSplit(args.get(0), args.get(1), args.get(2), args.get(3));
+          break;
+        case "rgb-combine":
+          if (args.size() != 4) {
+            throw wnaE;
+          }
+          cmd = new RgbCombine(args.get(0), args.get(1), args.get(2), args.get(3));
+          break;
+        case "brighten":
+          if (args.size() != 3) {
+            throw wnaE;
+          }
+          cmd = new Brighten(Integer.parseInt(args.get(0)), args.get(1), args.get(2));
+          break;
+        case "greyscale":
+          if (args.size() != 3) {
+            throw wnaE;
+          }
+          cmd = new Greyscale(args.get(0), args.get(1), args.get(2));
+          break;
+        case "vertical-flip":
+          if (args.size() != 2) {
+            throw wnaE;
+          }
+          cmd = new Vflip(args.get(0), args.get(1));
+          break;
+        case "horizontal-flip":
+          if (args.size() != 2) {
+            throw wnaE;
+          }
+          cmd = new Hflip(args.get(0), args.get(1));
+          break;
+        default:
+          output.append("!<Error>!: \t" + String.format("Unknown command [%s]", in) + "\n");
+          cmd = null;
+          break;
+      }
+    } catch (IllegalArgumentException wnag) {
+      output.append("!<Error>!: \t" + wnag + "\n");
     }
+
     if (cmd != null) {
-      cmd.execute(model);
-      output.append("Executed: \t" + command + "\n");
+      try {
+        cmd.execute(model);
+        output.append("Executed: \t").append(command).append("\n");
+      } catch (IllegalArgumentException | IllegalStateException | FileNotFoundException iae) {
+        output.append("!<Error>!: \t" + iae + "\n");
+      }
     }
 
     return output.toString();
