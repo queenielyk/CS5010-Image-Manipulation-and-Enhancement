@@ -1,7 +1,7 @@
-package IME.control.command;
+package ime.control.command;
 
-import IME.control.ImageCommand;
-import IME.model.ImageProcessor;
+import ime.control.ImageCommand;
+import ime.model.ImageProcessor;
 
 /**
  * This class represent a VerticalFlip command.

@@ -1,4 +1,4 @@
-package IME.model;
+package ime.model;
 
 /**
  * An interface to represent an image component.
@@ -26,7 +26,7 @@ public interface ImageComp {
 
 
   /**
-   * A method to get the reference of the image component that following this component
+   * A method to get the reference of the image component that following this component.
    *
    * @return the image component that following this component
    */

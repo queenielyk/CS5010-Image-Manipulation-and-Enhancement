@@ -1,12 +1,15 @@
-package IME;
+package ime;
 
 import org.junit.Test;
 
-import IME.model.ImageComp;
-import IME.model.ImageCompImp;
+import ime.model.ImageComp;
+import ime.model.ImageCompImp;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * A test class for object ImageCompImp.
+ */
 public class ImageCompImpTest {
 
   @Test(expected = IllegalStateException.class)

@@ -1,4 +1,4 @@
-package IME.model;
+package ime.model;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,7 +29,8 @@ public class PpmProcessor implements ImageProcessor {
   }
 
   @Override
-  public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
+  public void loadImage(String path, String name)
+          throws FileNotFoundException, IllegalStateException {
     String imageText = readPPM(path);
 
     Scanner sc = new Scanner(imageText);
@@ -78,7 +79,9 @@ public class PpmProcessor implements ImageProcessor {
     StringBuilder builder = new StringBuilder();
     while (sc.hasNextLine()) {
       String s = sc.nextLine();
-      if (s.isEmpty()) continue;
+      if (s.isEmpty()) {
+        continue;
+      }
       if (s.charAt(0) != '#') {
         builder.append(s).append(System.lineSeparator());
       }
@@ -181,8 +184,8 @@ public class PpmProcessor implements ImageProcessor {
     int column = 0;
 
     while (fromChain != null) {
-      int[] RGB = fromChain.getRGB();
-      ImageComp current = new ImageCompImp(RGB[0], RGB[1], RGB[2]);
+      int[] rgb = fromChain.getRGB();
+      ImageComp current = new ImageCompImp(rgb[0], rgb[1], rgb[2]);
       column += 1;
       if (prevCol != null) {
         current.setNext(prevCol);
@@ -222,8 +225,8 @@ public class PpmProcessor implements ImageProcessor {
     int column = 0;
 
     while (fromChain != null) {
-      int[] RGB = fromChain.getRGB();
-      ImageComp current = new ImageCompImp(RGB[0], RGB[1], RGB[2]);
+      int[] rgb = fromChain.getRGB();
+      ImageComp current = new ImageCompImp(rgb[0], rgb[1], rgb[2]);
       column += 1;
       if (prevStart != null) {
         prevStart.setNext(current);
@@ -254,11 +257,11 @@ public class PpmProcessor implements ImageProcessor {
     ImageComp prev = null;
 
     while (fromChain != null) {
-      int[] RGB = fromChain.getRGB();
+      int[] rgb = fromChain.getRGB();
       ImageComp current = new ImageCompImp(
-              Math.max(0, Math.min(RGB[0] + add, this.maxValue)),
-              Math.max(0, Math.min(RGB[1] + add, this.maxValue)),
-              Math.max(0, Math.min(RGB[2] + add, this.maxValue))
+              Math.max(0, Math.min(rgb[0] + add, this.maxValue)),
+              Math.max(0, Math.min(rgb[1] + add, this.maxValue)),
+              Math.max(0, Math.min(rgb[2] + add, this.maxValue))
       );
       if (toChain == null) {
         toChain = current;
@@ -316,10 +319,10 @@ public class PpmProcessor implements ImageProcessor {
 
     ImageComp temp = images.get(from);
     while (temp != null) {
-      int[] RGB = temp.getRGB();
-      imageWriter.write(RGB[0] + System.lineSeparator());
-      imageWriter.write(RGB[1] + System.lineSeparator());
-      imageWriter.write(RGB[2] + System.lineSeparator());
+      int[] rgb = temp.getRGB();
+      imageWriter.write(rgb[0] + System.lineSeparator());
+      imageWriter.write(rgb[1] + System.lineSeparator());
+      imageWriter.write(rgb[2] + System.lineSeparator());
       temp = temp.getNext();
     }
     imageWriter.close();

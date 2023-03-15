@@ -1,8 +1,8 @@
-package IME.control;
+package ime.control;
 
 import java.io.IOException;
 
-import IME.model.ImageProcessor;
+import ime.model.ImageProcessor;
 
 /**
  * This interface represent a Command can be preformed on ImageProcessor Model.

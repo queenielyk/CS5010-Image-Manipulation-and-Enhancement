@@ -1,9 +1,9 @@
-package IME.control.command;
+package ime.control.command;
 
 import java.io.FileNotFoundException;
 
-import IME.control.ImageCommand;
-import IME.model.ImageProcessor;
+import ime.control.ImageCommand;
+import ime.model.ImageProcessor;
 
 /**
  * This class represent a load command.

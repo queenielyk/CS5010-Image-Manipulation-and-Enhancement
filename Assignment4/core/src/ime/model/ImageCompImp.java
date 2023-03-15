@@ -1,7 +1,8 @@
-package IME.model;
+package ime.model;
 
 /**
  * An implementation class of interface IME.model.ImageComp.
+ * An image component contains red, green, blue value, and the following image component as well.
  */
 public class ImageCompImp implements ImageComp {
   private final int red;
@@ -10,6 +11,15 @@ public class ImageCompImp implements ImageComp {
   private ImageComp nextComp;
 
 
+  /**
+   * A constructor to construct an image component.
+   * Three positive integers should be provided to indicate R, G, B respectively.
+   *
+   * @param red   an integer to represent red value of a pixel
+   * @param green an integer to represent green value of a pixel
+   * @param blue  an integer to represent blue value of a pixel
+   * @throws IllegalStateException any value less than 0 (a.k.a negative integer)
+   */
   public ImageCompImp(int red, int green, int blue) throws IllegalStateException {
     if (red < 0 || green < 0 || blue < 0) {
       throw new IllegalStateException("RGB must be positive integer");

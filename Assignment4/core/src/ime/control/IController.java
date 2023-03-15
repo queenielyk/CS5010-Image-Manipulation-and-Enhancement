@@ -1,13 +1,13 @@
-package IME.control;
+package ime.control;
 
 import java.io.IOException;
 
-import IME.model.ImageProcessor;
+import ime.model.ImageProcessor;
 
 /**
  * The controller interface for the ImageProcess program. The functions here have been designed to
- * give control to the controller, and the primary operation for the controller to function (process
- * a image process command)
+ * give control to the controller,
+ * and the primary operation for the controller to function (process an image process command)
  */
 public interface IController {
 

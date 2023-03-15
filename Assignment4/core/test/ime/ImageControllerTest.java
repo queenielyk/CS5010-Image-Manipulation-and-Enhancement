@@ -1,4 +1,4 @@
-package IME;
+package ime;
 
 import org.junit.Test;
 
@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import IME.control.IController;
-import IME.control.ImageController;
-import IME.model.ImageProcessor;
+import ime.control.IController;
+import ime.control.ImageController;
+import ime.model.ImageProcessor;
 
 import static org.junit.Assert.assertEquals;
 
@@ -56,7 +56,8 @@ public class ImageControllerTest {
 
     @Override
     public void combines(String redName, String greenName, String blueName, String to) {
-      log.append("R:" + redName + " " + "G:" + greenName + " " + "B:" + blueName + " " + "To:" + to + "\n");
+      log.append("R:" + redName + " " + "G:" + greenName + " " + "B:" + blueName + " "
+              + "To:" + to + "\n");
     }
 
     @Override

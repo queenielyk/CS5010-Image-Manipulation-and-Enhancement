@@ -1,4 +1,4 @@
-package IME.model;
+package ime.model;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,14 +11,15 @@ import java.io.IOException;
 public interface ImageProcessor {
 
   /**
-   * A method to read image from specified path, name it to given name
+   * A method to read image from specified path, name it to given name.
    *
    * @param path relative path of image, in class dependent format
    * @param name name of image to be called throughout the command line
    * @throws FileNotFoundException the provided file is not exist
    * @throws IllegalStateException the magic number of the image is not P3
    */
-  public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException;
+  public void loadImage(String path, String name)
+          throws FileNotFoundException, IllegalStateException;
 
   /**
    * A method to convert specified image to greyscale based on specified mode.

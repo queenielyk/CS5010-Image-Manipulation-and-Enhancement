@@ -1,4 +1,4 @@
-package IME;
+package ime;
 
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -11,16 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import IME.model.ImageProcessor;
-import IME.model.PpmProcessor;
+import ime.model.ImageProcessor;
+import ime.model.PpmProcessor;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * A test class for object PpmProcessor.
+ */
 public class PpmProcessorTest {
 
   private final String src = "res/cat.ppm";
   private final String dst = "res/processor.ppm";
 
+  /**
+   * A method to be executed at the end of the test class.
+   * Remove image exported from this test class.
+   */
   @AfterClass
   public static void removeDstPpm() {
     String dst = "res/processor.ppm";
@@ -44,8 +51,12 @@ public class PpmProcessorTest {
   @Test
   public void testLoadCat() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
-    ppm.loadImage(src, "original");
-    ppm.save("original", dst);
+    ppm.loadImage("res/cat-brighter.ppm", "brighter");
+    ppm.save("brighter", dst);
+
+    List<String> sample = readPPM("res/cat-brighter.ppm");
+    List<String> custom = readPPM(dst);
+    assertEquals(sample.toString(), custom.toString());
   }
 
   @Test(expected = FileNotFoundException.class)

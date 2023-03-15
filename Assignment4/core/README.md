@@ -20,7 +20,7 @@ In our infrastructure, Controller takes input from user. Invokes desired action(
 
 ## Controller
 ``` bash
-IME/controller
+ime/controller
     ├── IController.java
     ├── ImageController.java
     ├── ImageCommand.java
@@ -98,7 +98,7 @@ In reality, there are various image format, e.g. PNG, JPG, BMP, etc.
 In this project, our goal is to process images in ASCII PPM format, hence we implement `ImageProcessor` as `PpmProcessor`.
 
 ``` bash
-IME/model
+ime/model
     ├── ImageComp.java
     ├── ImageCompImp.java
     ├── ImageProcessor.java

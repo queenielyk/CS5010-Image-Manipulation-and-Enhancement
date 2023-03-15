@@ -1,4 +1,4 @@
-package IME.control;
+package ime.control;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,20 +8,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import IME.control.command.Brighten;
-import IME.control.command.Greyscale;
-import IME.control.command.Hflip;
-import IME.control.command.Load;
-import IME.control.command.RgbCombine;
-import IME.control.command.RgbSplit;
-import IME.control.command.Save;
-import IME.control.command.Vflip;
-import IME.model.ImageProcessor;
-import IME.model.PpmProcessor;
+import ime.control.command.Brighten;
+import ime.control.command.Greyscale;
+import ime.control.command.Hflip;
+import ime.control.command.Load;
+import ime.control.command.RgbCombine;
+import ime.control.command.RgbSplit;
+import ime.control.command.Save;
+import ime.control.command.Vflip;
+import ime.model.ImageProcessor;
+import ime.model.PpmProcessor;
 
 
 /**
- * This represent a controller for {@link ImageProcessor} that will delegate command from Readable
+ * This class represents a controller for {@link ImageProcessor}
+ * that will delegate command from Readable.
  * In and return Output to Appendable.
  */
 public class ImageController implements IController {
@@ -46,12 +47,12 @@ public class ImageController implements IController {
     StringBuilder output = new StringBuilder();
     Scanner s = new Scanner(command);
     ImageCommand cmd = null;
-    List<String> args=new ArrayList<>();
-    IllegalArgumentException wnaE=new IllegalArgumentException("Wrong number of arguments");
+    List<String> args = new ArrayList<>();
+    IllegalArgumentException wnaE = new IllegalArgumentException("Wrong number of arguments");
 
     //Parse Input command and store arguments to list
     String in = s.next();
-    while(s.hasNext()){
+    while (s.hasNext()) {
       args.add(s.next());
     }
 
@@ -63,56 +64,56 @@ public class ImageController implements IController {
         output.append("Executed: \t" + "-EXIT-" + "\n");
         break;
       case "run":
-        if(args.size()!=1){
+        if (args.size() != 1) {
           throw wnaE;
         }
         Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
         output.append(processFileScript(fileScan));
         break;
       case "load":
-        if(args.size()!=2){
+        if (args.size() != 2) {
           throw wnaE;
         }
         cmd = new Load(args.get(0), args.get(1));
         break;
       case "save":
-        if(args.size()!=2){
+        if (args.size() != 2) {
           throw wnaE;
         }
         cmd = new Save(args.get(0), args.get(1));
         break;
       case "rgb-split":
-        if(args.size()!=4){
+        if (args.size() != 4) {
           throw wnaE;
         }
-        cmd = new RgbSplit(args.get(0), args.get(1),args.get(2),args.get(3));
+        cmd = new RgbSplit(args.get(0), args.get(1), args.get(2), args.get(3));
         break;
       case "rgb-combine":
-        if(args.size()!=4){
+        if (args.size() != 4) {
           throw wnaE;
         }
-        cmd = new RgbCombine(args.get(0), args.get(1),args.get(2),args.get(3));
+        cmd = new RgbCombine(args.get(0), args.get(1), args.get(2), args.get(3));
         break;
       case "brighten":
-        if(args.size()!=3){
+        if (args.size() != 3) {
           throw wnaE;
         }
-        cmd = new Brighten(Integer.parseInt(args.get(0)), args.get(1),args.get(2));
+        cmd = new Brighten(Integer.parseInt(args.get(0)), args.get(1), args.get(2));
         break;
       case "greyscale":
-        if(args.size()!=3){
+        if (args.size() != 3) {
           throw wnaE;
         }
-        cmd = new Greyscale(args.get(0), args.get(1),args.get(2));
+        cmd = new Greyscale(args.get(0), args.get(1), args.get(2));
         break;
       case "vertical-flip":
-        if(args.size()!=2){
+        if (args.size() != 2) {
           throw wnaE;
         }
         cmd = new Vflip(args.get(0), args.get(1));
         break;
       case "horizontal-flip":
-        if(args.size()!=2){
+        if (args.size() != 2) {
           throw wnaE;
         }
         cmd = new Hflip(args.get(0), args.get(1));
@@ -145,9 +146,9 @@ public class ImageController implements IController {
       //ignore comments
       if (line.isEmpty() || line.charAt(0) == '#') continue;
       //processCommand
-      String result=processCommand(line);
+      String result = processCommand(line);
       outputs.append(result);
-      if(result.contains("-EXIT-")) {
+      if (result.contains("-EXIT-")) {
         break;
       }
     }
@@ -163,9 +164,9 @@ public class ImageController implements IController {
     out.append("Enter Command:");
     //Keep asking for cmd
     while (scan.hasNextLine()) {
-      String result=processCommand(scan.nextLine());
+      String result = processCommand(scan.nextLine());
       out.append(result);
-      if(result.contains("-EXIT-")) {
+      if (result.contains("-EXIT-")) {
         break;
       }
       out.append("\nEnter Command:");
