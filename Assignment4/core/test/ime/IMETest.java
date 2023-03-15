@@ -42,7 +42,7 @@ public class IMETest {
         + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
         + "!<Error>!: \tUnknown command [lo]\n"
         + "!<Error>!: \tjava.lang.IllegalArgumentException: This grayscale component is not an option!\n"
-        + "!<Error>!: \tjava.io.FileNotFoundException: xxx\\building.ppm (???????????)\n"
+        + "!<Error>!: \tjava.io.FileNotFoundException: xxx\\building.ppm (No such file or directory)\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
         + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
         + "Executed: \t-EXIT-\n", out.toString());
@@ -55,7 +55,7 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-        "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME\\test\\IME\\fake.ppm (???????????)\n"
+        "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME\\test\\IME\\fake.ppm (No such file or directory)\n"
             + "\n"
             + "Enter Command:", out.toString());
   }
@@ -81,7 +81,7 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-        "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: Invalid PPM file: plain RAW file should begin with P3\n"
+        "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: Invalid Image file: Only ppm images are accepted\n"
             + "\n"
             + "Enter Command:", out.toString());
   }

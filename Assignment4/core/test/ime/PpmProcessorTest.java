@@ -65,6 +65,12 @@ public class PpmProcessorTest {
     ppm.loadImage("res/nocat.ppm", "original");
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void testLoadInvalidExtension() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage("res/nocat.png", "original");
+  }
+
   @Test
   public void testLoadOverwrite() throws FileNotFoundException, IOException {
     ImageProcessor ppm = new PpmProcessor();
@@ -239,6 +245,13 @@ public class PpmProcessorTest {
     List<String> sample = readPPM("res/cat-brighter.ppm");
     List<String> custom = readPPM(dst);
     assertEquals(sample.toString(), custom.toString());
+  }
+
+  @Test(expected = IOException.class)
+  public void testInvalidSaveExtension() throws FileNotFoundException, IOException {
+    ImageProcessor ppm = new PpmProcessor();
+    ppm.loadImage(src, "original");
+    ppm.save("original", "/test/cat.ppm");
   }
 
 }
