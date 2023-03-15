@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 
 import ime.control.command.Brighten;
 import ime.control.command.Greyscale;
@@ -30,7 +32,7 @@ public class ImageController implements IController {
   private ImageProcessor model;
   private final Readable in;
   private final Appendable out;
-
+  private Set<String> setScript;
 
   /**
    * Builder a controller and pass with In and Out stream.
@@ -41,6 +43,7 @@ public class ImageController implements IController {
   public ImageController(Readable in, Appendable out) {
     this.in = in;
     this.out = out;
+    this.setScript = new HashSet<>();
   }
 
   @Override
@@ -69,8 +72,17 @@ public class ImageController implements IController {
           if (args.size() != 1) {
             throw wnaE;
           }
+
+          if (this.setScript.contains(args.get(0))) {
+            throw new IllegalStateException("Encountered looping through scripts");
+          }
+
+          setScript.add(args.get(0));
           Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
           output.append(processFileScript(fileScan));
+
+          setScript.remove(args.get(0));
+
           break;
         case "load":
           if (args.size() != 2) {
@@ -125,7 +137,7 @@ public class ImageController implements IController {
           cmd = null;
           break;
       }
-    }catch (IllegalArgumentException wnag){
+    } catch (IllegalArgumentException wnag) {
       output.append("!<Error>!: \t" + wnag + "\n");
     }
 
@@ -133,7 +145,7 @@ public class ImageController implements IController {
       try {
         cmd.execute(model);
         output.append("Executed: \t").append(command).append("\n");
-      } catch (IllegalArgumentException | IllegalStateException | FileNotFoundException iae){
+      } catch (IllegalArgumentException | IllegalStateException | FileNotFoundException iae) {
         output.append("!<Error>!: \t" + iae + "\n");
       }
     }
