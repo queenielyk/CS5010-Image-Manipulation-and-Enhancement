@@ -184,25 +184,34 @@ public class ImageControllerTest {
         + "Executed: \tbrighten 50 cat-red cat-red\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
         + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
-        + "Executed: \t-EXIT-\n", out.toString());
+        + "\n"
+        + "Enter Command:", out.toString());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void MissingArgumentTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run ");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
+    assertEquals(
+        "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: Wrong number of arguments\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void ExtraArgumentTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run script.text script2.text");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
+    assertEquals(
+        "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: Wrong number of arguments\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
@@ -212,20 +221,23 @@ public class ImageControllerTest {
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
-    assertEquals("Enter Command:Unknown command [grey]\n"
+    assertEquals("Enter Command:!<Error>!: \tUnknown command [grey]\n"
         + "\n"
         + "Enter Command:", out.toString());
   }
 
-  @Test (expected = NumberFormatException.class)
+  @Test
   public void BrightNotIntTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("brighten a cat cat-a");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
+    assertEquals(
+        "Enter Command:!<Error>!: \tjava.lang.NumberFormatException: For input string: \"a\"\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
-
 
 
 }
