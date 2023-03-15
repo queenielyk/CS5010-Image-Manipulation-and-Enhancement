@@ -7,8 +7,9 @@ import ime.model.ImageProcessor;
  * This class represent a VerticalFlip command.
  */
 public class Vflip implements ImageCommand {
-  String from;
-  String to;
+
+  private String from;
+  private String to;
 
   public Vflip(String from, String to) {
     this.from = from;
@@ -16,7 +17,7 @@ public class Vflip implements ImageCommand {
   }
 
   @Override
-  public void go(ImageProcessor model) {
+  public void execute(ImageProcessor model) {
     model.verticalFlip(from, to);
   }
 }

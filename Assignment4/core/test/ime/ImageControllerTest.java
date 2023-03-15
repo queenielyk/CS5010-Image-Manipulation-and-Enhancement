@@ -14,9 +14,10 @@ import ime.model.ImageProcessor;
 import static org.junit.Assert.assertEquals;
 
 /**
- * This is a test class for {@link ImageController}
+ * This is a test class for {@link ImageController}.
  */
 public class ImageControllerTest {
+
   /**
    * This class represent a mock of {@link ImageProcessor} to take method input and store it for
    * testing purposes.
@@ -57,7 +58,7 @@ public class ImageControllerTest {
     @Override
     public void combines(String redName, String greenName, String blueName, String to) {
       log.append("R:" + redName + " " + "G:" + greenName + " " + "B:" + blueName + " "
-              + "To:" + to + "\n");
+          + "To:" + to + "\n");
     }
 
     @Override
@@ -72,7 +73,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("load res/cat.ppm cat");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("Path:res/cat.ppm Name:cat\n", log.toString());
   }
 
@@ -82,7 +83,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("greyscale value-component cat cat-greyscale");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("Mode:value-component From:cat To:cat-greyscale\n", log.toString());
   }
 
@@ -92,11 +93,10 @@ public class ImageControllerTest {
     Reader in = new StringReader("rgb-split cat cat-red cat-green cat-blue");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
-    assertEquals("Mode:red-component From:cat To:cat-red\n" +
-                    "Mode:green-component From:cat To:cat-green\n" +
-                    "Mode:blue-component From:cat To:cat-blue\n"
-            , log.toString());
+    controller.run(new MockModel(log));
+    assertEquals("Mode:red-component From:cat To:cat-red\n"
+        + "Mode:green-component From:cat To:cat-green\n"
+        + "Mode:blue-component From:cat To:cat-blue\n", log.toString());
   }
 
   @Test
@@ -105,7 +105,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("horizontal-flip cat-vertical cat-vertical-horizontal");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("From:cat-vertical To:cat-vertical-horizontal\n", log.toString());
   }
 
@@ -116,7 +116,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("vertical-flip cat cat-vertical");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("From:cat To:cat-vertical\n", log.toString());
   }
 
@@ -126,7 +126,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("brighten 10 cat cat-brighter");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("From:cat Add:10 To:cat-brighter\n", log.toString());
   }
 
@@ -136,7 +136,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("rgb-combine cat-red-tint cat-red cat-green cat-blue");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("R:cat-red G:cat-green B:cat-blue To:cat-red-tint\n", log.toString());
   }
 
@@ -146,7 +146,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("save res/cat-gs.ppm cat-greyscale");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("From:cat-greyscale Path:res/cat-gs.ppm\n", log.toString());
   }
 
@@ -156,7 +156,7 @@ public class ImageControllerTest {
     Reader in = new StringReader("run IME/test/IME/fake.text");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
   }
 
   @Test
@@ -165,45 +165,44 @@ public class ImageControllerTest {
     Reader in = new StringReader("run res/script.text");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n"
-            + "Executed: \tbrighten 30 cat cat-brighter\n"
-            + "Executed: \tsave res/cat-brighter.ppm cat-brighter\n"
-            + "Executed: \tbrighten -30 cat cat-darker\n"
-            + "Executed: \tsave res/cat-darker.ppm cat-darker\n"
-            + "Executed: \tvertical-flip cat cat-vertical\n"
-            + "Executed: \tsave res/cat-vertical.ppm cat-vertical\n"
-            + "Executed: \thorizontal-flip cat cat-horizontal\n"
-            + "Executed: \tsave res/cat-horizontal.ppm cat-horizontal\n"
-            + "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n"
-            + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
-            + "Executed: \tgreyscale value-component cat cat-greyscale\n"
-            + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
-            + "Executed: \tload res/building.ppm cat\n"
-            + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
-            + "Executed: \tbrighten 50 cat-red cat-red\n"
-            + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
-            + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
-            + "Executed: \t-EXIT-\n"
-            , out.toString());
+        + "Executed: \tbrighten 30 cat cat-brighter\n"
+        + "Executed: \tsave res/cat-brighter.ppm cat-brighter\n"
+        + "Executed: \tbrighten -30 cat cat-darker\n"
+        + "Executed: \tsave res/cat-darker.ppm cat-darker\n"
+        + "Executed: \tvertical-flip cat cat-vertical\n"
+        + "Executed: \tsave res/cat-vertical.ppm cat-vertical\n"
+        + "Executed: \thorizontal-flip cat cat-horizontal\n"
+        + "Executed: \tsave res/cat-horizontal.ppm cat-horizontal\n"
+        + "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n"
+        + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
+        + "Executed: \tgreyscale value-component cat cat-greyscale\n"
+        + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
+        + "Executed: \tload res/building.ppm cat\n"
+        + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
+        + "Executed: \tbrighten 50 cat-red cat-red\n"
+        + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
+        + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
+        + "Executed: \t-EXIT-\n", out.toString());
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void MissingArgumentTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run ");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void ExtraArgumentTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run script.text script2.text");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
-    controller.go(new MockModel(log));
+    controller.run(new MockModel(log));
   }
 
 

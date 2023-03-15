@@ -7,20 +7,29 @@ import ime.model.ImageProcessor;
  * This class represent a rgb-combine command.
  */
 public class RgbCombine implements ImageCommand {
-  String to;
-  String R;
-  String G;
-  String B;
 
-  public RgbCombine(String to, String R, String G, String B) {
+  private String to;
+  private String r;
+  private String g;
+  private String b;
+
+  /**
+   * Build a Rgb Combine command.
+   *
+   * @param to name of producing image
+   * @param r  red-component to combine
+   * @param g  green-component to combine
+   * @param b  blue-component to combine
+   */
+  public RgbCombine(String to, String r, String g, String b) {
     this.to = to;
-    this.R = R;
-    this.G = G;
-    this.B = B;
+    this.r = r;
+    this.g = g;
+    this.b = b;
   }
 
   @Override
-  public void go(ImageProcessor model) {
-    model.combines(R, G, B, to);
+  public void execute(ImageProcessor model) {
+    model.combines(r, g, b, to);
   }
 }

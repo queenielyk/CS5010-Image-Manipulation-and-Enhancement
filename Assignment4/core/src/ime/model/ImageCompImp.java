@@ -1,10 +1,11 @@
 package ime.model;
 
 /**
- * An implementation class of interface IME.model.ImageComp.
- * An image component contains red, green, blue value, and the following image component as well.
+ * An implementation class of interface IME.model.ImageComp. An image component contains red, green,
+ * blue value, and the following image component as well.
  */
 public class ImageCompImp implements ImageComp {
+
   private final int red;
   private final int green;
   private final int blue;
@@ -12,8 +13,8 @@ public class ImageCompImp implements ImageComp {
 
 
   /**
-   * A constructor to construct an image component.
-   * Three positive integers should be provided to indicate R, G, B respectively.
+   * A constructor to construct an image component. Three positive integers should be provided to
+   * indicate R, G, B respectively.
    *
    * @param red   an integer to represent red value of a pixel
    * @param green an integer to represent green value of a pixel

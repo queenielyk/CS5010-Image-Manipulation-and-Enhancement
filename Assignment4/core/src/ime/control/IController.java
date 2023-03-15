@@ -6,13 +6,13 @@ import ime.model.ImageProcessor;
 
 /**
  * The controller interface for the ImageProcess program. The functions here have been designed to
- * give control to the controller,
- * and the primary operation for the controller to function (process an image process command)
+ * give control to the controller, and the primary operation for the controller to function (process
+ * an image process command).
  */
 public interface IController {
 
   /**
-   * Process a given string command line and return status or error as a string
+   * Process a given string command line and return status or error as a string.
    *
    * @param command the command given, including any parameters (e.g. "load images/koala.ppm
    *                koala")
@@ -27,7 +27,7 @@ public interface IController {
    * @param model Model to work with
    * @throws IOException if output is not appendable or got from processCommand
    */
-  void go(ImageProcessor model) throws IOException;
+  void run(ImageProcessor model) throws IOException;
 }
 
 

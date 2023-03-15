@@ -1,11 +1,9 @@
 package ime.model;
 
 /**
- * An interface to represent an image component.
- * Each image component is a combination of red, green, blue.
- * An image is a series of image component,
- * each image component may reference to a followed image component,
- * otherwise null, if it is the last component.
+ * An interface to represent an image component. Each image component is a combination of red,
+ * green, blue. An image is a series of image component, each image component may reference to a
+ * followed image component, otherwise null, if it is the last component.
  */
 public interface ImageComp {
 
@@ -31,7 +29,6 @@ public interface ImageComp {
    * @return the image component that following this component
    */
   public ImageComp getNext();
-
 
 
 }

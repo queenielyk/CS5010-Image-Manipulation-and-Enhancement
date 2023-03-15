@@ -12,10 +12,11 @@ import java.util.Scanner;
 import java.util.function.Function;
 
 /**
- * A class to implement interface IME.model.ImageProcessor than specialized to ppm format image.
- * A processor may contain more than one images, including the original image and processed images.
+ * A class to implement interface IME.model.ImageProcessor than specialized to ppm format image. A
+ * processor may contain more than one images, including the original image and processed images.
  */
 public class PpmProcessor implements ImageProcessor {
+
   private Map<String, ImageComp> images;
   private int height;
   private int width;
@@ -30,7 +31,7 @@ public class PpmProcessor implements ImageProcessor {
 
   @Override
   public void loadImage(String path, String name)
-          throws FileNotFoundException, IllegalStateException {
+      throws FileNotFoundException, IllegalStateException {
     String imageText = readPPM(path);
 
     Scanner sc = new Scanner(imageText);
@@ -120,23 +121,23 @@ public class PpmProcessor implements ImageProcessor {
         break;
       case "value-component":
         greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
-                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
-                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
-                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]))
+            Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
+            Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
+            Math.max(Math.max(RGB[0], RGB[1]), RGB[2]))
         );
         break;
       case "intensity-component":
         greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
-                (RGB[0] + RGB[1] + RGB[2]) / 3,
-                (RGB[0] + RGB[1] + RGB[2]) / 3,
-                (RGB[0] + RGB[1] + RGB[2]) / 3)
+            (RGB[0] + RGB[1] + RGB[2]) / 3,
+            (RGB[0] + RGB[1] + RGB[2]) / 3,
+            (RGB[0] + RGB[1] + RGB[2]) / 3)
         );
         break;
       case "luma-component":
         greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
-                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
-                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
-                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]))
+            (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
+            (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
+            (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]))
         );
         break;
       default:
@@ -145,16 +146,16 @@ public class PpmProcessor implements ImageProcessor {
   }
 
   /**
-   * A helper method to loop over the component chain of the target image,
-   * meanwhile executing the specified function to each component to attain a new component.
-   * The function is passed by invoker that is specified based on the visualization mode.
+   * A helper method to loop over the component chain of the target image, meanwhile executing the
+   * specified function to each component to attain a new component. The function is passed by
+   * invoker that is specified based on the visualization mode.
    *
    * @param fromChain  component chain of the target image
    * @param to         new image's name
    * @param conversion function define how a new component to be constructed
    */
   private void greyscaleLooper(ImageComp fromChain, String to,
-                               Function<int[], ImageComp> conversion) {
+      Function<int[], ImageComp> conversion) {
     ImageComp toChain = null;
     ImageComp prevComp = null;
     while (fromChain != null) {
@@ -259,9 +260,9 @@ public class PpmProcessor implements ImageProcessor {
     while (fromChain != null) {
       int[] rgb = fromChain.getRGB();
       ImageComp current = new ImageCompImp(
-              Math.max(0, Math.min(rgb[0] + add, this.maxValue)),
-              Math.max(0, Math.min(rgb[1] + add, this.maxValue)),
-              Math.max(0, Math.min(rgb[2] + add, this.maxValue))
+          Math.max(0, Math.min(rgb[0] + add, this.maxValue)),
+          Math.max(0, Math.min(rgb[1] + add, this.maxValue)),
+          Math.max(0, Math.min(rgb[2] + add, this.maxValue))
       );
       if (toChain == null) {
         toChain = current;
@@ -290,7 +291,7 @@ public class PpmProcessor implements ImageProcessor {
     while (redChain != null && greenChain != null && blueChain != null) {
 
       ImageComp current = new ImageCompImp(
-              redChain.getRGB()[0], greenChain.getRGB()[1], blueChain.getRGB()[2]);
+          redChain.getRGB()[0], greenChain.getRGB()[1], blueChain.getRGB()[2]);
 
       if (toChain == null) {
         toChain = current;

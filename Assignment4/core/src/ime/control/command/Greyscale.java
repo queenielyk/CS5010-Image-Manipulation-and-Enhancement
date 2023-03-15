@@ -7,10 +7,18 @@ import ime.model.ImageProcessor;
  * This class represent a Greyscale command.
  */
 public class Greyscale implements ImageCommand {
+
   String mode;
   String from;
   String to;
 
+  /**
+   * Build a greyscale command.
+   *
+   * @param mode name of the greyscale mode to apply
+   * @param from name of source image
+   * @param to   name of image producing
+   */
   public Greyscale(String mode, String from, String to) {
     this.mode = mode;
     this.from = from;
@@ -18,7 +26,7 @@ public class Greyscale implements ImageCommand {
   }
 
   @Override
-  public void go(ImageProcessor model) {
+  public void execute(ImageProcessor model) {
     model.greyscale(mode, from, to);
   }
 }

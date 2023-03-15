@@ -4,9 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * An interface to represent a processor to process an image.
- * A processor read the original image and able to process each component to produce a new image.
- * A processor could export image to local as well.
+ * An interface to represent a processor to process an image. A processor read the original image
+ * and able to process each component to produce a new image. A processor could export image to
+ * local as well.
  */
 public interface ImageProcessor {
 
@@ -19,17 +19,12 @@ public interface ImageProcessor {
    * @throws IllegalStateException the magic number of the image is not P3
    */
   public void loadImage(String path, String name)
-          throws FileNotFoundException, IllegalStateException;
+      throws FileNotFoundException, IllegalStateException;
 
   /**
-   * A method to convert specified image to greyscale based on specified mode.
-   * Modes to convert image to greyscale:
-   * - red-component
-   * - green-component
-   * - blue-component
-   * - value-component
-   * - intensity-component
-   * - luma-component
+   * A method to convert specified image to greyscale based on specified mode. Modes to convert
+   * image to greyscale: - red-component - green-component - blue-component - value-component -
+   * intensity-component - luma-component
    *
    * @param mode mode to be adopted to convert image to greyscale
    * @param from name of image to be converted
@@ -56,9 +51,8 @@ public interface ImageProcessor {
 
 
   /**
-   * A method to adjust the brightness of specified image, and name it.
-   * The brightness value of the image clamp to it's maximum value defined at the prototype,
-   * 0 as the minimum value as well.
+   * A method to adjust the brightness of specified image, and name it. The brightness value of the
+   * image clamp to it's maximum value defined at the prototype, 0 as the minimum value as well.
    *
    * @param from name of the image to be adjusted
    * @param add  the brightness level to be added to the current level
@@ -78,8 +72,8 @@ public interface ImageProcessor {
   public void combines(String redName, String greenName, String blueName, String to);
 
   /**
-   * A method to export image to class dependent format and save at local.
-   * This method will overwrite the existing file if this path already exist.
+   * A method to export image to class dependent format and save at local. This method will
+   * overwrite the existing file if this path already exist.
    *
    * @param from name of the image to be export
    * @param path relative path to save the image at local

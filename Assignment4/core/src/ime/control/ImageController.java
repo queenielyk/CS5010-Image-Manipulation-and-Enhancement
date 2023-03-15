@@ -21,18 +21,18 @@ import ime.model.PpmProcessor;
 
 
 /**
- * This class represents a controller for {@link ImageProcessor}
- * that will delegate command from Readable.
- * In and return Output to Appendable.
+ * This class represents a controller for {@link ImageProcessor} that will delegate command from
+ * Readable. In and return Output to Appendable.
  */
 public class ImageController implements IController {
+
   private ImageProcessor model;
   private final Readable in;
   private final Appendable out;
 
 
   /**
-   * Builder a controller and pass with In and Out stream
+   * Builder a controller and pass with In and Out stream.
    *
    * @param in  Input object
    * @param out Output object
@@ -124,7 +124,7 @@ public class ImageController implements IController {
         break;
     }
     if (cmd != null) {
-      cmd.go(model);
+      cmd.execute(model);
       output.append("Executed: \t" + command + "\n");
     }
 
@@ -144,7 +144,9 @@ public class ImageController implements IController {
     while (fileScan.hasNextLine()) {
       String line = fileScan.nextLine();
       //ignore comments
-      if (line.isEmpty() || line.charAt(0) == '#') continue;
+      if (line.isEmpty() || line.charAt(0) == '#') {
+        continue;
+      }
       //processCommand
       String result = processCommand(line);
       outputs.append(result);
@@ -157,7 +159,7 @@ public class ImageController implements IController {
   }
 
   @Override
-  public void go(ImageProcessor model) throws IOException {
+  public void run(ImageProcessor model) throws IOException {
     Objects.requireNonNull(model);
     this.model = model;
     Scanner scan = new Scanner(this.in);
@@ -174,10 +176,17 @@ public class ImageController implements IController {
   }
 
 
+  /**
+   * Main method to run for controller.
+   *
+   * @param args command line argument passing in
+   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
+   *                     such path).
+   */
   public static void main(String[] args) throws IOException {
     //Example main program
     IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
-    ctrl.go(new PpmProcessor());
+    ctrl.run(new PpmProcessor());
   }
 
 

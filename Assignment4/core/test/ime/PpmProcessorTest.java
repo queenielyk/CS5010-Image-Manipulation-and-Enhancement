@@ -25,8 +25,8 @@ public class PpmProcessorTest {
   private final String dst = "res/processor.ppm";
 
   /**
-   * A method to be executed at the end of the test class.
-   * Remove image exported from this test class.
+   * A method to be executed at the end of the test class. Remove image exported from this test
+   * class.
    */
   @AfterClass
   public static void removeDstPpm() {
