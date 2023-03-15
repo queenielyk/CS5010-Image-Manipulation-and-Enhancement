@@ -32,6 +32,11 @@ public class PpmProcessor implements ImageProcessor {
   @Override
   public void loadImage(String path, String name)
       throws FileNotFoundException, IllegalStateException {
+
+    if (!path.endsWith(".ppm")) {
+      throw new IllegalStateException("Invalid Image file: Only ppm images are accepted");
+    }
+
     String imageText = readPPM(path);
 
     Scanner sc = new Scanner(imageText);
