@@ -34,6 +34,8 @@ save res/cat-v-h.ppm cat-vertical-horizontal
 #create a greyscale using only the value component, as an image cat-greyscale
 greyscale value-component cat cat-greyscale
 
+quit
+
 #save cat-greyscale
 save res/cat-gs.ppm cat-greyscale
 

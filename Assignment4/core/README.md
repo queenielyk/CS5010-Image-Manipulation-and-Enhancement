@@ -109,6 +109,7 @@ IME/model
 1.  Run ImageController.java to start the program   
 2.  Enter command with parameters separated by spaces **(ex. "Enter Command:run res/script.text")**
 >This scripts will run on images files under res/folder and output file will produce to the same folder.
+3.  Enter `exit`/`q`/`quit` to exit the program
 
 ## Citation
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.

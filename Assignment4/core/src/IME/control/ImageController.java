@@ -57,6 +57,11 @@ public class ImageController implements IController {
 
     //Create cmd
     switch (in) {
+      case "q":
+      case "quit":
+      case "exit":
+        output.append("Executed: \t" + "-EXIT-" + "\n");
+        break;
       case "run":
         if(args.size()!=1){
           throw wnaE;
@@ -140,7 +145,12 @@ public class ImageController implements IController {
       //ignore comments
       if (line.isEmpty() || line.charAt(0) == '#') continue;
       //processCommand
-      outputs.append(processCommand(line));
+      String result=processCommand(line);
+      outputs.append(result);
+      if(result.contains("-EXIT-")) {
+        out.append("<<<<Program quited>>>>>");
+        break;
+      }
     }
 
     return outputs.toString();
@@ -154,7 +164,11 @@ public class ImageController implements IController {
     out.append("Enter Command:");
     //Keep asking for cmd
     while (scan.hasNextLine()) {
-      out.append(processCommand(scan.nextLine()));
+      String result=processCommand(scan.nextLine());
+      out.append(result);
+      if(result.contains("-EXIT-")) {
+        break;
+      }
       out.append("\nEnter Command:");
     }
   }
