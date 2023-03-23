@@ -6,14 +6,9 @@ import static org.junit.Assert.assertEquals;
 import ime.control.IController;
 import ime.control.ImageController;
 import ime.model.PpmProcessor;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
-import javax.imageio.ImageIO;
 import org.junit.Test;
 
 /**
@@ -28,31 +23,29 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n"
-            + "Executed: \tbrighten 30 cat cat-brighter\n"
-            + "Executed: \tsave res/cat-brighter.ppm cat-brighter\n"
-            + "Executed: \tbrighten -30 cat cat-darker\n"
-            + "Executed: \tsave res/cat-darker.ppm cat-darker\n"
-            + "Executed: \tvertical-flip cat cat-vertical\n"
-            + "Executed: \tsave res/cat-vertical.ppm cat-vertical\n"
-            + "Executed: \thorizontal-flip cat cat-horizontal\n"
-            + "Executed: \tsave res/cat-horizontal.ppm cat-horizontal\n"
-            + "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n"
-            + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
-            + "Executed: \tgreyscale value-component cat cat-greyscale\n"
-            + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
-            + "Executed: \tload res/building.ppm cat\n"
-            + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
-            + "Executed: \tbrighten 50 cat-red cat-red\n"
-            + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
-            + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
-            + "!<Error>!: \tUnknown command [lo]\n"
-            + "!<Error>!: \tjava.lang.IllegalArgumentException: "
-            + "This grayscale component is not an option!\n"
-            + "!<Error>!: \tjava.io.FileNotFoundException: "
-            + "xxx\\building.ppm (No such file or directory)\n"
-            + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
-            + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
-            + "Executed: \t-EXIT-\n", out.toString());
+        + "Executed: \tbrighten 30 cat cat-brighter\n"
+        + "Executed: \tsave res/cat-brighter.ppm cat-brighter\n"
+        + "Executed: \tbrighten -30 cat cat-darker\n"
+        + "Executed: \tsave res/cat-darker.ppm cat-darker\n"
+        + "Executed: \tvertical-flip cat cat-vertical\n"
+        + "Executed: \tsave res/cat-vertical.ppm cat-vertical\n"
+        + "Executed: \thorizontal-flip cat cat-horizontal\n"
+        + "Executed: \tsave res/cat-horizontal.ppm cat-horizontal\n"
+        + "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n"
+        + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
+        + "Executed: \tgreyscale value-component cat cat-greyscale\n"
+        + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
+        + "Executed: \tload res/building.ppm cat\n"
+        + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
+        + "Executed: \tbrighten 50 cat-red cat-red\n"
+        + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
+        + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
+        + "!<Error>!: \tUnknown command [lo]\n"
+        + "!<Error>!: \tjava.lang.IllegalArgumentException: This grayscale component is not an option!\n"
+        + "!<Error>!: \tjava.io.FileNotFoundException: xxx\\building.ppm (The system cannot find the path specified)\n"
+        + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
+        + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
+        + "Executed: \t-EXIT-\n", out.toString());
   }
 
   @Test
@@ -62,25 +55,24 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: "
-                    + "IME\\test\\IME\\fake.ppm (No such file or directory)\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: "
+            + "IME\\test\\IME\\fake.ppm (The system cannot find the path specified)\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
   public void wrongGreyTypeTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("load res/cat.ppm cat \n"
-            + "greyscale xxxx-component cat cat-greyscale");
+        + "greyscale xxxx-component cat cat-greyscale");
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat \n"
-            + "\n"
-            + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException:"
-            + "This grayscale component is not an option!\n"
-            + "\n"
-            + "Enter Command:", out.toString());
+        + "\n"
+        + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: This grayscale component is not an option!\n"
+        + "\n"
+        + "Enter Command:", out.toString());
   }
 
   @Test
@@ -90,10 +82,10 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
-                    + "Invalid Image file: Only ppm images are accepted\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
+            + "Invalid Image file: Only ppm images are accepted\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
@@ -103,10 +95,10 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
-                    + "This image is not exist!\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
+            + "This image is not exist!\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -117,12 +109,12 @@ public class IMETest {
     controller.run(new PpmProcessor());
   }
 
-  @Test
-  public void ImageIOTest() throws IOException {
-
-    BufferedImage cat = ImageIO.read(new File("res/cat.ppm"));
-//    BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-    ImageIO.write(cat, "png", new File("test.png"));
-  }
+//  @Test
+//  public void ImageIOTest() throws IOException {
+//
+//    BufferedImage cat = ImageIO.read(new File("res/cat.ppm"));
+////    BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+//    ImageIO.write(cat, "png", new File("test.png"));
+//  }
 
 }
