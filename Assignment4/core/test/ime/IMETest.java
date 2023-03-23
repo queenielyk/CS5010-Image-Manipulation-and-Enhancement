@@ -7,10 +7,13 @@ import ime.control.IController;
 import ime.control.ImageController;
 import ime.model.PpmProcessor;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import javax.imageio.ImageIO;
 import org.junit.Test;
 
 /**
@@ -112,6 +115,14 @@ public class IMETest {
     Reader in = new StringReader("run res/loop1.text");
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
+  }
+
+  @Test
+  public void ImageIOTest() throws IOException {
+
+    BufferedImage cat = ImageIO.read(new File("res/cat.ppm"));
+//    BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+    ImageIO.write(cat, "png", new File("test.png"));
   }
 
 }
