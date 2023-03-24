@@ -19,7 +19,7 @@ public interface ImageProcessor {
    * @throws IllegalStateException the magic number of the image is not P3
    */
   public void loadImage(String path, String name)
-      throws FileNotFoundException, IllegalStateException;
+          throws FileNotFoundException, IllegalStateException;
 
   /**
    * A method to convert specified image to greyscale based on specified mode. Modes to convert
@@ -68,8 +68,9 @@ public interface ImageProcessor {
    * @param greenName the name of green-based greyscale image
    * @param blueName  the name of blue-based greyscale image
    * @param to        new image's name
+   * @throws IllegalStateException Either image info is different to others
    */
-  public void combines(String redName, String greenName, String blueName, String to);
+  public void combines(String redName, String greenName, String blueName, String to) throws IllegalStateException;
 
   /**
    * A method to export image to class dependent format and save at local. This method will
