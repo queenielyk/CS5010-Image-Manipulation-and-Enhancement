@@ -74,7 +74,7 @@ public class IMETest {
     controller.run(new PpmProcessor());
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat \n"
             + "\n"
-            + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException:"
+            + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: "
             + "This grayscale component is not an option!\n"
             + "\n"
             + "Enter Command:", out.toString());
