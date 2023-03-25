@@ -1,7 +1,7 @@
-# CS5010 Assignment4: Image Manipulation and Enhancement
+# CS5010 Assignment5: Image Manipulation and Enhancement V2.0
 
 Member: Queenie, Cheng    
-Date: March 3 2023   
+Date: March 25 2023   
 Professor: Amit Shesh
 
 ## Project idea
@@ -63,7 +63,7 @@ extensions.
 
 ### Control flow
 
-The major control flow will be done inside `processCommand()` implementation which takes a String
+The major control flow will be done inside `processCommand()` implementation, which takes a String
 command.
 
 First, parse it into two part: commandType and List of Arguments by calling *scanner.next()* in a
@@ -91,7 +91,7 @@ This makes the controller capable to take not just *System.in/ out* but also fil
 
 Image is composed by a group of components.
 Each component is a combination of Red, Green, and Blue (RGB).
-Hence, we store a image as a Linked List: each compontent is a Node of Linked List who contains the
+Hence, we store a image as a Linked List: each component is a Node of Linked List who contains the
 reference of it's next component.
 
 e.g. Node(RGB = 0,0,0) -> Node(RGB = 0,0,1) -> Node(RGB = 0,0,2) -> NULL
@@ -132,16 +132,20 @@ ime/model
 
 ## Instruction
 
-1. Run ImageController.java to start the program
-2. Enter command with parameters separated by spaces **(ex. "Enter Command:run res/script.text")**
+1. Run `ImageController.java` to start the program. 
+   - Enter command with parameters separated by spaces.**(ex. ">run res/script.text")**
+   - Enter `exit`/`q`/`quit` to exit the program   
+
+2. Run packed `core.jar` file on command promote with command lind option.
+   - -file res/script.text
+     **(ex. ">java -jar core.jar res/script.text")**
+   - Program will run the script and shows
 
 > This scripts will run on images files under res/folder and output file will produce to the same
 > folder.
-
-3. Enter `exit`/`q`/`quit` to exit the program
 
 ## Citation
 
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
 > - res/cat.ppm
->- res/building.ppm
+> - res/building.ppm
