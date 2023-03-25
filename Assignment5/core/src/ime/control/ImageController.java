@@ -84,7 +84,6 @@ public class ImageController implements IController {
           output.append(processFileScript(fileScan));
 
           setScript.remove(args.get(0));
-
           break;
         case "load":
           if (args.size() != 2) {
@@ -147,8 +146,10 @@ public class ImageController implements IController {
       try {
         cmd.execute(model);
         output.append("Executed: \t").append(command).append("\n");
-      } catch (IllegalArgumentException | IllegalStateException | FileNotFoundException iae) {
-        output.append("!<Error>!: \t" + iae + "\n");
+      } catch (IllegalArgumentException | IllegalStateException iae) {
+        output.append("!<Error>!: \t" + iae.toString() + "\n");
+      } catch (FileNotFoundException fne){
+        output.append("!<Error>!: \t" + fne.toString().replaceAll("The system cannot find the path specified","No such file or directory") + "\n");
       }
     }
 
