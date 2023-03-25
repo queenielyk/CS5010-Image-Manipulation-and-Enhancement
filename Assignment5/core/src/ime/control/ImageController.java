@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -206,9 +208,18 @@ public class ImageController implements IController {
    *                     such path).
    */
   public static void main(String[] args) throws IOException {
-    //Example main program
-    IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
-    ctrl.run(new PpmProcessor());
+    int fileOption = Arrays.asList(args).indexOf("-file");
+
+    //cmd line option
+    if(args.length>0 && fileOption!=-1){
+      IController ctrl = new ImageController(new StringReader("run "+args[fileOption+1]), System.out);
+      ctrl.run(new PpmProcessor());
+    }
+    else {
+      //Example main program
+      IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
+      ctrl.run(new PpmProcessor());
+    }
   }
 
 

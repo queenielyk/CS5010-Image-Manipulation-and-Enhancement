@@ -1,5 +1,7 @@
 package ime.model;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Function;
+import javax.imageio.ImageIO;
 
 /**
  * A class to implement interface IME.model.ImageProcessor than specialized to ppm format image. A
@@ -80,6 +83,34 @@ public class PpmProcessor implements ImageProcessor {
       }
     }
     return builder.toString();
+  }
+
+
+  /**
+   * Read Image file (.jpg .png) from path
+   * @param path path of the .ppm image
+   * @return a String of image content
+   * @throws IOException the path and file name is not exist
+   */
+  public void readImage(String path,String name) throws IOException {
+    //Read file from path
+    BufferedImage image = ImageIO.read(new FileInputStream(path));
+
+    int width = image.getWidth();
+    int height = image.getHeight();
+    int[][][] imageArray = new int[height][width][3];
+
+    for(int j=0;j<height;j++) {
+      for (int i = 0; i < width; i++) {
+        Color c= new Color(image.getRGB(i,j));
+        images.values();
+        imageArray[i][j][0]=c.getRed();
+        imageArray[i][j][1]=c.getGreen();
+        imageArray[i][j][2]=c.getBlue();
+      }
+    }
+    images.put(name,imageArray);
+    infos.put(name,new int[]{width, height, 255});
   }
 
   /**
