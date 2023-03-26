@@ -1,30 +1,130 @@
 package mime.model;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.function.Function;
 
+import javax.imageio.ImageIO;
+
 public class MoreImageProcessorImpl implements MoreImageProcessor {
-  private Map<String, int[][][]> images;
-  private Map<String, int[]> infos;
+  private Map<String, int[][][]> images; // <name, int[row, col, [r, g, b]]>
+  private Map<String, int[]> infos; // <name, int[width, height, maxi value]>
+
+  protected Set<String> acceptFormat;
 
   public MoreImageProcessorImpl() {
-    images = new HashMap<String, int[][][]>();
-    infos = new HashMap<>();
+    this.images = new HashMap<String, int[][][]>();
+    this.infos = new HashMap<>();
+    this.acceptFormat = new HashSet<>(Arrays.asList("ppm", "jpg", "jpeg", "png", "bmp"));
   }
 
   @Override
-  public void loadImage(BufferedImage image, String name) {
-    
+  public boolean verifyFormat(String path) {
+    if (this.acceptFormat.contains(path.substring(path.lastIndexOf('.') + 1))) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public void loadImage(BufferedImage image, String name) throws IllegalStateException {
+
+    if (image == null) {
+      throw new IllegalStateException("Image is not accessible!");
+    }
+
+    int width = image.getWidth();
+    int height = image.getHeight();
+
+    int[] dataBuffInt = image.getRGB(0, 0, width, height, null, 0, width);
+    int[][][] imageArray = new int[height][width][3];
+    int row = 0;
+    int col = 0;
+
+    for (int rgb : dataBuffInt) {
+      int red = (rgb >> 16) & 0xFF;
+      int green = (rgb >> 8) & 0xFF;
+      int blue = (rgb) & 0xFF;
+      imageArray[row][col] = new int[]{red, green, blue};
+      col++;
+      if (col == width) {
+        col = 0;
+        row++;
+      }
+    }
+
+    infos.put(name, new int[]{width, height, 255});
+    images.put(name, imageArray);
   }
 
   @Override
   public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
 
+    if (!path.endsWith(".ppm")) {
+      throw new IllegalStateException("This input format is not available");
+    }
+
+
+    Scanner sc = new Scanner(new FileInputStream(path));
+
+    if (!sc.nextLine().equals("P3")) {
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    }
+
+    String s = sc.nextLine();
+    if (s.charAt(0) == '#') {
+      s = sc.nextLine();
+    }
+    //Dimension
+    String[] splited = s.split(" ");
+    int width = Integer.parseInt(splited[0]);
+    int height = Integer.parseInt(splited[1]);
+    //Maxi Value
+    int maxi = Integer.parseInt(sc.nextLine());
+
+
+    int[][][] imageArray = new int[height][width][3];
+    int row = 0;
+    int col = 0;
+    int count = 0;
+
+    while (sc.hasNextLine()) {
+      s = sc.nextLine();
+      if (s.isEmpty()) {
+        continue;
+      }
+      if (s.charAt(0) != '#') {
+        splited = s.split(" ");
+        for (String ss : splited) {
+          if (!ss.equals("")) {
+            imageArray[row][col][count] = Integer.parseInt(ss);
+            count++;
+            if (count == 3) {
+              count = 0;
+              col++;
+              if (col == width) {
+                col = 0;
+                row++;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    infos.put(name, new int[]{width, height, maxi});
+    images.put(name, imageArray);
   }
 
   /**
@@ -89,7 +189,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param to         new image's name
    * @param conversion function define how a new component to be constructed
    */
-  private void greyscaleLooper(String from, String to, Function<int[], int[]> conversion) {
+  protected void greyscaleLooper(String from, String to, Function<int[], int[]> conversion) {
 
     int[][][] fromImage = images.get(from);
     int[] info = infos.get(from);
@@ -200,9 +300,42 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   @Override
-  public void save(String from, String path) throws IOException {
+  public void save(String from, String path) throws IOException, IllegalStateException {
 
     checkImageExistence(from);
+    if (!verifyFormat(path)) {
+      throw new IllegalStateException("This output format is not available");
+    }
+
+
+    if (path.endsWith(".ppm")) {
+      savePPM(from, path);
+      return;
+    }
+
+    saveBJP(from, path);
+  }
+
+  private void saveBJP(String from, String path) throws IOException {
+    int[] info = infos.get(from);
+    int[][][] fromImage = images.get(from);
+
+    BufferedImage image = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_ARGB);
+    int[] rgb;
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        rgb = fromImage[row][col];
+        Color c = new Color(rgb[0], rgb[1], rgb[2]);
+        image.setRGB(col, row, c.getRGB());
+
+      }
+    }
+    File outputfile = new File(path);
+    ImageIO.write(image, path.substring(path.lastIndexOf('.') + 1), outputfile);
+    System.out.println(path.substring(path.lastIndexOf('.') + 1));
+  }
+
+  private void savePPM(String from, String path) throws IOException {
     int[] info = infos.get(from);
 
     FileWriter imageWriter = new FileWriter(path);
@@ -218,8 +351,13 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         }
       }
     }
-
     imageWriter.close();
+  }
+
+
+  @Override
+  public void filter(String mode, String from, String to) {
+
   }
 
   @Override
