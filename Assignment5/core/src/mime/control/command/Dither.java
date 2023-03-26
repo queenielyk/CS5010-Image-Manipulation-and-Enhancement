@@ -1,7 +1,5 @@
 package mime.control.command;
 
-import ime.control.ImageCommand;
-import ime.model.ImageProcessor;
 import java.io.IOException;
 import mime.model.MoreImageProcessor;
 
@@ -29,6 +27,6 @@ public class Dither implements MoreImageCommand {
    */
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
-
+    model.dithering(from, to);
   }
 }

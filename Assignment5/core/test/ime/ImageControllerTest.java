@@ -1,17 +1,15 @@
 package ime;
 
-import org.junit.Test;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import static org.junit.Assert.assertEquals;
 
 import ime.control.IController;
 import ime.control.ImageController;
 import ime.model.ImageProcessor;
-
-import static org.junit.Assert.assertEquals;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import org.junit.Test;
 
 /**
  * This is a test class for {@link ImageController}.
@@ -24,7 +22,7 @@ public class ImageControllerTest {
    */
   public static class MockModel implements ImageProcessor {
 
-    private final StringBuilder log;
+    protected final StringBuilder log;
 
     public MockModel(StringBuilder log) {
       this.log = log;

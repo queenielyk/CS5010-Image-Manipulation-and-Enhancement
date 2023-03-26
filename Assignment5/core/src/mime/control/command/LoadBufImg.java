@@ -1,8 +1,6 @@
 package mime.control.command;
 
-import ime.control.ImageCommand;
-import ime.control.command.Load;
-import ime.model.ImageProcessor;
+
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,13 +9,13 @@ import mime.model.MoreImageProcessor;
 
 public class LoadBufImg implements MoreImageCommand {
 
-  private String path;
-  private String imgName;
+  private final String path;
+  private final String imgName;
 
   /**
    * Build a load command.
    *
-   * @param path string to load file from
+   * @param path    string to load file from
    * @param imgName name of image file will be store as
    */
   public LoadBufImg(String path, String imgName) {

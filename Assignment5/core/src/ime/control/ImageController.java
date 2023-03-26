@@ -1,5 +1,15 @@
 package ime.control;
 
+import ime.control.command.Brighten;
+import ime.control.command.Greyscale;
+import ime.control.command.Hflip;
+import ime.control.command.Load;
+import ime.control.command.RgbCombine;
+import ime.control.command.RgbSplit;
+import ime.control.command.Save;
+import ime.control.command.Vflip;
+import ime.model.ImageProcessor;
+import ime.model.PpmProcessor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,17 +21,6 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
-import ime.control.command.Brighten;
-import ime.control.command.Greyscale;
-import ime.control.command.Hflip;
-import ime.control.command.Load;
-import ime.control.command.RgbCombine;
-import ime.control.command.RgbSplit;
-import ime.control.command.Save;
-import ime.control.command.Vflip;
-import ime.model.ImageProcessor;
-import ime.model.PpmProcessor;
-
 
 /**
  * This class represents a controller for {@link ImageProcessor} that will delegate command from
@@ -32,7 +31,7 @@ public class ImageController implements IController {
   protected ImageProcessor model;
   private final Readable in;
   private final Appendable out;
-  private Set<String> setScript;
+  private final Set<String> setScript;
 
   /**
    * Builder a controller and pass with In and Out a stream.
@@ -145,8 +144,12 @@ public class ImageController implements IController {
       try {
         cmd.execute(model);
         output.append("Executed: \t").append(command).append("\n");
-      } catch (IllegalArgumentException | IllegalStateException | FileNotFoundException iae) {
+      } catch (IllegalArgumentException | IllegalStateException iae) {
         output.append("!<Error>!: \t" + iae + "\n");
+      } catch (FileNotFoundException fne) {
+        output.append("!<Error>!: \t" + fne.toString()
+            .replaceAll("The system cannot find the path specified", "No such file or directory")
+            + "\n");
       }
     }
 
