@@ -3,8 +3,9 @@ package mime.control.command;
 import ime.control.ImageCommand;
 import ime.model.ImageProcessor;
 import java.io.IOException;
+import mime.model.MoreImageProcessor;
 
-public class Dither implements ImageCommand {
+public class Dither implements MoreImageCommand {
 
   String from;
   String to;
@@ -27,7 +28,7 @@ public class Dither implements ImageCommand {
    * @throws IOException if IO error occurs in model's method(ex. load can not find file)
    */
   @Override
-  public void execute(ImageProcessor model) throws IOException {
+  public void execute(MoreImageProcessor model) throws IOException {
 
   }
 }

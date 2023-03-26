@@ -1,5 +1,6 @@
 package mime;
 
+import mime.control.MoreImageController;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -8,15 +9,15 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import ime.control.IController;
-import ime.control.ImageController;
+
 import ime.model.ImageProcessor;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * This is a test class for {@link ImageController}.
+ * This is a test class for {@link MoreImageController}.
  */
-public class ImageControllerTest {
+public class MoreImageControllerTest {
 
   /**
    * This class represent a mock of {@link ImageProcessor} to take method input and store it for
@@ -71,7 +72,7 @@ public class ImageControllerTest {
   public void mockLoadTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load res/cat.ppm cat");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Path:res/cat.ppm Name:cat\n", log.toString());
@@ -81,7 +82,7 @@ public class ImageControllerTest {
   public void mockGreyscaleTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("greyscale value-component cat cat-greyscale");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Mode:value-component From:cat To:cat-greyscale\n", log.toString());
@@ -91,7 +92,7 @@ public class ImageControllerTest {
   public void mockRgbSplitTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("rgb-split cat cat-red cat-green cat-blue");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Mode:red-component From:cat To:cat-red\n"
@@ -103,7 +104,7 @@ public class ImageControllerTest {
   public void mockHflipTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("horizontal-flip cat-vertical cat-vertical-horizontal");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("From:cat-vertical To:cat-vertical-horizontal\n", log.toString());
@@ -114,7 +115,7 @@ public class ImageControllerTest {
   public void mockVflipTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("vertical-flip cat cat-vertical");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("From:cat To:cat-vertical\n", log.toString());
@@ -124,7 +125,7 @@ public class ImageControllerTest {
   public void mockVBrightenTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("brighten 10 cat cat-brighter");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("From:cat Add:10 To:cat-brighter\n", log.toString());
@@ -134,7 +135,7 @@ public class ImageControllerTest {
   public void mockCombineTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("rgb-combine cat-red-tint cat-red cat-green cat-blue");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("R:cat-red G:cat-green B:cat-blue To:cat-red-tint\n", log.toString());
@@ -144,7 +145,7 @@ public class ImageControllerTest {
   public void mockSaveTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("save res/cat-gs.ppm cat-greyscale");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("From:cat-greyscale Path:res/cat-gs.ppm\n", log.toString());
@@ -154,7 +155,7 @@ public class ImageControllerTest {
   public void ScriptNotFoundTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run IME/test/IME/fake.text");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
   }
@@ -163,7 +164,7 @@ public class ImageControllerTest {
   public void RunScriptTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run res/script.text");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n"
@@ -192,7 +193,7 @@ public class ImageControllerTest {
   public void MissingArgumentTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run ");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals(
@@ -205,7 +206,7 @@ public class ImageControllerTest {
   public void ExtraArgumentTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run script.text script2.text");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals(
@@ -218,7 +219,7 @@ public class ImageControllerTest {
   public void UnknownCommandTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("grey value-component cat cat-greyscale");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Enter Command:!<Error>!: \tUnknown command [grey]\n"
@@ -230,7 +231,7 @@ public class ImageControllerTest {
   public void BrightNotIntTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("brighten a cat cat-a");
-    IController controller = new ImageController(in, out);
+    IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals(

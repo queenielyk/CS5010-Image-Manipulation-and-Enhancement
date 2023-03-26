@@ -29,13 +29,13 @@ import ime.model.PpmProcessor;
  */
 public class ImageController implements IController {
 
-  private ImageProcessor model;
+  protected ImageProcessor model;
   private final Readable in;
   private final Appendable out;
   private Set<String> setScript;
 
   /**
-   * Builder a controller and pass with In and Out stream.
+   * Builder a controller and pass with In and Out a stream.
    *
    * @param in  Input object
    * @param out Output object
@@ -160,7 +160,7 @@ public class ImageController implements IController {
    * @return String of execution result.
    * @throws IOException if command in script try to run script file that can not be found
    */
-  private String processFileScript(Scanner fileScan) throws IOException {
+  protected String processFileScript(Scanner fileScan) throws IOException {
     StringBuilder outputs = new StringBuilder();
 
     while (fileScan.hasNextLine()) {

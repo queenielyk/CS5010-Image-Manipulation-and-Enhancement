@@ -8,9 +8,9 @@ import ime.model.ImageProcessor;
  */
 public class Greyscale implements ImageCommand {
 
-  String mode;
-  String from;
-  String to;
+  private String mode;
+  private String from;
+  private String to;
 
   /**
    * Build a greyscale command.
