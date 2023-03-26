@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,7 +62,7 @@ public abstract class AbstractMIPTest {
 
   private String readBJP(String path) throws IOException {
     BufferedImage image = ImageIO.read(new File(path));
-    return image.toString();
+    return Arrays.toString(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()));
   }
 
   private void loadImageInvoker(String path, String name) throws IOException {
@@ -253,6 +254,18 @@ public abstract class AbstractMIPTest {
     processor.save("luma", dst);
 
     String sample = readImage("res/cat-luma." + this.format);
+    String custom = readImage(dst);
+    assertEquals(sample, custom);
+  }
+
+  @Test
+  public void testGreyScaleSepia() throws FileNotFoundException, IOException {
+
+    loadImageInvoker(src, "original");
+    processor.greyscale("sepia", "original", "sepia");
+    processor.save("sepia", dst);
+
+    String sample = readImage("res/cat-sepia." + this.format);
     String custom = readImage(dst);
     assertEquals(sample, custom);
   }

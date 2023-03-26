@@ -14,7 +14,7 @@ import mime.model.MoreImageProcessorImpl;
 
 public class JpgTest extends AbstractMIPTest {
   public JpgTest() {
-    super("res/cat.jepg", "res/processor.jpg", "jpg");
+    super("res/cat.jpeg", "res/processor.jpeg", "jpeg");
   }
 
   /**
