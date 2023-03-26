@@ -168,6 +168,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
                 (RGB[0] + RGB[1] + RGB[2]) / 3
         });
         break;
+      case "greyscale":
       case "luma-component":
         greyscaleLooper(from, to, RGB -> new int[]{
                 (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
