@@ -370,6 +370,54 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   @Override
   public void dithering(String from, String to) {
+    checkImageExistence(from);
 
+    int[] info = infos.get(from);
+    int[][][] fromImage = images.get(from);
+
+    int[][][] toImage = new int[info[1]][info[0]][];
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        toImage[row][col] = fromImage[row][col].clone();
+      }
+    }
+
+    int oldColor;
+    int newColor;
+    int error;
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        for (int rgb = 0; rgb < 3; rgb++) {
+          oldColor = toImage[row][col][rgb];
+          newColor = Math.round((float) oldColor / info[2]) * info[2];
+          toImage[row][col][rgb] = newColor;
+
+          error = oldColor - newColor;
+
+          // [row+1][col+1]
+          if (row + 1 < info[1] && col + 1 < info[0]) {
+            toImage[row + 1][col + 1][rgb] += (int) ((float) 1 / 16 * error);
+          }
+
+          // [row+1][col-1]
+          if (row + 1 < info[1] && col - 1 >= 0) {
+            toImage[row + 1][col - 1][rgb] += (int) ((float) 3 / 16 * error);
+          }
+
+          // [row+1][col]
+          if (row + 1 < info[1]) {
+            toImage[row + 1][col][rgb] += (int) ((float) 5 / 16 * error);
+          }
+
+          // [row][col+1]
+          if (col + 1 < info[0]) {
+            toImage[row][col + 1][rgb] += (int) ((float) 7 / 16 * error);
+          }
+        }
+      }
+    }
+
+    infos.put(to, info);
+    images.put(to, toImage);
   }
 }
