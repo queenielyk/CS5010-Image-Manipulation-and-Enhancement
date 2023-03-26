@@ -175,6 +175,13 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
                 (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2])
         });
         break;
+      case "sepia":
+        greyscaleLooper(from, to, RGB -> new int[]{
+                (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
+                (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
+                (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
+        });
+        break;
       default:
         throw new IllegalArgumentException("This grayscale component is not an option!");
     }
@@ -197,7 +204,8 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
     for (int row = 0; row < info[1]; row++) {
       for (int col = 0; col < info[0]; col++) {
-        toImage[row][col] = conversion.apply(fromImage[row][col]);
+        int[] rgb = conversion.apply(fromImage[row][col]);
+        toImage[row][col] = new int[]{Math.min(rgb[0], info[2]), Math.min(rgb[1], info[2]), Math.min(rgb[2], info[2])};
       }
     }
     infos.put(to, info);
@@ -320,7 +328,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     int[] info = infos.get(from);
     int[][][] fromImage = images.get(from);
 
-    BufferedImage image = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_ARGB);
+    BufferedImage image = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_RGB);
     int[] rgb;
     for (int row = 0; row < info[1]; row++) {
       for (int col = 0; col < info[0]; col++) {
@@ -332,7 +340,6 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     }
     File outputfile = new File(path);
     ImageIO.write(image, path.substring(path.lastIndexOf('.') + 1), outputfile);
-    System.out.println(path.substring(path.lastIndexOf('.') + 1));
   }
 
   private void savePPM(String from, String path) throws IOException {
