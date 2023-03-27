@@ -1,0 +1,67 @@
+#new script supported by MIEM package
+
+#load jpg----------------------------------------------------------------
+load res/cat.jpg cat
+
+#load bmp
+load res/cat.bmp cat
+
+#load jpeg
+load res/cat.jpeg cat
+
+#load png
+load res/cat.png cat
+
+#call new greyscale with two arg----------------------------------------
+greyscale cat cat-grey2
+
+#save to jpeg
+save res/new/cat-grey2.jpeg cat-grey2
+
+#save to jpg
+save res/new/cat-grey2.jpg cat-grey2
+
+#save to png
+save res/new/cat-grey2.png cat-grey2
+
+#save to bmp
+save res/new/cat-grey2.bmp cat-grey2
+
+#save to ppm
+save res/new/cat-grey2.ppm cat-grey2
+
+#call sepia-------------------------------------
+sepia cat cat-sepia
+
+#save to jpeg
+save res/new/cat-sepia.jpeg cat-sepia
+
+#save to jpg
+save res/new/cat-sepia.jpg cat-sepia
+
+#save to png
+save res/new/cat-sepia.png cat-sepia
+
+#save to bmp
+save res/new/cat-sepia.bmp cat-sepia
+
+#save to ppm
+save res/new/cat-sepia.ppm cat-sepia
+
+#call dither-------------------------------------
+dither cat cat-dither
+
+#save to jpeg
+save res/new/cat-dither.jpeg cat-dither
+
+#save to jpg
+save res/new/cat-dither.jpg cat-dither
+
+#save to png
+save res/new/cat-dither.png cat-dither
+
+#save to bmp
+save res/new/cat-dither.bmp cat-dither
+
+#save to ppm
+save res/new/cat-dither.ppm cat-dither

@@ -1,11 +1,7 @@
 package mime.control;
 
 import ime.control.IController;
-import ime.control.ImageCommand;
 import ime.control.ImageController;
-import ime.control.command.Greyscale;
-import ime.model.ImageProcessor;
-import ime.model.PpmProcessor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,7 +9,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import mime.control.command.ColorTrans;
 import mime.control.command.Dither;
@@ -65,14 +60,20 @@ public class MoreImageController extends ImageController  {
           }
           cmd = new LoadBufImg(args.get(0), args.get(1));
           break;
+        // color trans (greyscale)
         case "greyscale":
-        case "sepia":
           if (args.size() != 2 && args.size() != 3) {
             throw wnaE;
           }
           cmd = args.size() == 2 ?
-              new ColorTrans(in, args.get(0), args.get(1))
+              new ColorTrans("luma-component", args.get(0), args.get(1))
               : new ColorTrans(args.get(0), args.get(1), args.get(2));
+          break;
+        case "sepia":
+          if (args.size() != 2) {
+            throw wnaE;
+          }
+          cmd = new ColorTrans(in, args.get(0), args.get(1));
           break;
         // filter
         case "blur":

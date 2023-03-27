@@ -88,13 +88,53 @@ public class MoreImageControllerTest extends ImageControllerTest {
   }
 
   @Test
-  public void mockDitherBufTest() throws IOException {
+  public void mockDitherTest() throws IOException {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("dither cat cat-dither");
     IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MoreMockModel(log));
     assertEquals("From:cat To:cat-dither\n", log.toString());
+  }
+
+  @Test
+  public void mockGreyscaleTwoArgsTest() throws IOException {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("greyscale cat cat-greyscale");
+    IController controller = new MoreImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MoreMockModel(log));
+    assertEquals("Mode:luma-component From:cat To:cat-greyscale\n", log.toString());
+  }
+
+  @Test
+  public void mockSepiaTest() throws IOException {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("sepia cat cat-greyscale");
+    IController controller = new MoreImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MoreMockModel(log));
+    assertEquals("Mode:sepia From:cat To:cat-greyscale\n", log.toString());
+  }
+
+  @Test
+  public void mockBlurTest() throws IOException {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("blur cat cat-blur");
+    IController controller = new MoreImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MoreMockModel(log));
+    assertEquals("Mode:blur From:cat To:cat-blur\n", log.toString());
+  }
+
+  @Test
+  public void mockSharpTest() throws IOException {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("sharpen cat cat-sharp");
+    IController controller = new MoreImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MoreMockModel(log));
+    assertEquals("Mode:sharpen From:cat To:cat-sharp\n", log.toString());
   }
 
 
