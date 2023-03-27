@@ -380,8 +380,12 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
 
   @Override
-  public void filter(String mode, String from, String to) {
+  public void filter(String mode, String from, String to) throws IllegalStateException {
     checkImageExistence(from);
+
+    if (!filterings.containsKey(mode)) {
+      throw new IllegalStateException("This filter is not supported!");
+    }
 
     float[][] filterMatrix = filterings.get(mode);
     int[] info = infos.get(from);

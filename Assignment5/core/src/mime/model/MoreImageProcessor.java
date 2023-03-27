@@ -44,8 +44,9 @@ public interface MoreImageProcessor extends ImageProcessor {
    * @param mode filtering mode to be apply to the image
    * @param from name of image to be applied
    * @param to   new image's name
+   * @throws IllegalStateException filtering mode is not supported
    */
-  void filter(String mode, String from, String to);
+  void filter(String mode, String from, String to) throws IllegalStateException;
 
 
   /**
