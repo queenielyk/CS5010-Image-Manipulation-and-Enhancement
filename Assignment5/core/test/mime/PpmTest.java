@@ -20,6 +20,4 @@ public class PpmTest extends AbstractMIPTest {
     myObj.delete();
   }
 
-  //  Ppm: Save PPM -> JPG, PNG, BMP
-
 }

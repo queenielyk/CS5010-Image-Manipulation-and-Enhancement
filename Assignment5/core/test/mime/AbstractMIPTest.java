@@ -8,9 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -24,7 +22,7 @@ public abstract class AbstractMIPTest {
 
 
   protected final String src;
-  protected final String dst;
+  protected String dst;
   protected final String format;
   protected MoreImageProcessor processor;
 
@@ -50,14 +48,37 @@ public abstract class AbstractMIPTest {
 
     Scanner sc = new Scanner(new FileInputStream(path));
 
-    List<String> builder = new ArrayList<>();
+    sc.nextLine();
+    String s = sc.nextLine();
+    if (s.charAt(0) == '#') {
+      s = sc.nextLine();
+    }
+    //Dimension
+    String[] splited = s.split(" ");
+    int width = Integer.parseInt(splited[0]);
+    int height = Integer.parseInt(splited[1]);
+    //Maxi Value
+    int maxi = Integer.parseInt(sc.nextLine());
+
+    int[] imageArray = new int[width * height * 3];
+    int count = 0;
+
     while (sc.hasNextLine()) {
-      String s = sc.nextLine();
+      s = sc.nextLine();
+      if (s.isEmpty()) {
+        continue;
+      }
       if (s.charAt(0) != '#') {
-        builder.add(s);
+        splited = s.split(" ");
+        for (String ss : splited) {
+          if (!ss.equals("")) {
+            imageArray[count] = Integer.parseInt(ss);
+            count++;
+          }
+        }
       }
     }
-    return builder.toString();
+    return Arrays.toString(imageArray);
   }
 
   private String readBJP(String path) throws IOException {
@@ -76,11 +97,10 @@ public abstract class AbstractMIPTest {
 
   @Test
   public void testLoadCat() throws FileNotFoundException, IOException {
+    loadImageInvoker(src, "original");
+    processor.save("original", dst);
 
-    loadImageInvoker("res/cat-brighter." + this.format, "brighter");
-    processor.save("brighter", dst);
-
-    String sample = readImage("res/cat-brighter." + this.format);
+    String sample = readImage(src);
     String custom = readImage(dst);
     assertEquals(sample, custom);
   }
@@ -290,5 +310,89 @@ public abstract class AbstractMIPTest {
     processor.save("original", "/test/cat.gif");
   }
 
+
+  @Test
+  public void testDithering() throws IOException {
+    loadImageInvoker(src, "original");
+    processor.dithering("original", "dithering");
+    processor.save("dithering", dst);
+
+//    String sample = readImage("res/cat-brighter." + this.format);
+//    String custom = readImage(dst);
+//    assertEquals(sample, custom);
+  }
+
+
+  @Test
+  public void testBlur() throws IOException {
+    loadImageInvoker(src, "original");
+    processor.filter("blur", "original", "blur");
+    processor.save("blur", dst);
+
+//    String sample = readImage("res/cat-brighter." + this.format);
+//    String custom = readImage(dst);
+//    assertEquals(sample, custom);
+  }
+
+
+  @Test
+  public void testSharpening() throws IOException {
+    loadImageInvoker(src, "original");
+    processor.filter("sharpening", "original", "sharpening");
+    processor.save("sharpening", dst);
+
+//    String sample = readImage("res/cat-brighter." + this.format);
+//    String custom = readImage(dst);
+//    assertEquals(sample, custom);
+  }
+
+
+  @Test
+  public void testSavePPM() throws IOException {
+    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".ppm");
+
+    loadImageInvoker(src, "original");
+    processor.save("original", dst);
+
+    String sample = readImage(dst);
+    String custom = readImage(dst);
+    assertEquals(sample, custom);
+  }
+
+  @Test
+  public void testSaveJPG() throws IOException {
+    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".jpeg");
+
+    loadImageInvoker(src, "original");
+    processor.save("original", dst);
+
+    String sample = readImage(dst);
+    String custom = readImage(dst);
+    assertEquals(sample, custom);
+  }
+
+  @Test
+  public void testSavePNG() throws IOException {
+    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".png");
+
+    loadImageInvoker(src, "original");
+    processor.save("original", dst);
+
+    String sample = readImage(dst);
+    String custom = readImage(dst);
+    assertEquals(sample, custom);
+  }
+
+ @Test
+ public void testSaveBMP() throws IOException {
+   dst = dst.substring(0, dst.lastIndexOf(".")).concat(".bmp");
+
+   loadImageInvoker(src, "original");
+   processor.save("original", dst);
+
+  //  String sample = readImage(dst);
+  //  String custom = readImage(dst);
+  //  assertEquals(sample, custom);
+ }
 
 }
