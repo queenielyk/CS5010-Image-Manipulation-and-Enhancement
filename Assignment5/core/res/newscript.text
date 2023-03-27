@@ -48,6 +48,42 @@ save res/new/cat-sepia.bmp cat-sepia
 #save to ppm
 save res/new/cat-sepia.ppm cat-sepia
 
+#call sharpen-------------------------------------
+sharpen cat cat-sharpen
+
+#save to jpeg
+save res/new/cat-sharpen.jpeg cat-sharpen
+
+#save to jpg
+save res/new/cat-sharpen.jpg cat-sharpen
+
+#save to png
+save res/new/cat-sharpen.png cat-sharpen
+
+#save to bmp
+save res/new/cat-sharpen.bmp cat-sharpen
+
+#save to ppm
+save res/new/cat-sharpen.ppm cat-sharpen
+
+#call blur-------------------------------------
+blur cat cat-blur
+
+#save to jpeg
+save res/new/cat-blur.jpeg cat-blur
+
+#save to jpg
+save res/new/cat-blur.jpg cat-blur
+
+#save to png
+save res/new/cat-blur.png cat-blur
+
+#save to bmp
+save res/new/cat-blur.bmp cat-blur
+
+#save to ppm
+save res/new/cat-blur.ppm cat-blur
+
 #call dither-------------------------------------
 dither cat cat-dither
 

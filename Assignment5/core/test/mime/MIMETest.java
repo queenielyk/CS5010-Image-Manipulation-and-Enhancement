@@ -3,10 +3,8 @@ package mime;
 
 import static org.junit.Assert.assertEquals;
 
+import ime.IMETest;
 import ime.control.IController;
-import ime.control.ImageController;
-import ime.model.PpmProcessor;
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -17,10 +15,10 @@ import org.junit.Test;
 /**
  * This is a test class for MVC as whole program.
  */
-public class MoreIMETest {
+public class MIMETest extends IMETest {
 
   @Test
-  public void RunScriptTest() throws IOException {
+  public void RunScriptForMIMETest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run res/error.text");
     IController controller = new MoreImageController(in, out);
@@ -59,6 +57,18 @@ public class MoreIMETest {
         + "Executed: \tsave res/new/cat-sepia.png cat-sepia\n"
         + "Executed: \tsave res/new/cat-sepia.bmp cat-sepia\n"
         + "Executed: \tsave res/new/cat-sepia.ppm cat-sepia\n"
+        + "Executed: \tsharpen cat cat-sharpen\n"
+        + "Executed: \tsave res/new/cat-sharpen.jpeg cat-sharpen\n"
+        + "Executed: \tsave res/new/cat-sharpen.jpg cat-sharpen\n"
+        + "Executed: \tsave res/new/cat-sharpen.png cat-sharpen\n"
+        + "Executed: \tsave res/new/cat-sharpen.bmp cat-sharpen\n"
+        + "Executed: \tsave res/new/cat-sharpen.ppm cat-sharpen\n"
+        + "Executed: \tblur cat cat-blur\n"
+        + "Executed: \tsave res/new/cat-blur.jpeg cat-blur\n"
+        + "Executed: \tsave res/new/cat-blur.jpg cat-blur\n"
+        + "Executed: \tsave res/new/cat-blur.png cat-blur\n"
+        + "Executed: \tsave res/new/cat-blur.bmp cat-blur\n"
+        + "Executed: \tsave res/new/cat-blur.ppm cat-blur\n"
         + "Executed: \tdither cat cat-dither\n"
         + "Executed: \tsave res/new/cat-dither.jpeg cat-dither\n"
         + "Executed: \tsave res/new/cat-dither.jpg cat-dither\n"
@@ -74,67 +84,25 @@ public class MoreIMETest {
   }
 
   @Test
-  public void wrongPathFileTest() throws IOException {
-    StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("load IME/test/IME/fake.ppm fake");
-    IController controller = new ImageController(in, out);
-    controller.run(new PpmProcessor());
-    assertEquals(
-            "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: "
-                    + "IME" + File.separator + "test" + File.separator + "IME" + File.separator + "fake.ppm (No such file or directory)\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+  public void OutImageFormatNotInMap() {
+
   }
 
   @Test
-  public void wrongGreyTypeTest() throws IOException {
-    StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("load res/cat.ppm cat \n"
-            + "greyscale xxxx-component cat cat-greyscale");
-    IController controller = new ImageController(in, out);
-    controller.run(new PpmProcessor());
-    assertEquals("Enter Command:Executed: \tload res/cat.ppm cat \n"
-            + "\n"
-            + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: "
-            + "This grayscale component is not an option!\n"
-            + "\n"
-            + "Enter Command:", out.toString());
+  public void InImageFormatNotInMap() {
+
+  }
+
+
+  @Test
+  public void greyNotInMap() {
+
   }
 
   @Test
-  public void wrongImageTypeTest() throws IOException {
-    StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("load res/test.png cat");
-    IController controller = new ImageController(in, out);
-    controller.run(new PpmProcessor());
-    assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
-                    + "Invalid Image file: Only ppm images are accepted\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
-  }
+  public void filterNotInMap() {
 
-  @Test
-  public void ImageNotInMapTest() throws IOException {
-    StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("greyscale xxxx-component cat cat-greyscale");
-    IController controller = new ImageController(in, out);
-    controller.run(new PpmProcessor());
-    assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
-                    + "This image is not exist!\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
   }
-
-  @Test(expected = IllegalStateException.class)
-  public void RunScriptTestLoop() throws IOException {
-    StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("run res/loop1.text");
-    IController controller = new ImageController(in, out);
-    controller.run(new PpmProcessor());
-  }
-
 
 
 }

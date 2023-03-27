@@ -110,11 +110,11 @@ public class MoreImageControllerTest extends ImageControllerTest {
   @Test
   public void mockSepiaTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("sepia cat cat-greyscale");
+    Reader in = new StringReader("sepia cat cat-sepia");
     IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MoreMockModel(log));
-    assertEquals("Mode:sepia From:cat To:cat-greyscale\n", log.toString());
+    assertEquals("Mode:sepia From:cat To:cat-sepia\n", log.toString());
   }
 
   @Test

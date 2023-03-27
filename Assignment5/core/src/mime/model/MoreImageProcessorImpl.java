@@ -14,12 +14,12 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Function;
-
 import javax.imageio.ImageIO;
 
 public class MoreImageProcessorImpl implements MoreImageProcessor {
-  private Map<String, int[][][]> images; // <name, int[row, col, [r, g, b]]>
-  private Map<String, int[]> infos; // <name, int[width, height, maxi value]>
+
+  private final Map<String, int[][][]> images; // <name, int[row, col, [r, g, b]]>
+  private final Map<String, int[]> infos; // <name, int[width, height, maxi value]>
   protected Set<String> acceptFormat;
   protected Map<String, float[][]> filterings; // <name, 2d-array filter matrix>
 
@@ -29,25 +29,22 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     this.acceptFormat = new HashSet<>(Arrays.asList("ppm", "jpg", "jpeg", "png", "bmp"));
     this.filterings = new HashMap<>();
     this.filterings.put("blur", new float[][]{
-            {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16},
+        {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16},
             {(float) 1 / 8, (float) 1 / 4, (float) 1 / 8},
             {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16}
     });
-    this.filterings.put("sharpening", new float[][]{
-            {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8},
-            {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
-            {(float) -1 / 8, (float) 1 / 4, 1, (float) 1 / 4, (float) -1 / 8},
-            {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
-            {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8}
+    this.filterings.put("sharpen", new float[][]{
+        {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8},
+        {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
+        {(float) -1 / 8, (float) 1 / 4, 1, (float) 1 / 4, (float) -1 / 8},
+        {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
+        {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8}
     });
   }
 
   @Override
   public boolean verifyFormat(String path) {
-    if (this.acceptFormat.contains(path.substring(path.lastIndexOf('.') + 1))) {
-      return true;
-    }
-    return false;
+    return this.acceptFormat.contains(path.substring(path.lastIndexOf('.') + 1));
   }
 
   @Override
