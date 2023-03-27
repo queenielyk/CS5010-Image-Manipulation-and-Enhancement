@@ -20,13 +20,26 @@ import javax.imageio.ImageIO;
 public class MoreImageProcessorImpl implements MoreImageProcessor {
   private Map<String, int[][][]> images; // <name, int[row, col, [r, g, b]]>
   private Map<String, int[]> infos; // <name, int[width, height, maxi value]>
-
   protected Set<String> acceptFormat;
+  protected Map<String, float[][]> filterings; // <name, 2d-array filter matrix>
 
   public MoreImageProcessorImpl() {
     this.images = new HashMap<String, int[][][]>();
     this.infos = new HashMap<>();
     this.acceptFormat = new HashSet<>(Arrays.asList("ppm", "jpg", "jpeg", "png", "bmp"));
+    this.filterings = new HashMap<>();
+    this.filterings.put("blur", new float[][]{
+            {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16},
+            {(float) 1 / 8, (float) 1 / 4, (float) 1 / 8},
+            {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16}
+    });
+    this.filterings.put("sharpening", new float[][]{
+            {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8},
+            {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
+            {(float) -1 / 8, (float) 1 / 4, 1, (float) 1 / 4, (float) -1 / 8},
+            {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
+            {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8}
+    });
   }
 
   @Override
@@ -206,7 +219,10 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     for (int row = 0; row < info[1]; row++) {
       for (int col = 0; col < info[0]; col++) {
         int[] rgb = conversion.apply(fromImage[row][col]);
-        toImage[row][col] = new int[]{Math.min(rgb[0], info[2]), Math.min(rgb[1], info[2]), Math.min(rgb[2], info[2])};
+        toImage[row][col] = new int[]{
+                Math.min(rgb[0], info[2]),
+                Math.min(rgb[1], info[2]),
+                Math.min(rgb[2], info[2])};
       }
     }
     infos.put(to, info);
@@ -365,7 +381,40 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   @Override
   public void filter(String mode, String from, String to) {
+    checkImageExistence(from);
 
+    float[][] filterMatrix = filterings.get(mode);
+    int[] info = infos.get(from);
+    int[][][] fromImage = images.get(from);
+    int[][][] toImage = new int[info[1]][info[0]][];
+    int halfmatrix = (filterMatrix.length - 1) / 2;
+
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+
+        for (int fRow = Math.abs(Math.min(row - halfmatrix, 0));
+             fRow < ((row + halfmatrix) >= info[1] ? info[1] - row + halfmatrix : filterMatrix.length); fRow++) {
+          for (int fCol = Math.abs(Math.min(col - halfmatrix, 0));
+               fCol < ((col + halfmatrix) >= info[0] ? info[0] - col + halfmatrix : filterMatrix.length); fCol++) {
+            int[] rgb = fromImage[row - halfmatrix + fRow][col - halfmatrix + fCol];
+            red += rgb[0] * filterMatrix[fRow][fCol];
+            green += rgb[1] * filterMatrix[fRow][fCol];
+            blue += rgb[2] * filterMatrix[fRow][fCol];
+          }
+        }
+
+        toImage[row][col] = new int[]{
+                Math.max(0, Math.min(red, info[2])),
+                Math.max(0, Math.min(green, info[2])),
+                Math.max(0, Math.min(blue, info[2]))
+        };
+      }
+    }
+    infos.put(to, info);
+    images.put(to, toImage);
   }
 
   @Override
