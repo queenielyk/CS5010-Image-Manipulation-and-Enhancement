@@ -351,24 +351,14 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       for (int col = 0; col < info[0]; col++) {
         rgb = fromImage[row][col];
         Color c = new Color(rgb[0], rgb[1], rgb[2]);
-//        System.out.println(c.getRed() + " " + c.getGreen() + " " + c.getBlue());
         image.setRGB(col, row, c.getRGB());
-        int tmp = image.getRGB(col, row);
-//        System.out.println(
-//                ((tmp >> 16) & 0xFF) + " " +
-//                        ((tmp >> 8) & 0xFF) + " " +
-//                        ((tmp) & 0xFF)
-//        );
-//        System.out.println();
-
       }
     }
 
 
     File outputfile = new File(path);
     if (path.endsWith(".jpg") || path.endsWith("jpeg")) {
-      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName(
-          path.substring(path.lastIndexOf('.') + 1)).next();
+      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
       ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
       jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
       jpgWriteParam.setCompressionQuality(1f);
@@ -377,11 +367,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       IIOImage outputImage = new IIOImage(image, null, null);
       jpgWriter.write(null, outputImage, jpgWriteParam);
       jpgWriter.dispose();
-    } else {
-
-      ImageIO.write(image, path.substring(path.lastIndexOf('.') + 1), outputfile);
     }
 
+    ImageIO.write(image, path.substring(path.lastIndexOf('.') + 1), outputfile);
 
   }
 
@@ -421,9 +409,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
     for (int row = 0; row < info[1]; row++) {
       for (int col = 0; col < info[0]; col++) {
-        int red = 0;
-        int green = 0;
-        int blue = 0;
+        double red = 0;
+        double green = 0;
+        double blue = 0;
 
         for (int fRow = Math.abs(Math.min(row - halfmatrix, 0));
              fRow < ((row + halfmatrix) >= info[1] ? info[1] - row + halfmatrix : filterMatrix.length); fRow++) {
@@ -437,9 +425,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         }
 
         toImage[row][col] = new int[]{
-                Math.max(0, Math.min(red, info[2])),
-                Math.max(0, Math.min(green, info[2])),
-                Math.max(0, Math.min(blue, info[2]))
+                (int) Math.max(0, Math.min(red, info[2])),
+                (int) Math.max(0, Math.min(green, info[2])),
+                (int) Math.max(0, Math.min(blue, info[2]))
         };
       }
     }
