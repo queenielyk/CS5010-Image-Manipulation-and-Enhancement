@@ -68,11 +68,11 @@ public class MoreImageControllerTest extends ImageControllerTest {
   @Test
   public void mockLoadBufTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("load res/cat.jpeg cat");
+    Reader in = new StringReader("load res/format/cat.jpeg cat");
     IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MoreMockModel(log));
-    String imgInfo = ImageIO.read(new FileInputStream("res/cat.jpeg")).toString()
+    String imgInfo = ImageIO.read(new FileInputStream("res/format/cat.jpeg")).toString()
         .replaceAll("BufferedImage@[A-Za-z0-9]+:", "");
     assertEquals("BufImg:" + imgInfo + " name:cat\n", log.toString());
   }

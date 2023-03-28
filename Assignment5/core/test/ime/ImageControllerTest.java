@@ -177,7 +177,7 @@ public class ImageControllerTest {
         + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
         + "Executed: \tgreyscale value-component cat cat-greyscale\n"
         + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
-        + "Executed: \tload res/building.ppm cat\n"
+        + "Executed: \tload res/cat.ppm cat\n"
         + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
         + "Executed: \tbrighten 50 cat-red cat-red\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"

@@ -20,7 +20,7 @@ public class MIMETest extends IMETest {
   @Test
   public void RunScriptForMIMETest() throws IOException {
     StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("run res/error.text");
+    Reader in = new StringReader("run res/newerror.text");
     IController controller = new MoreImageController(in, out);
     controller.run(new MoreImageProcessorImpl());
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n"
@@ -36,15 +36,21 @@ public class MIMETest extends IMETest {
         + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
         + "Executed: \tgreyscale value-component cat cat-greyscale\n"
         + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
-        + "Executed: \tload res/building.ppm cat\n"
+        + "Executed: \tload res/cat.ppm cat\n"
         + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
         + "Executed: \tbrighten 50 cat-red cat-red\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
         + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
-        + "Executed: \tload res/cat.jpg cat\n"
-        + "Executed: \tload res/cat.bmp cat\n"
-        + "Executed: \tload res/cat.jpeg cat\n"
-        + "Executed: \tload res/cat.png cat\n"
+        + "Executed: \tload res/cat.ppm cat\n"
+        + "Executed: \tsave res/format/cat.jpg cat\n"
+        + "Executed: \tsave res/format/cat.jpeg cat\n"
+        + "Executed: \tsave res/format/cat.png cat\n"
+        + "Executed: \tsave res/format/cat.bmp cat\n"
+        + "Executed: \tload res/format/cat.jpg cat\n"
+        + "Executed: \tload res/format/cat.bmp cat\n"
+        + "Executed: \tload res/format/cat.jpeg cat\n"
+        + "Executed: \tload res/format/cat.png cat\n"
+        + "Executed: \tload res/cat.ppm cat\n"
         + "Executed: \tgreyscale cat cat-grey2\n"
         + "Executed: \tsave res/new/cat-grey2.jpeg cat-grey2\n"
         + "Executed: \tsave res/new/cat-grey2.jpg cat-grey2\n"

@@ -1,6 +1,9 @@
 #run good script
 run res/script.text
 
+#run new good script
+run res/newscript.text
+
 #Unknown command
 lo res/building.ppm cat
 
