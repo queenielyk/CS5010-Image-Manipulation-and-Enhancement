@@ -1,16 +1,26 @@
 #new script supported by MIEM package
 
+#convert image to other format----------------------------------
+load res/cat.ppm cat
+save res/format/cat.jpg cat
+save res/format/cat.jpeg cat
+save res/format/cat.png cat
+save res/format/cat.bmp cat
+
 #load jpg----------------------------------------------------------------
-load res/cat.jpg cat
+load res/format/cat.jpg cat
 
 #load bmp
-load res/cat.bmp cat
+load res/format/cat.bmp cat
 
 #load jpeg
-load res/cat.jpeg cat
+load res/format/cat.jpeg cat
 
 #load png
-load res/cat.png cat
+load res/format/cat.png cat
+
+#load png
+load res/cat.ppm cat
 
 #call new greyscale with two arg----------------------------------------
 greyscale cat cat-grey2

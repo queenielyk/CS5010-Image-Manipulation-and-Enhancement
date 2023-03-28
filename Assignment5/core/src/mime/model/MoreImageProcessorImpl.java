@@ -14,12 +14,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Function;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 
 public class MoreImageProcessorImpl implements MoreImageProcessor {
 
@@ -353,15 +351,15 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       for (int col = 0; col < info[0]; col++) {
         rgb = fromImage[row][col];
         Color c = new Color(rgb[0], rgb[1], rgb[2]);
-        System.out.println(c.getRed() + " " + c.getGreen() + " " + c.getBlue());
+//        System.out.println(c.getRed() + " " + c.getGreen() + " " + c.getBlue());
         image.setRGB(col, row, c.getRGB());
         int tmp = image.getRGB(col, row);
-        System.out.println(
-                ((tmp >> 16) & 0xFF) + " " +
-                        ((tmp >> 8) & 0xFF) + " " +
-                        ((tmp) & 0xFF)
-        );
-        System.out.println();
+//        System.out.println(
+//                ((tmp >> 16) & 0xFF) + " " +
+//                        ((tmp >> 8) & 0xFF) + " " +
+//                        ((tmp) & 0xFF)
+//        );
+//        System.out.println();
 
       }
     }
@@ -369,7 +367,8 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
     File outputfile = new File(path);
     if (path.endsWith(".jpg") || path.endsWith("jpeg")) {
-      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName(
+          path.substring(path.lastIndexOf('.') + 1)).next();
       ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
       jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
       jpgWriteParam.setCompressionQuality(1f);
