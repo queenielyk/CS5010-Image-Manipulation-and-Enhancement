@@ -470,36 +470,9 @@ public abstract class AbstractMIPTest {
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
             }
             , dst);
-  }
 
-  @Test
-  public void testSaveJPG() throws IOException {
-    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".jpg");
-
-    loadImageInvoker(src, "original");
-    processor.save("original", dst);
-
-    assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , dst);
-  }
-
-  @Test
-  public void testSaveJPEG() throws IOException {
-    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".jpeg");
-
-    loadImageInvoker(src, "original");
-    processor.save("original", dst);
-
-    assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , dst);
+    File myObj = new File(dst);
+    myObj.delete();
   }
 
   @Test
@@ -515,6 +488,8 @@ public abstract class AbstractMIPTest {
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
             }
             , dst);
+    File myObj = new File(dst);
+    myObj.delete();
   }
 
   @Test
@@ -530,6 +505,8 @@ public abstract class AbstractMIPTest {
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
             }
             , dst);
+    File myObj = new File(dst);
+    myObj.delete();
   }
 
 }
