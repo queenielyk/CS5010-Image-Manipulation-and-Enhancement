@@ -39,6 +39,8 @@ ime/controller
         ├── RgbSplit.java
         ├── Save.java
         └── Vflip.java
+        └── Filter.java
+        └── Dithering.java
 ```
 
 ### Design
@@ -87,48 +89,67 @@ This makes the controller capable to take not just *System.in/ out* but also fil
 
 ## Model
 
+``` bash
+ime/model
+    ├── MoreImageProcessor.java
+    └── MoreImageProcessorImpl.java
+```
+
 ### Data Structure
 
+We store an image as a 3D-Array: `int[Height][Width][RGB]`
+
+Each image has it's width and height.
+We initialized the 3D-Array by specifying the width and height to mimic a real image.
 Image is composed by a group of components.
-Each component is a combination of Red, Green, and Blue (RGB).
-Hence, we store a image as a Linked List: each component is a Node of Linked List who contains the
-reference of it's next component.
+Each component is a combination of Red, Green, and Blue (RGB),
+therefore we putted them together as an `int[]`.
 
-e.g. Node(RGB = 0,0,0) -> Node(RGB = 0,0,1) -> Node(RGB = 0,0,2) -> NULL
-
-From our codes, `ImageComp` is the interface to indicate what a Node should be and actions
-available:
-
-- Returning it's RGB value
-- Setting it's next component
-- Getting it's next component
-
-`ImageCompImp` is a class to implement interface `ImageComp`.
+```bash
+Example
+An image Dimension: 2x4
+[
+    [[R, G, B],[R, G, B],[R, G, B],[R, G, B]],
+    [[R, G, B],[R, G, B],[R, G, B],[R, G, B]]
+]
+```
 
 ### Computation
 
-`ImageProcessor` is an interface to indicate what kind of actions a processor should have:
+`MoreImageProcessor` is an interface to indicate what kind of actions a processor should have:
 
 - Load
-- Greyscale : red-component / green-component / blue-component / value-component /
-  intensity-component / luma-component
+- Greyscale
+  - red-component
+  - green-component
+  - blue-component
+  - value-component
+  - intensity-component
+  - luma-component
+  - sepia
 - Flip
     - Horizontal
     - Vertical
 - Combine
+- Filter
+  - Blur
+  - Sharpen
+- Dithering
 - Save
 
-In reality, there are various image format, e.g. PNG, JPG, BMP, etc.
-In this project, our goal is to process images in ASCII PPM format, hence we
-implement `ImageProcessor` as `PpmProcessor`.
+### Format limitation
+Extending this project from assignment 4, we are now able to support more formats other than ASCII PPM.
+Overall, the supporting formats are:
+- ASCII PPM
+- BMP
+- JPG
+- JPEG
+- PNG
 
-``` bash
-ime/model
-    ├── ImageComp.java
-    ├── ImageCompImp.java
-    ├── ImageProcessor.java
-    └── PpmProcessor.java
-```
+For those formats are not listed above, we are not able to provide any operations,
+even the most basic operations load and save.
+
+If an attempting image is not supported, the processor will throw exception.
 
 ## Instruction
 
@@ -149,3 +170,36 @@ ime/model
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
 > - res/cat.ppm
 > - res/building.ppm
+
+## Change Log
+
+### From Assignment 4 to Assignment 5
+
+#### 1. Image representation: Linked List -> 3D-Array
+We used Linked List to represent an image in assignment 4;
+however this is not convenient for us to apply filter matrix.
+Therefore, we used 3D-Array instead of Linked List in assignment 5.
+Even there is a change in our data structure, assignment 4 is still supporting on it's own.
+
+### 2. Support more image operations
+This latest version supports more image operations, such as:
+- Blur
+- Sharpen
+- Color transformation
+  - Greyscale
+  - Sepia
+- Dithering
+
+### 3. Support more image format
+While assignment 4 only support ASCII PPM image,
+Assignment 5 supports:
+- ASCII PPM
+- BMP
+- JPG
+- JPEG
+- PNG
+
+Besides, regardless the format of the image being loaded, it's always an option to save the image to another format.
+> e.g. load xxx.ppm -> save xxx.bmp
+
+To apply these new operations, please refer to [Instruction](#Instruction).
