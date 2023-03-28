@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
 import mime.model.MoreImageProcessor;
@@ -37,14 +37,14 @@ public abstract class AbstractMIPTest {
     processor = new MoreImageProcessorImpl();
   }
 
-  private String readImage(String path) throws IOException {
+  private int[][][] readImage(String path) throws IOException {
     if (path.endsWith(".ppm")) {
       return readPPM(path);
     }
     return readBJP(path);
   }
 
-  private String readPPM(String path) throws FileNotFoundException {
+  private int[][][] readPPM(String path) throws FileNotFoundException {
 
     Scanner sc = new Scanner(new FileInputStream(path));
 
@@ -60,7 +60,10 @@ public abstract class AbstractMIPTest {
     //Maxi Value
     int maxi = Integer.parseInt(sc.nextLine());
 
-    int[] imageArray = new int[width * height * 3];
+
+    int[][][] imageArray = new int[height][width][3];
+    int row = 0;
+    int col = 0;
     int count = 0;
 
     while (sc.hasNextLine()) {
@@ -72,18 +75,45 @@ public abstract class AbstractMIPTest {
         splited = s.split(" ");
         for (String ss : splited) {
           if (!ss.equals("")) {
-            imageArray[count] = Integer.parseInt(ss);
+            imageArray[row][col][count] = Integer.parseInt(ss);
             count++;
+            if (count == 3) {
+              count = 0;
+              col++;
+              if (col == width) {
+                col = 0;
+                row++;
+              }
+            }
           }
         }
       }
     }
-    return Arrays.toString(imageArray);
+    return imageArray;
   }
 
-  private String readBJP(String path) throws IOException {
+  private int[][][] readBJP(String path) throws IOException {
     BufferedImage image = ImageIO.read(new File(path));
-    return Arrays.toString(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()));
+    int width = image.getWidth();
+    int height = image.getHeight();
+
+    int[] dataBuffInt = image.getRGB(0, 0, width, height, null, 0, width);
+    int[][][] imageArray = new int[height][width][3];
+    int row = 0;
+    int col = 0;
+
+    for (int rgb : dataBuffInt) {
+      int red = (rgb >> 16) & 0xFF;
+      int green = (rgb >> 8) & 0xFF;
+      int blue = (rgb) & 0xFF;
+      imageArray[row][col] = new int[]{red, green, blue};
+      col++;
+      if (col == width) {
+        col = 0;
+        row++;
+      }
+    }
+    return imageArray;
   }
 
   private void loadImageInvoker(String path, String name) throws IOException {
@@ -95,20 +125,46 @@ public abstract class AbstractMIPTest {
     }
   }
 
+  private void assertLooper(int[][][] sample, String dst) throws IOException {
+    int[][][] custom = readImage(dst);
+    for (int row = 0; row < custom.length; row++) {
+      for (int col = 0; col < custom[row].length; col++) {
+        for (int rgb = 0; rgb < 3; rgb++) {
+          try {
+            assertEquals(sample[row][col][rgb], custom[row][col][rgb]);
+          } catch (AssertionError e) {
+            System.out.println(row + " " + col + " " + rgb);
+            throw e;
+          }
+        }
+      }
+    }
+  }
+
+
   @Test
   public void testLoadCat() throws FileNotFoundException, IOException {
     loadImageInvoker(src, "original");
     processor.save("original", dst);
 
-    String sample = readImage(src);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
-  @Test(expected = FileNotFoundException.class)
+  @Test
   public void testLoadNotExist() throws FileNotFoundException, IOException {
 
-    loadImageInvoker("res/nocat." + this.format, "original");
+    try {
+      loadImageInvoker("res/nocat." + this.format, "original");
+    } catch (FileNotFoundException e) {
+      assertEquals("res" + File.separator + "nocat.ppm (No such file or directory)", e.getMessage());
+    } catch (IIOException e) {
+      assertEquals("Can't read input file!", e.getMessage());
+    }
   }
 
   @Test(expected = IllegalStateException.class)
@@ -120,31 +176,41 @@ public abstract class AbstractMIPTest {
   @Test
   public void testLoadOverwrite() throws FileNotFoundException, IOException {
 
-    loadImageInvoker("res/building." + this.format, "original");
+    loadImageInvoker("res/building.ppm", "original");
     loadImageInvoker(src, "original");
-    loadImageInvoker("res/cat-brighter." + this.format, "original");
+    loadImageInvoker("res/cat." + this.format, "original");
     processor.save("original", dst);
 
-    String sample = readImage("res/cat-brighter." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
+
 
   @Test
   public void testLoadDifferentImages() throws FileNotFoundException, IOException {
 
-    loadImageInvoker("res/cat-brighter." + this.format, "brighter");
-    loadImageInvoker("res/cat-horizontal." + this.format, "horizontal");
+    loadImageInvoker("res/building.ppm", "building");
+    loadImageInvoker("res/cat." + this.format, "original");
 
-    processor.save("brighter", dst);
-    String sample = readImage("res/cat-brighter." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    processor.save("building", dst);
+    assertLooper(new int[][][]{
+                    {{167, 172, 180}, {163, 168, 177}, {161, 166, 175}},
+                    {{169, 178, 164}, {169, 178, 164}, {169, 178, 164}},
+                    {{183, 166, 171}, {184, 166, 173}, {186, 167, 174}}
+            }
+            , dst);
 
-    processor.save("horizontal", dst);
-    sample = readImage("res/cat-horizontal." + this.format);
-    custom = readImage(dst);
-    assertEquals(sample, custom);
+    processor.save("original", dst);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -158,28 +224,33 @@ public abstract class AbstractMIPTest {
   public void testAdjustBrightnessPos() throws FileNotFoundException, IOException {
     int brightness = 30;
 
-
     loadImageInvoker(src, "original");
     processor.adjustBrightness("original", brightness, "brighter");
     processor.save("brighter", dst);
 
-    String sample = readImage("res/cat-brighter." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
+                    {{255, 255, 255}, {224, 214, 217}, {146, 129, 131}},
+                    {{241, 233, 236}, {200, 180, 180}, {100, 72, 73}}
+            }
+            , dst);
   }
 
   @Test
   public void testAdjustBrightnessNeg() throws FileNotFoundException, IOException {
-    int brightness = -30;
+    int brightness = -50;
 
 
     loadImageInvoker(src, "original");
     processor.adjustBrightness("original", brightness, "darker");
     processor.save("darker", dst);
 
-    String sample = readImage("res/cat-darker." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
+                    {{184, 180, 181}, {144, 134, 137}, {66, 49, 51}},
+                    {{161, 153, 156}, {120, 100, 100}, {20, 0, 0}}
+            }
+            , dst);
   }
 
   @Test
@@ -189,9 +260,12 @@ public abstract class AbstractMIPTest {
     processor.horizontalFlip("original", "horizontal");
     processor.save("horizontal", dst);
 
-    String sample = readImage("res/cat-horizontal." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
+                    {{116, 99, 101}, {194, 184, 187}, {234, 230, 231}},
+                    {{70, 42, 43}, {170, 150, 150}, {211, 203, 206}}
+            }
+            , dst);
   }
 
   @Test
@@ -201,9 +275,12 @@ public abstract class AbstractMIPTest {
     processor.verticalFlip("original", "vertical");
     processor.save("vertical", dst);
 
-    String sample = readImage("res/cat-vertical." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}}
+            }
+            , dst);
   }
 
   @Test
@@ -213,9 +290,12 @@ public abstract class AbstractMIPTest {
     processor.greyscale("red-component", "original", "red");
     processor.save("red", dst);
 
-    String sample = readImage("res/cat-red." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
+                    {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
+                    {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
+            }
+            , dst);
   }
 
   @Test
@@ -225,9 +305,12 @@ public abstract class AbstractMIPTest {
     processor.greyscale("green-component", "original", "green");
     processor.save("green", dst);
 
-    String sample = readImage("res/cat-green." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
+                    {{230, 230, 230}, {184, 184, 184}, {99, 99, 99}},
+                    {{203, 203, 203}, {150, 150, 150}, {42, 42, 42}}
+            }
+            , dst);
   }
 
   @Test
@@ -237,9 +320,12 @@ public abstract class AbstractMIPTest {
     processor.greyscale("blue-component", "original", "blue");
     processor.save("blue", dst);
 
-    String sample = readImage("res/cat-blue." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
+                    {{231, 231, 231}, {187, 187, 187}, {101, 101, 101}},
+                    {{206, 206, 206}, {150, 150, 150}, {43, 43, 43}}
+            }
+            , dst);
   }
 
   @Test
@@ -249,9 +335,12 @@ public abstract class AbstractMIPTest {
     processor.greyscale("value-component", "original", "value");
     processor.save("value", dst);
 
-    String sample = readImage("res/cat-value." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
+                    {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
+                    {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
+            }
+            , dst);
   }
 
   @Test
@@ -261,9 +350,12 @@ public abstract class AbstractMIPTest {
     processor.greyscale("intensity-component", "original", "intensity");
     processor.save("intensity", dst);
 
-    String sample = readImage("res/cat-intensity." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
+                    {{231, 231, 231}, {188, 188, 188}, {105, 105, 105}},
+                    {{206, 206, 206}, {156, 156, 156}, {51, 51, 51}}
+            }
+            , dst);
   }
 
   @Test
@@ -273,9 +365,12 @@ public abstract class AbstractMIPTest {
     processor.greyscale("luma-component", "original", "luma");
     processor.save("luma", dst);
 
-    String sample = readImage("res/cat-luma." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
+                    {{230, 230, 230}, {186, 186, 186}, {102, 102, 102}},
+                    {{204, 204, 204}, {154, 154, 154}, {48, 48, 48}}
+            }
+            , dst);
   }
 
   @Test
@@ -285,23 +380,29 @@ public abstract class AbstractMIPTest {
     processor.greyscale("sepia", "original", "sepia");
     processor.save("sepia", dst);
 
-    String sample = readImage("res/cat-sepia." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
+                    {{255, 255, 216}, {253, 225, 175}, {140, 125, 97}},
+                    {{255, 247, 192}, {210, 187, 145}, {67, 60, 47}}
+            }
+            , dst);
   }
 
   @Test
   public void testCombine() throws FileNotFoundException, IOException {
-    loadImageInvoker("res/cat-brighter." + this.format, "original");
+    loadImageInvoker("res/cat." + this.format, "original");
     processor.greyscale("red-component", "original", "red");
     processor.greyscale("green-component", "original", "green");
     processor.greyscale("blue-component", "original", "blue");
     processor.combines("red", "green", "blue", "combine");
     processor.save("combine", dst);
 
-    String sample = readImage("res/cat-brighter." + this.format);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -317,9 +418,12 @@ public abstract class AbstractMIPTest {
     processor.dithering("original", "dithering");
     processor.save("dithering", dst);
 
-//    String sample = readImage("res/cat-brighter." + this.format);
-//    String custom = readImage(dst);
-//    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{255, 255, 255}, {255, 255, 255}, {255, 0, 0}},
+                    {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
+                    {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}
+            }
+            , dst);
   }
 
 
@@ -329,21 +433,27 @@ public abstract class AbstractMIPTest {
     processor.filter("blur", "original", "blur");
     processor.save("blur", dst);
 
-//    String sample = readImage("res/cat-brighter." + this.format);
-//    String custom = readImage(dst);
-//    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
+                    {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
+                    {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
+            }
+            , dst);
   }
 
 
   @Test
   public void testSharpening() throws IOException {
     loadImageInvoker(src, "original");
-    processor.filter("sharpening", "original", "sharpening");
-    processor.save("sharpening", dst);
+    processor.filter("sharpen", "original", "sharpen");
+    processor.save("sharpen", dst);
 
-//    String sample = readImage("res/cat-brighter." + this.format);
-//    String custom = readImage(dst);
-//    assertEquals(sample, custom);
+//    assertLooper(new int[][][]{
+//                    {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
+//                    {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
+//                    {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
+//            }
+//            , dst);
   }
 
 
@@ -354,21 +464,42 @@ public abstract class AbstractMIPTest {
     loadImageInvoker(src, "original");
     processor.save("original", dst);
 
-    String sample = readImage(dst);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
   @Test
   public void testSaveJPG() throws IOException {
+    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".jpg");
+
+    loadImageInvoker(src, "original");
+    processor.save("original", dst);
+
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
+  }
+
+  @Test
+  public void testSaveJPEG() throws IOException {
     dst = dst.substring(0, dst.lastIndexOf(".")).concat(".jpeg");
 
     loadImageInvoker(src, "original");
     processor.save("original", dst);
 
-    String sample = readImage(dst);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
   @Test
@@ -378,21 +509,27 @@ public abstract class AbstractMIPTest {
     loadImageInvoker(src, "original");
     processor.save("original", dst);
 
-    String sample = readImage(dst);
-    String custom = readImage(dst);
-    assertEquals(sample, custom);
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
- @Test
- public void testSaveBMP() throws IOException {
-   dst = dst.substring(0, dst.lastIndexOf(".")).concat(".bmp");
+  @Test
+  public void testSaveBMP() throws IOException {
+    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".bmp");
 
-   loadImageInvoker(src, "original");
-   processor.save("original", dst);
+    loadImageInvoker(src, "original");
+    processor.save("original", dst);
 
-  //  String sample = readImage(dst);
-  //  String custom = readImage(dst);
-  //  assertEquals(sample, custom);
- }
+    assertLooper(new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
+  }
 
 }
