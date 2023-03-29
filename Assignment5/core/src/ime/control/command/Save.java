@@ -23,7 +23,7 @@ public class Save implements ImageCommand {
   @Override
   public void execute(ImageProcessor model) throws IOException {
     OutputStream outputStream = new FileOutputStream(path);
-    String format = path.split(".")[1];
+    String format = path.split("\\.")[1];
     model.save(from, outputStream, format);
   }
 }
