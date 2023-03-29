@@ -30,7 +30,7 @@ replay_pid*
 out/
 
 # .ppm from Assignment4 test cases
-*.ppm
+**/*.ppm
 
 # MacOS file
 .DS_Store
@@ -40,3 +40,8 @@ out/
 
 #Menifest file
 *.MF
+
+# images
+**/core/res/oldOut
+**/core/res/new
+**/core/res/format
