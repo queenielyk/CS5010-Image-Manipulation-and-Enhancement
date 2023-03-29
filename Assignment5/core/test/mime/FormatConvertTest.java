@@ -9,6 +9,8 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
+import mime.model.ImageHandler;
+import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
 
@@ -23,23 +25,32 @@ public class FormatConvertTest {
    * @param imgB the second image.
    * @return whether the images are both the same or not.
    */
-  private static boolean compareBufferImages(BufferedImage imgA, BufferedImage imgB) {
-    // The images must be the same size.
-    if (imgA.getWidth() != imgB.getWidth() || imgA.getHeight() != imgB.getHeight()) {
-      return false;
-    }
+  private static boolean compareImage(ImageHandler imgA, ImageHandler imgB) {
 
-    int width = imgA.getWidth();
-    int height = imgA.getHeight();
+    // The images must be the same size and maxi-value.
+    int[] infoA = imgA.getInfo();
+    int[] infoB = imgB.getInfo();
+    for (int i = 0; i < infoA.length; i++)
+      if (infoA[i] != infoB[i]) {
+        return false;
+      }
+
+
+    int width = infoA[0];
+    int height = infoA[1];
+
+    int[][][] imgAContent = imgA.getImage();
+    int[][][] imgBContent = imgB.getImage();
 
     // Loop over every pixel.
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-
-        // Compare the pixels for equality.
-        if (imgA.getRGB(x, y) != imgB.getRGB(x, y)) {
-          System.out.println("A:" + imgA.getRGB(x, y) + "\tB:" + imgB.getRGB(x, y));
-          return false;
+        for (int rgb = 0; rgb < 3; rgb++) {
+          // Compare the pixels for equality.
+          if (imgAContent[x][y][rgb] != imgBContent[x][y][rgb]) {
+            System.out.println("A:" + imgAContent[x][y][rgb] + "\tB:" + imgBContent[x][y][rgb]);
+            return false;
+          }
         }
       }
     }
@@ -55,15 +66,21 @@ public class FormatConvertTest {
       for (int i = 0; i < type.length; i++) {
         MoreImageProcessor model = new MoreImageProcessorImpl();
         InputStream stream = new FileInputStream("res/format/cat." + type[i]);
-        BufferedImage img = ImageIO.read(new FileInputStream("res/format/cat." + type[i]));
+        ImageHandler imageH = new ImageIOHandler();
+        imageH.readImage(stream);
+//        BufferedImage img = ImageIO.read(new FileInputStream("res/format/cat." + type[i]));
         OutputStream outputStream = new FileOutputStream("res/new/cat-" + type[i] + "." + type[j]);
-        model.loadImage(stream, "cat", type[j]);
+        model.loadImage(imageH, "cat");
         model.save("cat", outputStream, type[j]);
-        BufferedImage NewImg = ImageIO.read(
-                new FileInputStream("res/new/cat-" + type[i] + "." + type[j]));
+
+        InputStream newStream = new FileInputStream("res/new/cat-" + type[i] + "." + type[j]);
+        ImageHandler newImageH = new ImageIOHandler();
+        newImageH.readImage(newStream);
+//        BufferedImage NewImg = ImageIO.read(
+//                new FileInputStream("res/new/cat-" + type[i] + "." + type[j]));
         System.out.println(
-                "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareBufferImages(img,
-                        NewImg));
+                "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareImage(imageH,
+                        newImageH));
 
 //        assertTrue(compareBufferImages(img, NewImg));
       }

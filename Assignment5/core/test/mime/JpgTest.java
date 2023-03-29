@@ -14,6 +14,8 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
+import mime.model.ImageHandler;
+import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
 
@@ -36,7 +38,9 @@ public class JpgTest {
     String dst = "res/processor.jpeg";
     MoreImageProcessor processor = new MoreImageProcessorImpl();
     InputStream stream = new FileInputStream("res/format/cat.jpeg");
-    processor.loadImage(stream, "original", "jpeg");
+    ImageHandler handler = new ImageIOHandler();
+    handler.readImage(stream);
+    processor.loadImage(handler, "original");
     OutputStream outputStream = new FileOutputStream(dst);
     processor.save("original", outputStream, "jpeg");
   }
@@ -46,7 +50,9 @@ public class JpgTest {
     String dst = "res/processor.jpg";
     MoreImageProcessor processor = new MoreImageProcessorImpl();
     InputStream stream = new FileInputStream("res/format/cat.jpeg");
-    processor.loadImage(stream, "original", "jpeg");
+    ImageHandler handler = new ImageIOHandler();
+    handler.readImage(stream);
+    processor.loadImage(handler, "original");
     OutputStream outputStream = new FileOutputStream(dst);
     processor.save("original", outputStream, "jpg");
   }

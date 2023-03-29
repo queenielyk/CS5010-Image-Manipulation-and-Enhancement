@@ -122,10 +122,7 @@ public abstract class AbstractMIPTest {
     return imageArray;
   }
 
-  private void loadImageInvoker(String path, String name) throws IOException {
-    InputStream stream = new FileInputStream(path);
-    processor.loadImage(stream, name, path.substring(path.lastIndexOf(".") + 1));
-  }
+  protected abstract void loadImageInvoker(String path, String name) throws IOException;
 
   private void assertLooper(int[][][] sample, String dst) throws IOException {
     int[][][] custom = readImage(dst);
