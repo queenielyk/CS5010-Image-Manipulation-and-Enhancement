@@ -29,9 +29,10 @@ public interface MoreImageProcessor extends ImageProcessor {
    * @param stream an InputStream
    * @param name   the name of image
    * @param format the format of image
-   * @throws IOException if unable to read file
+   * @throws IOException           if unable to read file
+   * @throws IllegalStateException if format is not supported
    */
-  void loadImage(InputStream stream, String name, String format) throws IOException;
+  void loadImage(InputStream stream, String name, String format) throws IOException, IllegalStateException;
 
   /**
    * A method to combine three channel-based greyscale images into one image, and named it.

@@ -52,10 +52,15 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   @Deprecated
   public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
+    throw new IllegalStateException("This method is deprecated!");
   }
 
   @Override
-  public void loadImage(InputStream stream, String name, String format) throws IOException {
+  public void loadImage(InputStream stream, String name, String format) throws IOException, IllegalStateException {
+    if (!verifyFormat(format)) {
+      throw new IllegalStateException("This format is not supported!");
+    }
+
     if (format.equals("ppm")) {
       readPPM(stream, name);
     } else {
@@ -333,8 +338,8 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   @Deprecated
-  public void save(String from, String path) throws IOException {
-
+  public void save(String from, String path) throws IOException, IllegalStateException {
+    throw new IllegalStateException("This operation is not supported!");
   }
 
   @Override
@@ -370,7 +375,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     }
 
     if (format.equals(".jpg") || format.equals("jpeg")) {
-      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName(format).next();
       ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
       jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
       jpgWriteParam.setCompressionQuality(1f);
@@ -379,9 +384,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       IIOImage outputImage = new IIOImage(image, null, null);
       jpgWriter.write(null, outputImage, jpgWriteParam);
       jpgWriter.dispose();
+    } else {
+      ImageIO.write(image, format, stream);
     }
-
-    ImageIO.write(image, format, stream);
 
   }
 
@@ -396,7 +401,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     for (int row = 0; row < info[1]; row++) {
       for (int col = 0; col < info[0]; col++) {
         for (int tmp : fromImage[row][col]) {
-          stream.write(tmp);
+          stream.write(String.format("%s", tmp).getBytes());
           stream.write(System.lineSeparator().getBytes());
         }
       }
