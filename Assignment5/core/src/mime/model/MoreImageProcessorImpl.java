@@ -115,7 +115,6 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         });
         break;
       case "sepia":
-        this.greyscale("greyscale", from, to);
         greyscaleLooper(to, to, RGB -> new int[]{
                 (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
                 (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
@@ -399,8 +398,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   public void dithering(String from, String to) {
     checkImageExistence(from);
 
-    int[] info = infos.get(from);
-    int[][][] fromImage = images.get(from);
+    this.greyscale("greyscale", from, to);
+    int[] info = infos.get(to);
+    int[][][] fromImage = images.get(to);
 
     int[][][] toImage = new int[info[1]][info[0]][];
     for (int row = 0; row < info[1]; row++) {
