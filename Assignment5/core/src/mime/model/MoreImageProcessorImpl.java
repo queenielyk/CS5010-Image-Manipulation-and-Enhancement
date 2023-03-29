@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -105,20 +104,20 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         break;
       case "intensity-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-                calIntensityValue(RGB), calIntensityValue(RGB), calIntensityValue(RGB)
+            calIntensityValue(RGB), calIntensityValue(RGB), calIntensityValue(RGB)
         });
         break;
       case "greyscale":
       case "luma-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-                calLumaValue(RGB), calLumaValue(RGB), calLumaValue(RGB),
+            calLumaValue(RGB), calLumaValue(RGB), calLumaValue(RGB),
         });
         break;
       case "sepia":
-        greyscaleLooper(to, to, RGB -> new int[]{
-                (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
-                (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
-                (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
+        greyscaleLooper(from, to, RGB -> new int[]{
+            (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
+            (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
+            (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
         });
         break;
       default:

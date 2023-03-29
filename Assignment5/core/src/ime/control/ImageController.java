@@ -75,11 +75,9 @@ public class ImageController implements IController {
           if (this.setScript.contains(args.get(0))) {
             throw new IllegalStateException("Encountered looping through scripts");
           }
-
           setScript.add(args.get(0));
           Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
           output.append(processFileScript(fileScan));
-
           setScript.remove(args.get(0));
 
           break;
@@ -136,8 +134,8 @@ public class ImageController implements IController {
           cmd = null;
           break;
       }
-    } catch (IllegalArgumentException wnag) {
-      output.append("!<Error>!: \t" + wnag + "\n");
+    } catch (IllegalArgumentException | FileNotFoundException fne) {
+      output.append("!<Error>!: \t" + fne + "\n");
     }
 
     if (cmd != null) {

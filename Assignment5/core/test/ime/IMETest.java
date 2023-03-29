@@ -23,7 +23,7 @@ public class IMETest {
     Reader in = new StringReader("run res/error.text");
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
-    assertEquals("Enter Command:Executed: \tload res/oldOut/cat.ppm cat\n"
+    assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n"
         + "Executed: \tbrighten 30 cat cat-brighter\n"
         + "Executed: \tsave res/oldOut/cat-brighter.ppm cat-brighter\n"
         + "Executed: \tbrighten -30 cat cat-darker\n"
@@ -36,7 +36,7 @@ public class IMETest {
         + "Executed: \tsave res/oldOut/cat-v-h.ppm cat-vertical-horizontal\n"
         + "Executed: \tgreyscale value-component cat cat-greyscale\n"
         + "Executed: \tsave res/oldOut/cat-gs.ppm cat-greyscale\n"
-        + "Executed: \tload res/oldOut/cat.ppm cat\n"
+        + "Executed: \tload res/cat.ppm cat\n"
         + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
         + "Executed: \tbrighten 50 cat-red cat-red\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"

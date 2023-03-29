@@ -3,8 +3,10 @@ package mime.control.command;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import mime.model.ImageHandler;
+import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
+import mime.model.PpmHandler;
 
 public class LoadInputStream implements MoreImageCommand {
 
@@ -30,15 +32,25 @@ public class LoadInputStream implements MoreImageCommand {
    */
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
-    InputStream inputStream = new FileInputStream(path);
     String format = path.split("\\.")[1];
+    ImageHandler handler = null;
 
-    if (!model.verifyFormat(path)) {
-      throw new IllegalArgumentException("Model do not support:" + format + "format");
+    switch (format) {
+      case "ppm":
+        handler = new PpmHandler();
+        break;
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "bmp":
+        handler = new ImageIOHandler();
+        break;
+      default:
+        throw new IllegalArgumentException("Handler do not support:" + format + "format");
     }
 
-    model.loadImage(inputStream, imgName, format);
-
+    handler.readImage(new FileInputStream(path));
+    model.loadImage(handler, imgName);
   }
 
 

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import ime.control.IController;
 import ime.control.ImageController;
 import ime.model.ImageProcessor;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -148,42 +147,18 @@ public class ImageControllerTest {
     assertEquals("From:cat-greyscale Path:res/cat-gs.ppm\n", log.toString());
   }
 
-  @Test(expected = FileNotFoundException.class)
+  @Test
   public void ScriptNotFoundTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run IME/test/IME/fake.text");
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
-  }
 
-  @Test
-  public void RunScriptTest() throws IOException {
-    StringBuilder out = new StringBuilder();
-    Reader in = new StringReader("run res/script.text");
-    IController controller = new ImageController(in, out);
-    StringBuilder log = new StringBuilder();
-    controller.run(new MockModel(log));
-    assertEquals("Enter Command:Executed: \tload res/oldOut/cat.ppm cat\n"
-        + "Executed: \tbrighten 30 cat cat-brighter\n"
-        + "Executed: \tsave res/oldOut/cat-brighter.ppm cat-brighter\n"
-        + "Executed: \tbrighten -30 cat cat-darker\n"
-        + "Executed: \tsave res/oldOut/cat-darker.ppm cat-darker\n"
-        + "Executed: \tvertical-flip cat cat-vertical\n"
-        + "Executed: \tsave res/oldOut/cat-vertical.ppm cat-vertical\n"
-        + "Executed: \thorizontal-flip cat cat-horizontal\n"
-        + "Executed: \tsave res/oldOut/cat-horizontal.ppm cat-horizontal\n"
-        + "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n"
-        + "Executed: \tsave res/oldOut/cat-v-h.ppm cat-vertical-horizontal\n"
-        + "Executed: \tgreyscale value-component cat cat-greyscale\n"
-        + "Executed: \tsave res/oldOut/cat-gs.ppm cat-greyscale\n"
-        + "Executed: \tload res/oldOut/cat.ppm cat\n"
-        + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
-        + "Executed: \tbrighten 50 cat-red cat-red\n"
-        + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
-        + "Executed: \tsave res/oldOut/cat-red-tint.ppm cat-red-tint\n"
-        + "\n"
-        + "Enter Command:", out.toString());
+    assertEquals(
+        "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME\\test\\IME\\fake.text (The system cannot find the path specified)\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test

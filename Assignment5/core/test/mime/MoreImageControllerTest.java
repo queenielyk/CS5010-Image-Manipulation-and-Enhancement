@@ -5,20 +5,14 @@ import static org.junit.Assert.assertEquals;
 import ime.ImageControllerTest;
 import ime.control.IController;
 import ime.model.ImageProcessor;
-
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
-
-import javax.imageio.ImageIO;
-
+import java.util.Arrays;
 import mime.control.MoreImageController;
+import mime.model.ImageHandler;
 import mime.model.MoreImageProcessor;
-
 import org.junit.Test;
 
 /**
@@ -46,22 +40,29 @@ public class MoreImageControllerTest extends ImageControllerTest {
      */
     @Override
     public boolean verifyFormat(String pathname) {
-      return false;
+      return true;
     }
 
-    @Deprecated
-    public void loadImage(InputStream stream, String name, String format) throws IOException {
-
+    /**
+     * A method to load image from an InputStream and store it.
+     *
+     * @param reader
+     * @param name   the name of image
+     * @throws IOException           if unable to read file
+     * @throws IllegalStateException if format is not supported
+     */
+    @Override
+    public void loadImage(ImageHandler reader, String name) {
+      log.append("Handler:" + Arrays.deepToString(reader.getImage()) + " " + "name:" + name + "\n");
     }
 
 
-    public void loadImage(BufferedImage image, String name) {
-      log.append(
-              "BufImg:"
-                      + image.toString().replaceAll("BufferedImage@[A-Za-z0-9]+:", "")
-                      + " "
-                      + "name:" + name + "\n");
+    @Override
+    public void save(String from, OutputStream stream, String format)
+        throws IOException, IllegalStateException {
+      log.append("from:" + from + " " + "format:" + format + "\n");
     }
+
 
     @Override
     public void filter(String mode, String from, String to) {
@@ -73,24 +74,31 @@ public class MoreImageControllerTest extends ImageControllerTest {
       log.append("From:" + from + " " + "To:" + to + "\n");
     }
 
-    @Deprecated
-    public void save(String from, OutputStream stream, String format) throws IOException, IllegalStateException {
-
-    }
 
   }
 
 
   @Test
-  public void mockLoadBufTest() throws IOException {
+  public void mockLoadInputStreamTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("load res/format/cat.jpeg cat");
+    Reader in = new StringReader("load res/cat.ppm cat");
     IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MoreMockModel(log));
-    String imgInfo = ImageIO.read(new FileInputStream("res/format/cat.jpeg")).toString()
-            .replaceAll("BufferedImage@[A-Za-z0-9]+:", "");
-    assertEquals("BufImg:" + imgInfo + " name:cat\n", log.toString());
+    assertEquals("Handler:[["
+        + "[234, 232, 236], [209, 194, 193], [168, 150, 148]],"
+        + " [[234, 230, 231], [194, 184, 187], [116, 99, 101]],"
+        + " [[211, 203, 206], [170, 150, 150], [70, 42, 43]]] name:cat\n", log.toString());
+  }
+
+  @Test
+  public void mockSaveOutputStreamTest() throws IOException {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("save res/cat-gs.ppm cat-greyscale");
+    IController controller = new MoreImageController(in, out);
+    StringBuilder log = new StringBuilder();
+    controller.run(new MoreMockModel(log));
+    assertEquals("from:cat-greyscale format:ppm\n", log.toString());
   }
 
   @Test
