@@ -164,24 +164,24 @@ public class ImageControllerTest {
     IController controller = new ImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
-    assertEquals("Enter Command:Executed: \tload res/cat.ppm cat\n"
+    assertEquals("Enter Command:Executed: \tload res/oldOut/cat.ppm cat\n"
         + "Executed: \tbrighten 30 cat cat-brighter\n"
-        + "Executed: \tsave res/cat-brighter.ppm cat-brighter\n"
+        + "Executed: \tsave res/oldOut/cat-brighter.ppm cat-brighter\n"
         + "Executed: \tbrighten -30 cat cat-darker\n"
-        + "Executed: \tsave res/cat-darker.ppm cat-darker\n"
+        + "Executed: \tsave res/oldOut/cat-darker.ppm cat-darker\n"
         + "Executed: \tvertical-flip cat cat-vertical\n"
-        + "Executed: \tsave res/cat-vertical.ppm cat-vertical\n"
+        + "Executed: \tsave res/oldOut/cat-vertical.ppm cat-vertical\n"
         + "Executed: \thorizontal-flip cat cat-horizontal\n"
-        + "Executed: \tsave res/cat-horizontal.ppm cat-horizontal\n"
+        + "Executed: \tsave res/oldOut/cat-horizontal.ppm cat-horizontal\n"
         + "Executed: \thorizontal-flip cat-vertical cat-vertical-horizontal\n"
-        + "Executed: \tsave res/cat-v-h.ppm cat-vertical-horizontal\n"
+        + "Executed: \tsave res/oldOut/cat-v-h.ppm cat-vertical-horizontal\n"
         + "Executed: \tgreyscale value-component cat cat-greyscale\n"
-        + "Executed: \tsave res/cat-gs.ppm cat-greyscale\n"
-        + "Executed: \tload res/cat.ppm cat\n"
+        + "Executed: \tsave res/oldOut/cat-gs.ppm cat-greyscale\n"
+        + "Executed: \tload res/oldOut/cat.ppm cat\n"
         + "Executed: \trgb-split cat cat-red cat-green cat-blue\n"
         + "Executed: \tbrighten 50 cat-red cat-red\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
-        + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
+        + "Executed: \tsave res/oldOut/cat-red-tint.ppm cat-red-tint\n"
         + "\n"
         + "Enter Command:", out.toString());
   }
