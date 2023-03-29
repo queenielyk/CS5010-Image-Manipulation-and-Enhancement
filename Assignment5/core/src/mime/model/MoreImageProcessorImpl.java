@@ -4,13 +4,11 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -45,6 +43,17 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     });
   }
 
+  /**
+   * A protected helper method to clamp a RGB that 0 < RGB < maxi-value.
+   *
+   * @param rgb  rgb value
+   * @param maxi maximum value of an image
+   * @return a clamped rgb value
+   */
+  protected int clampRGB(int rgb, int maxi) {
+    return Math.max(0, Math.min(rgb, maxi));
+  }
+
   @Override
   public boolean verifyFormat(String path) {
     return this.acceptFormat.contains(path.substring(path.lastIndexOf('.') + 1));
@@ -56,99 +65,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   @Override
-  public void loadImage(InputStream stream, String name, String format) throws IOException, IllegalStateException {
-    if (!verifyFormat(format)) {
-      throw new IllegalStateException("This format is not supported!");
-    }
-
-    if (format.equals("ppm")) {
-      readPPM(stream, name);
-    } else {
-      readBJP(stream, name);
-    }
-  }
-
-  private void readPPM(InputStream stream, String name) {
-    Scanner sc = new Scanner(stream);
-
-    if (!sc.nextLine().equals("P3")) {
-      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
-    }
-
-    String s = sc.nextLine();
-    if (s.charAt(0) == '#') {
-      s = sc.nextLine();
-    }
-    //Dimension
-    String[] splited = s.split(" ");
-    int width = Integer.parseInt(splited[0]);
-    int height = Integer.parseInt(splited[1]);
-    //Maxi Value
-    int maxi = Integer.parseInt(sc.nextLine());
-
-
-    int[][][] imageArray = new int[height][width][3];
-    int row = 0;
-    int col = 0;
-    int count = 0;
-
-    while (sc.hasNextLine()) {
-      s = sc.nextLine();
-      if (s.isEmpty()) {
-        continue;
-      }
-      if (s.charAt(0) != '#') {
-        splited = s.split(" ");
-        for (String ss : splited) {
-          if (!ss.equals("")) {
-            imageArray[row][col][count] = Integer.parseInt(ss);
-            count++;
-            if (count == 3) {
-              count = 0;
-              col++;
-              if (col == width) {
-                col = 0;
-                row++;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    infos.put(name, new int[]{width, height, maxi});
-    images.put(name, imageArray);
-  }
-
-  private void readBJP(InputStream stream, String name) throws IOException {
-    BufferedImage image = ImageIO.read(stream);
-
-    if (image == null) {
-      throw new IllegalStateException("Image is not accessible!");
-    }
-
-    int width = image.getWidth();
-    int height = image.getHeight();
-
-    int[] dataBuffInt = image.getRGB(0, 0, width, height, null, 0, width);
-    int[][][] imageArray = new int[height][width][3];
-    int row = 0;
-    int col = 0;
-
-    for (int rgb : dataBuffInt) {
-      int red = (rgb >> 16) & 0xFF;
-      int green = (rgb >> 8) & 0xFF;
-      int blue = (rgb) & 0xFF;
-      imageArray[row][col] = new int[]{red, green, blue};
-      col++;
-      if (col == width) {
-        col = 0;
-        row++;
-      }
-    }
-
-    infos.put(name, new int[]{width, height, 255});
-    images.put(name, imageArray);
+  public void loadImage(ImageHandler reader, String name) {
+    infos.put(name, reader.getInfo());
+    images.put(name, reader.getImage());
   }
 
 
@@ -181,24 +100,18 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         break;
       case "value-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
-                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
-                Math.max(Math.max(RGB[0], RGB[1]), RGB[2])
+                calValueValue(RGB), calValueValue(RGB), calValueValue(RGB)
         });
         break;
       case "intensity-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-                (RGB[0] + RGB[1] + RGB[2]) / 3,
-                (RGB[0] + RGB[1] + RGB[2]) / 3,
-                (RGB[0] + RGB[1] + RGB[2]) / 3
+                calIntensityValue(RGB), calIntensityValue(RGB), calIntensityValue(RGB)
         });
         break;
       case "greyscale":
       case "luma-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
-                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
-                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2])
+                calLumaValue(RGB), calLumaValue(RGB), calLumaValue(RGB),
         });
         break;
       case "sepia":
@@ -212,6 +125,36 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       default:
         throw new IllegalArgumentException("This grayscale component is not an option!");
     }
+  }
+
+  /**
+   * A protected helper method to assist calculating value value.
+   *
+   * @param RGB int[red, green, blue] of a pixel
+   * @return the value value
+   */
+  protected int calValueValue(int[] RGB) {
+    return Math.max(Math.max(RGB[0], RGB[1]), RGB[2]);
+  }
+
+  /**
+   * A protected helper method to assist calculating intensity value.
+   *
+   * @param RGB int[red, green, blue] of a pixel
+   * @return the intensity value
+   */
+  protected int calIntensityValue(int[] RGB) {
+    return (RGB[0] + RGB[1] + RGB[2]) / 3;
+  }
+
+  /**
+   * A protected helper method to assist calculating luma value.
+   *
+   * @param RGB int[red, green, blue] of a pixel
+   * @return the luma value
+   */
+  protected int calLumaValue(int[] RGB) {
+    return (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]);
   }
 
   /**
@@ -292,9 +235,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       for (int col = 0; col < info[0]; col++) {
         int[] rgb = fromImage[row][col];
         toImage[row][col] = new int[]{
-                Math.max(0, Math.min(rgb[0] + add, info[2])),
-                Math.max(0, Math.min(rgb[1] + add, info[2])),
-                Math.max(0, Math.min(rgb[2] + add, info[2]))
+                clampRGB(rgb[0] + add, info[2]),
+                clampRGB(rgb[1] + add, info[2]),
+                clampRGB(rgb[2] + add, info[2])
         };
       }
     }
@@ -442,9 +385,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         }
 
         toImage[row][col] = new int[]{
-                (int) Math.max(0, Math.min(red, info[2])),
-                (int) Math.max(0, Math.min(green, info[2])),
-                (int) Math.max(0, Math.min(blue, info[2]))
+                clampRGB((int) red, info[2]),
+                clampRGB((int) green, info[2]),
+                clampRGB((int) blue, info[2]),
         };
       }
     }

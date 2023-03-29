@@ -1,8 +1,6 @@
 package mime.model;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import ime.model.ImageProcessor;
@@ -32,7 +30,7 @@ public interface MoreImageProcessor extends ImageProcessor {
    * @throws IOException           if unable to read file
    * @throws IllegalStateException if format is not supported
    */
-  void loadImage(InputStream stream, String name, String format) throws IOException, IllegalStateException;
+  void loadImage(ImageHandler reader, String name);
 
   /**
    * A method to combine three channel-based greyscale images into one image, and named it.
