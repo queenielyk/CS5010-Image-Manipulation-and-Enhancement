@@ -1,12 +1,19 @@
 package mime;
 
 import org.junit.AfterClass;
-import java.io.File;
+import org.junit.Test;
 
-public class JpgTest extends AbstractMIPTest {
-  public JpgTest() {
-    super("res/cat.jpeg", "res/processor.jpeg", "jpeg");
-  }
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import mime.model.MoreImageProcessor;
+import mime.model.MoreImageProcessorImpl;
+
+public class JpgTest {
 
   /**
    * A method to be executed at the end of the test class. Remove image exported from this test
@@ -14,9 +21,28 @@ public class JpgTest extends AbstractMIPTest {
    */
   @AfterClass
   public static void removeDstPpm() {
+    for (String dst : new String[]{"res/processor.jpeg", "res/processor.jpg"}) {
+      File myObj = new File(dst);
+      myObj.delete();
+    }
+  }
+
+  @Test
+  public void testLoadJPEG() throws FileNotFoundException, IOException {
+    String dst = "res/processor.jpeg";
+    MoreImageProcessor processor = new MoreImageProcessorImpl();
+    BufferedImage image = ImageIO.read(new File("res/cat.jpeg"));
+    processor.loadImage(image, "original");
+    processor.save("original", dst);
+  }
+
+  @Test
+  public void testLoadJPG() throws FileNotFoundException, IOException {
     String dst = "res/processor.jpg";
-    File myObj = new File(dst);
-    myObj.delete();
+    MoreImageProcessor processor = new MoreImageProcessorImpl();
+    BufferedImage image = ImageIO.read(new File("res/cat.jpg"));
+    processor.loadImage(image, "original");
+    processor.save("original", dst);
   }
 
 }
