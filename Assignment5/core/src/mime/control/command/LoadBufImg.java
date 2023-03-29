@@ -4,6 +4,7 @@ package mime.control.command;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 import mime.model.MoreImageProcessor;
 
@@ -31,13 +32,20 @@ public class LoadBufImg implements MoreImageCommand {
    */
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
-    if(path.endsWith(".ppm")){
-      model.loadImage(path,imgName);
-    }
-    else {
+    if (path.endsWith(".ppm")) {
+      model.loadImage(path, imgName);
+    } else {
       BufferedImage bufImg = ImageIO.read(new FileInputStream(path));
       model.loadImage(bufImg, imgName);
     }
+  }
+
+  @Override
+  public void execute(MoreImageProcessor model) throws IOException {
+    InputStream inputStream = new FileInputStream(path);
+    String format = path.split(".")[1];
+    model.loadImage(inputStream, imgName, format);
+
   }
 
 

@@ -1,17 +1,18 @@
 package ime.control.command;
 
-import java.io.IOException;
-
 import ime.control.ImageCommand;
 import ime.model.ImageProcessor;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * This class represent a save command.
  */
 public class Save implements ImageCommand {
 
-  private String path;
-  private String from;
+  private final String path;
+  private final String from;
 
   public Save(String path, String from) {
     this.path = path;
@@ -21,6 +22,8 @@ public class Save implements ImageCommand {
 
   @Override
   public void execute(ImageProcessor model) throws IOException {
-    model.save(from, path);
+    OutputStream outputStream = new FileOutputStream(path);
+    String format = path.split(".")[1];
+    model.save(from, outputStream, format);
   }
 }

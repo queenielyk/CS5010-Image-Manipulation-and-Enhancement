@@ -41,11 +41,13 @@ public class MIMETest extends IMETest {
         + "Executed: \tbrighten 50 cat-red cat-red\n"
         + "Executed: \trgb-combine cat-red-tint cat-red cat-green cat-blue\n"
         + "Executed: \tsave res/cat-red-tint.ppm cat-red-tint\n"
+
         + "Executed: \tload res/cat.ppm cat\n"
         + "Executed: \tsave res/format/cat.jpg cat\n"
         + "Executed: \tsave res/format/cat.jpeg cat\n"
         + "Executed: \tsave res/format/cat.png cat\n"
         + "Executed: \tsave res/format/cat.bmp cat\n"
+
         + "Executed: \tload res/format/cat.jpg cat\n"
         + "Executed: \tload res/format/cat.bmp cat\n"
         + "Executed: \tload res/format/cat.jpeg cat\n"

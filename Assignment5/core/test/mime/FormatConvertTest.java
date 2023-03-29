@@ -29,9 +29,10 @@ public class FormatConvertTest {
     // Loop over every pixel.
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-//        System.out.println("A:"+imgA.getRGB(x,y)+"\tB:"+imgB.getRGB(x,y));
+
         // Compare the pixels for equality.
         if (imgA.getRGB(x, y) != imgB.getRGB(x, y)) {
+          System.out.println("A:" + imgA.getRGB(x, y) + "\tB:" + imgB.getRGB(x, y));
           return false;
         }
       }
