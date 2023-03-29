@@ -8,6 +8,10 @@ import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
 import mime.model.PpmHandler;
 
+/**
+ * This represents a loadInputStream command, which takes a path and parse it and delegate a
+ * different handler to model.
+ */
 public class LoadInputStream implements MoreImageCommand {
 
   private final String path;

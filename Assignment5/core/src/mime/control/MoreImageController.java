@@ -25,7 +25,7 @@ import mime.model.MoreImageProcessorImpl;
  * {@link mime.model.MoreImageProcessor} that will delegate command from Readable. In and return
  * Output to Appendable.
  */
-public class MoreImageController extends ImageController  {
+public class MoreImageController extends ImageController {
 
   /**
    * Builder a {@link MoreImageController} and pass with In and Output stream.
@@ -35,6 +35,28 @@ public class MoreImageController extends ImageController  {
    */
   public MoreImageController(Readable in, Appendable out) {
     super(in, out);
+  }
+
+  /**
+   * Main method to run for controller.
+   *
+   * @param args command line argument passing in
+   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
+   *                     such path).
+   */
+  public static void main(String[] args) throws IOException {
+    int fileOption = Arrays.asList(args).indexOf("-file");
+
+    //cmd line option
+    if (args.length > 0 && fileOption != -1) {
+      IController ctrl = new MoreImageController(new StringReader("run " + args[fileOption + 1]),
+          System.out);
+      ctrl.run(new MoreImageProcessorImpl());
+    } else {
+      //Example main program
+      IController ctrl = new MoreImageController(new InputStreamReader(System.in), System.out);
+      ctrl.run(new MoreImageProcessorImpl());
+    }
   }
 
 
@@ -118,30 +140,6 @@ public class MoreImageController extends ImageController  {
     }
 
     return output.toString();
-  }
-
-
-
-  /**
-   * Main method to run for controller.
-   *
-   * @param args command line argument passing in
-   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
-   *                     such path).
-   */
-  public static void main(String[] args) throws IOException {
-    int fileOption = Arrays.asList(args).indexOf("-file");
-
-    //cmd line option
-    if (args.length > 0 && fileOption != -1) {
-      IController ctrl = new MoreImageController(new StringReader("run " + args[fileOption + 1]),
-          System.out);
-      ctrl.run(new MoreImageProcessorImpl());
-    } else {
-      //Example main program
-      IController ctrl = new MoreImageController(new InputStreamReader(System.in), System.out);
-      ctrl.run(new MoreImageProcessorImpl());
-    }
   }
 
 

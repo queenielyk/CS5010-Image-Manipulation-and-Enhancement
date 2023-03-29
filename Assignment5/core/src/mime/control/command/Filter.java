@@ -3,7 +3,11 @@ package mime.control.command;
 import java.io.IOException;
 import mime.model.MoreImageProcessor;
 
+/**
+ * This represents a Filter command.
+ */
 public class Filter implements MoreImageCommand {
+
   String mode;
   String from;
   String to;

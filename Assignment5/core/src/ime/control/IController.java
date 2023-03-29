@@ -1,8 +1,7 @@
 package ime.control;
 
-import java.io.IOException;
-
 import ime.model.ImageProcessor;
+import java.io.IOException;
 
 /**
  * The controller interface for the ImageProcess program. The functions here have been designed to

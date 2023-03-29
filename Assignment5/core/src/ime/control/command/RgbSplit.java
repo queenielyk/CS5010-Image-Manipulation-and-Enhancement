@@ -8,17 +8,18 @@ import ime.model.ImageProcessor;
  */
 public class RgbSplit implements ImageCommand {
 
-  private String from;
-  private String r;
-  private String g;
-  private String b;
+  private final String from;
+  private final String r;
+  private final String g;
+  private final String b;
 
   /**
    * Build a Rgb Split command.
+   *
    * @param from name of source image
-   * @param r name of red-component image to produce
-   * @param g name of green-component image to produce
-   * @param b name of blue-component image to produce
+   * @param r    name of red-component image to produce
+   * @param g    name of green-component image to produce
+   * @param b    name of blue-component image to produce
    */
   public RgbSplit(String from, String r, String g, String b) {
     this.from = from;

@@ -1,23 +1,17 @@
 package mime;
 
-import org.junit.AfterClass;
-import org.junit.Test;
-
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import javax.imageio.ImageIO;
-
 import mime.model.ImageHandler;
 import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
+import org.junit.AfterClass;
+import org.junit.Test;
 
 public class JpgTest {
 
@@ -34,7 +28,7 @@ public class JpgTest {
   }
 
   @Test
-  public void testLoadJPEG() throws FileNotFoundException, IOException {
+  public void testLoadJPEG() throws IOException {
     String dst = "res/processor.jpeg";
     MoreImageProcessor processor = new MoreImageProcessorImpl();
     InputStream stream = new FileInputStream("res/format/cat.jpeg");
@@ -46,7 +40,7 @@ public class JpgTest {
   }
 
   @Test
-  public void testLoadJPG() throws FileNotFoundException, IOException {
+  public void testLoadJPG() throws IOException {
     String dst = "res/processor.jpg";
     MoreImageProcessor processor = new MoreImageProcessorImpl();
     InputStream stream = new FileInputStream("res/format/cat.jpeg");

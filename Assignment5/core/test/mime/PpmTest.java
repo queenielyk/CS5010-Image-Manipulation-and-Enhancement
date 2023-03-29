@@ -1,18 +1,16 @@
 package mime;
 
-import org.junit.AfterClass;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import mime.model.ImageHandler;
-import mime.model.ImageIOHandler;
 import mime.model.PpmHandler;
+import org.junit.AfterClass;
 
 public class PpmTest extends AbstractMIPTest {
+
   public PpmTest() throws FileNotFoundException {
     super("res/cat.ppm", "res/processor.ppm", "ppm");
   }

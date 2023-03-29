@@ -15,7 +15,7 @@ public class Hflip implements ImageCommand {
    * Build a horizontal flip command.
    *
    * @param from name of source image
-   * @param to name of image producing
+   * @param to   name of image producing
    */
   public Hflip(String from, String to) {
     this.from = from;

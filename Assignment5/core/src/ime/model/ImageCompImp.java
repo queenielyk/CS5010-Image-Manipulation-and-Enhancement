@@ -38,12 +38,12 @@ public class ImageCompImp implements ImageComp {
   }
 
   @Override
-  public void setNext(ImageComp next) {
-    this.nextComp = next;
+  public ImageComp getNext() {
+    return nextComp;
   }
 
   @Override
-  public ImageComp getNext() {
-    return nextComp;
+  public void setNext(ImageComp next) {
+    this.nextComp = next;
   }
 }

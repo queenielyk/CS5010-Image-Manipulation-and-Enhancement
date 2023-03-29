@@ -1,19 +1,14 @@
 package mime.model;
 
+import ime.model.ImageProcessor;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import ime.model.ImageProcessor;
 
 public interface MoreImageProcessor extends ImageProcessor {
 
   /**
-   * A method to verify whether accepting them image format.
-   * Accepted image format includes:
-   * - ppm
-   * - jpg
-   * - png
-   * - bmp
+   * A method to verify whether accepting them image format. Accepted image format includes: - ppm -
+   * jpg - png - bmp
    *
    * @param pathname pathname of incoming image
    * @return true if acceptable; else otherwise
@@ -43,13 +38,11 @@ public interface MoreImageProcessor extends ImageProcessor {
    */
   @Override
   void combines(String redName, String greenName, String blueName, String to)
-          throws IllegalStateException;
+      throws IllegalStateException;
 
   /**
-   * A method to apply a filter to the specified image.
-   * There are two filtering mode:
-   * - Blur
-   * - Sharpen
+   * A method to apply a filter to the specified image. There are two filtering mode: - Blur -
+   * Sharpen
    *
    * @param mode filtering mode to be apply to the image
    * @param from name of image to be applied
@@ -69,8 +62,8 @@ public interface MoreImageProcessor extends ImageProcessor {
 
 
   /**
-   * A method to export image to specified and acceptable image format then save at local
-   * This method will overwrite the existing file if this path already exist.
+   * A method to export image to specified and acceptable image format then save at local This
+   * method will overwrite the existing file if this path already exist.
    *
    * @param from   name of the image to be export
    * @param stream a output stream
@@ -78,5 +71,6 @@ public interface MoreImageProcessor extends ImageProcessor {
    * @throws IOException           unable to write file
    * @throws IllegalStateException the image format is not an option
    */
-  void save(String from, OutputStream stream, String format) throws IOException, IllegalStateException;
+  void save(String from, OutputStream stream, String format)
+      throws IOException, IllegalStateException;
 }

@@ -1,13 +1,12 @@
 package mime.control.command;
 
-import ime.control.ImageCommand;
 import java.io.IOException;
 import mime.model.MoreImageProcessor;
 
 /**
  * This interface represent a Command can be preformed on MoreImageProcessor Model.
  */
-public interface MoreImageCommand  {
+public interface MoreImageCommand {
 
   /**
    * delegate command to model's different method.

@@ -3,6 +3,9 @@ package mime.control.command;
 import java.io.IOException;
 import mime.model.MoreImageProcessor;
 
+/**
+ * This represent a dither command.
+ */
 public class Dither implements MoreImageCommand {
 
   String from;

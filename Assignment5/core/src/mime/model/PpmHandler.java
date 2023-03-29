@@ -7,6 +7,7 @@ import java.util.Scanner;
  * A class to be na image reader reading ppm image.
  */
 public class PpmHandler extends AbsrtuctImageHandler {
+
   public PpmHandler() {
     super();
   }
@@ -30,7 +31,6 @@ public class PpmHandler extends AbsrtuctImageHandler {
     //Maxi Value
     int maxi = Integer.parseInt(sc.nextLine());
     this.info = new int[]{width, height, maxi};
-
 
     image = new int[height][width][3];
     int row = 0;

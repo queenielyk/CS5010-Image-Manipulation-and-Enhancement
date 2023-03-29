@@ -1,17 +1,16 @@
 package mime;
 
-import org.junit.AfterClass;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import mime.model.ImageHandler;
 import mime.model.ImageIOHandler;
+import org.junit.AfterClass;
 
 public class BmpTest extends AbstractMIPTest {
+
   public BmpTest() throws FileNotFoundException {
     super("res/format/cat.bmp", "res/processor.bmp", "bmp");
   }

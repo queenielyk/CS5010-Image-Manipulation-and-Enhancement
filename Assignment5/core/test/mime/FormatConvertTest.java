@@ -1,21 +1,19 @@
 package mime;
 
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import javax.imageio.ImageIO;
-
 import mime.model.ImageHandler;
 import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
-
 import org.junit.Test;
 
+/**
+ * This is a test class to generate other formats of source file cat.ppm.
+ */
 public class FormatConvertTest {
 
   /**
@@ -30,11 +28,11 @@ public class FormatConvertTest {
     // The images must be the same size and maxi-value.
     int[] infoA = imgA.getInfo();
     int[] infoB = imgB.getInfo();
-    for (int i = 0; i < infoA.length; i++)
+    for (int i = 0; i < infoA.length; i++) {
       if (infoA[i] != infoB[i]) {
         return false;
       }
-
+    }
 
     int width = infoA[0];
     int height = infoA[1];
@@ -79,8 +77,8 @@ public class FormatConvertTest {
 //        BufferedImage NewImg = ImageIO.read(
 //                new FileInputStream("res/new/cat-" + type[i] + "." + type[j]));
         System.out.println(
-                "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareImage(imageH,
-                        newImageH));
+            "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareImage(imageH,
+                newImageH));
 
 //        assertTrue(compareBufferImages(img, NewImg));
       }

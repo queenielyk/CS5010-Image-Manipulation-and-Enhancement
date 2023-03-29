@@ -15,55 +15,6 @@ import org.junit.Test;
  */
 public class ImageControllerTest {
 
-  /**
-   * This class represent a mock of {@link ImageProcessor} to take method input and store it for
-   * testing purposes.
-   */
-  public static class MockModel implements ImageProcessor {
-
-    protected final StringBuilder log;
-
-    public MockModel(StringBuilder log) {
-      this.log = log;
-    }
-
-    @Override
-    public void loadImage(String path, String name) throws IllegalStateException {
-      log.append("Path:" + path + " " + "Name:" + name + "\n");
-    }
-
-    @Override
-    public void greyscale(String mode, String from, String to) {
-      log.append("Mode:" + mode + " " + "From:" + from + " " + "To:" + to + "\n");
-    }
-
-    @Override
-    public void horizontalFlip(String from, String to) {
-      log.append("From:" + from + " " + "To:" + to + "\n");
-    }
-
-    @Override
-    public void verticalFlip(String from, String to) {
-      log.append("From:" + from + " " + "To:" + to + "\n");
-    }
-
-    @Override
-    public void adjustBrightness(String from, int add, String to) {
-      log.append("From:" + from + " " + "Add:" + add + " " + "To:" + to + "\n");
-    }
-
-    @Override
-    public void combines(String redName, String greenName, String blueName, String to) {
-      log.append("R:" + redName + " " + "G:" + greenName + " " + "B:" + blueName + " "
-          + "To:" + to + "\n");
-    }
-
-    @Override
-    public void save(String from, String path) {
-      log.append("From:" + from + " " + "Path:" + path + "\n");
-    }
-  }
-
   @Test
   public void mockLoadTest() throws IOException {
     StringBuffer out = new StringBuffer();
@@ -105,7 +56,6 @@ public class ImageControllerTest {
     controller.run(new MockModel(log));
     assertEquals("From:cat-vertical To:cat-vertical-horizontal\n", log.toString());
   }
-
 
   @Test
   public void mockVflipTest() throws IOException {
@@ -210,6 +160,55 @@ public class ImageControllerTest {
         "Enter Command:!<Error>!: \tjava.lang.NumberFormatException: For input string: \"a\"\n"
             + "\n"
             + "Enter Command:", out.toString());
+  }
+
+  /**
+   * This class represent a mock of {@link ImageProcessor} to take method input and store it for
+   * testing purposes.
+   */
+  public static class MockModel implements ImageProcessor {
+
+    protected final StringBuilder log;
+
+    public MockModel(StringBuilder log) {
+      this.log = log;
+    }
+
+    @Override
+    public void loadImage(String path, String name) throws IllegalStateException {
+      log.append("Path:" + path + " " + "Name:" + name + "\n");
+    }
+
+    @Override
+    public void greyscale(String mode, String from, String to) {
+      log.append("Mode:" + mode + " " + "From:" + from + " " + "To:" + to + "\n");
+    }
+
+    @Override
+    public void horizontalFlip(String from, String to) {
+      log.append("From:" + from + " " + "To:" + to + "\n");
+    }
+
+    @Override
+    public void verticalFlip(String from, String to) {
+      log.append("From:" + from + " " + "To:" + to + "\n");
+    }
+
+    @Override
+    public void adjustBrightness(String from, int add, String to) {
+      log.append("From:" + from + " " + "Add:" + add + " " + "To:" + to + "\n");
+    }
+
+    @Override
+    public void combines(String redName, String greenName, String blueName, String to) {
+      log.append("R:" + redName + " " + "G:" + greenName + " " + "B:" + blueName + " "
+          + "To:" + to + "\n");
+    }
+
+    @Override
+    public void save(String from, String path) {
+      log.append("From:" + from + " " + "Path:" + path + "\n");
+    }
   }
 
 

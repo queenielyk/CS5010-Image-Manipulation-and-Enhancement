@@ -1,8 +1,9 @@
 package ime;
 
-import org.junit.AfterClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
+import ime.model.ImageProcessor;
+import ime.model.PpmProcessor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,11 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import ime.model.ImageProcessor;
-import ime.model.PpmProcessor;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.AfterClass;
+import org.junit.Test;
 
 /**
  * A test class for object PpmProcessor.
@@ -49,7 +47,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testLoadCat() throws FileNotFoundException, IOException {
+  public void testLoadCat() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage("res/cat-brighter.ppm", "brighter");
     ppm.save("brighter", dst);
@@ -60,19 +58,19 @@ public class PpmProcessorTest {
   }
 
   @Test(expected = FileNotFoundException.class)
-  public void testLoadNotExist() throws FileNotFoundException, IOException {
+  public void testLoadNotExist() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage("res/nocat.ppm", "original");
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testLoadInvalidExtension() throws FileNotFoundException, IOException {
+  public void testLoadInvalidExtension() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage("res/nocat.png", "original");
   }
 
   @Test
-  public void testLoadOverwrite() throws FileNotFoundException, IOException {
+  public void testLoadOverwrite() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage("res/building.ppm", "original");
     ppm.loadImage(src, "original");
@@ -85,7 +83,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testLoadDifferentImages() throws FileNotFoundException, IOException {
+  public void testLoadDifferentImages() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage("res/cat-brighter.ppm", "brighter");
     ppm.loadImage("res/cat-horizontal.ppm", "horizontal");
@@ -109,7 +107,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testAdjustBrightnessPos() throws FileNotFoundException, IOException {
+  public void testAdjustBrightnessPos() throws IOException {
     int brightness = 30;
 
     ImageProcessor ppm = new PpmProcessor();
@@ -123,7 +121,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testAdjustBrightnessNeg() throws FileNotFoundException, IOException {
+  public void testAdjustBrightnessNeg() throws IOException {
     int brightness = -30;
 
     ImageProcessor ppm = new PpmProcessor();
@@ -137,7 +135,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testHorizontalFlip() throws FileNotFoundException, IOException {
+  public void testHorizontalFlip() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.horizontalFlip("original", "horizontal");
@@ -149,7 +147,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testVerticalFlip() throws FileNotFoundException, IOException {
+  public void testVerticalFlip() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.verticalFlip("original", "vertical");
@@ -161,7 +159,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testGreyscaleRed() throws FileNotFoundException, IOException {
+  public void testGreyscaleRed() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.greyscale("red-component", "original", "red");
@@ -173,7 +171,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testGreyscaleGreen() throws FileNotFoundException, IOException {
+  public void testGreyscaleGreen() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.greyscale("green-component", "original", "green");
@@ -185,7 +183,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testGreyscaleBlue() throws FileNotFoundException, IOException {
+  public void testGreyscaleBlue() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.greyscale("blue-component", "original", "blue");
@@ -197,7 +195,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testGreyscaleValue() throws FileNotFoundException, IOException {
+  public void testGreyscaleValue() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.greyscale("value-component", "original", "value");
@@ -209,7 +207,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testGreyscaleIntensity() throws FileNotFoundException, IOException {
+  public void testGreyscaleIntensity() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.greyscale("intensity-component", "original", "intensity");
@@ -221,7 +219,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testGreyscaleLuma() throws FileNotFoundException, IOException {
+  public void testGreyscaleLuma() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.greyscale("luma-component", "original", "luma");
@@ -233,7 +231,7 @@ public class PpmProcessorTest {
   }
 
   @Test
-  public void testCombine() throws FileNotFoundException, IOException {
+  public void testCombine() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage("res/cat-brighter.ppm", "original");
     ppm.greyscale("red-component", "original", "red");
@@ -248,7 +246,7 @@ public class PpmProcessorTest {
   }
 
   @Test(expected = IOException.class)
-  public void testInvalidSaveExtension() throws FileNotFoundException, IOException {
+  public void testInvalidSaveExtension() throws IOException {
     ImageProcessor ppm = new PpmProcessor();
     ppm.loadImage(src, "original");
     ppm.save("original", "/test/cat.ppm");

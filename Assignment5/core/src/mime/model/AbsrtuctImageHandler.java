@@ -1,8 +1,7 @@
 package mime.model;
 
 /**
- * A abstract class to implement ImageHandler.
- * Implement common methods here.
+ * A abstract class to implement ImageHandler. Implement common methods here.
  */
 public abstract class AbsrtuctImageHandler implements ImageHandler {
 

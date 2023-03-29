@@ -56,25 +56,26 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: "
-                    + "IME" + File.separator + "test" + File.separator + "IME" + File.separator + "fake.ppm (No such file or directory)\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: "
+            + "IME" + File.separator + "test" + File.separator + "IME" + File.separator
+            + "fake.ppm (No such file or directory)\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
   public void wrongGreyTypeTest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("load res/cat.ppm cat \n"
-            + "greyscale xxxx-component cat cat-greyscale");
+        + "greyscale xxxx-component cat cat-greyscale");
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals("Enter Command:Executed: \tload res/cat.ppm cat \n"
-            + "\n"
-            + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: "
-            + "This grayscale component is not an option!\n"
-            + "\n"
-            + "Enter Command:", out.toString());
+        + "\n"
+        + "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: "
+        + "This grayscale component is not an option!\n"
+        + "\n"
+        + "Enter Command:", out.toString());
   }
 
   @Test
@@ -84,10 +85,10 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
-                    + "Invalid Image file: Only ppm images are accepted\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
+            + "Invalid Image file: Only ppm images are accepted\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
@@ -97,10 +98,10 @@ public class IMETest {
     IController controller = new ImageController(in, out);
     controller.run(new PpmProcessor());
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
-                    + "This image is not exist!\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.IllegalStateException: "
+            + "This image is not exist!\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test(expected = IllegalStateException.class)

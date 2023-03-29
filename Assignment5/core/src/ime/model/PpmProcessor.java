@@ -17,7 +17,7 @@ import java.util.function.Function;
  */
 public class PpmProcessor implements ImageProcessor {
 
-  private Map<String, ImageComp> images;
+  private final Map<String, ImageComp> images;
   private int height;
   private int width;
   private int maxValue;

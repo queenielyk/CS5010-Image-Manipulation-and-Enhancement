@@ -28,10 +28,10 @@ import java.util.Set;
  */
 public class ImageController implements IController {
 
-  protected ImageProcessor model;
   private final Readable in;
   private final Appendable out;
   private final Set<String> setScript;
+  protected ImageProcessor model;
 
   /**
    * Builder a controller and pass with In and Out a stream.
@@ -43,6 +43,19 @@ public class ImageController implements IController {
     this.in = in;
     this.out = out;
     this.setScript = new HashSet<>();
+  }
+
+  /**
+   * Main method to run for controller.
+   *
+   * @param args command line argument passing in
+   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
+   *                     such path).
+   */
+  public static void main(String[] args) throws IOException {
+    //Example main program
+    IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
+    ctrl.run(new PpmProcessor());
   }
 
   @Override
@@ -196,20 +209,6 @@ public class ImageController implements IController {
       }
       out.append("\nEnter Command:");
     }
-  }
-
-
-  /**
-   * Main method to run for controller.
-   *
-   * @param args command line argument passing in
-   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
-   *                     such path).
-   */
-  public static void main(String[] args) throws IOException {
-    //Example main program
-    IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
-    ctrl.run(new PpmProcessor());
   }
 
 

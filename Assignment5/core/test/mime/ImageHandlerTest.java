@@ -1,6 +1,6 @@
 package mime;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,14 +9,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
-
-import mime.model.ImageIOHandler;
 import mime.model.ImageHandler;
+import mime.model.ImageIOHandler;
 import mime.model.PpmHandler;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class ImageHandlerTest {
 
@@ -49,7 +46,6 @@ public class ImageHandlerTest {
     int height = Integer.parseInt(splited[1]);
     //Maxi Value
     int maxi = Integer.parseInt(sc.nextLine());
-
 
     int[][][] imageArray = new int[height][width][3];
     int row = 0;
@@ -139,11 +135,11 @@ public class ImageHandlerTest {
     this.reader = new ImageIOHandler();
     this.reader.readImage(stream);
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , this.reader.getImage());
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+        }
+        , this.reader.getImage());
     assertLooper(new int[]{3, 3, 255}, this.reader.getInfo());
   }
 
@@ -154,11 +150,11 @@ public class ImageHandlerTest {
     this.reader = new PpmHandler();
     this.reader.readImage(stream);
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , this.reader.getImage());
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+        }
+        , this.reader.getImage());
     assertLooper(new int[]{3, 3, 255}, this.reader.getInfo());
   }
 

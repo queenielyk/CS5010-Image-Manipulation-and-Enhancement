@@ -1,13 +1,17 @@
 package mime.control.command;
 
-import ime.control.command.Greyscale;
 import java.io.IOException;
 import mime.model.MoreImageProcessor;
 
-public class ColorTrans  implements MoreImageCommand {
+/**
+ * This represents a ColorTransformation command.
+ */
+public class ColorTrans implements MoreImageCommand {
+
   protected String mode;
   protected String from;
   protected String to;
+
   /**
    * Build a greyscale command.
    *
@@ -16,9 +20,9 @@ public class ColorTrans  implements MoreImageCommand {
    * @param to   name of image producing
    */
   public ColorTrans(String mode, String from, String to) {
-    this.mode=mode;
-    this.from=from;
-    this.to=to;
+    this.mode = mode;
+    this.from = from;
+    this.to = to;
   }
 
   /**
@@ -29,6 +33,6 @@ public class ColorTrans  implements MoreImageCommand {
    */
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
-    model.greyscale(mode,from,to);
+    model.greyscale(mode, from, to);
   }
 }

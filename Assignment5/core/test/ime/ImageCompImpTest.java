@@ -1,11 +1,10 @@
 package ime;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import ime.model.ImageComp;
 import ime.model.ImageCompImp;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  * A test class for object ImageCompImp.

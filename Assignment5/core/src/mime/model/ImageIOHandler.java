@@ -3,18 +3,14 @@ package mime.model;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.imageio.ImageIO;
 
 /**
- * A class to be an image reader by using ImageIO library.
- * Acceptable image format:
- * - bmp
- * - jpg
- * - jpeg
- * - png
+ * A class to be an image reader by using ImageIO library. Acceptable image format: - bmp - jpg -
+ * jpeg - png
  */
 public class ImageIOHandler extends AbsrtuctImageHandler {
+
   public ImageIOHandler() {
     super();
   }

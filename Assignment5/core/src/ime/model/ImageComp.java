@@ -12,23 +12,21 @@ public interface ImageComp {
    *
    * @return an array of int: red, green, blue (fixed order)
    */
-  public int[] getRGB();
-
-
-  /**
-   * A method to set the reference to the image component that following this component.
-   *
-   * @param next the image component that following this component
-   */
-  public void setNext(ImageComp next);
-
+  int[] getRGB();
 
   /**
    * A method to get the reference of the image component that following this component.
    *
    * @return the image component that following this component
    */
-  public ImageComp getNext();
+  ImageComp getNext();
+
+  /**
+   * A method to set the reference to the image component that following this component.
+   *
+   * @param next the image component that following this component
+   */
+  void setNext(ImageComp next);
 
 
 }

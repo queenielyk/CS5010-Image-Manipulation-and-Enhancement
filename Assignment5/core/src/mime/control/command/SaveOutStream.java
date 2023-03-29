@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import mime.model.MoreImageProcessor;
 
+/**
+ * This represents a save command.
+ */
 public class SaveOutStream extends Save implements MoreImageCommand {
 
   public SaveOutStream(String path, String from) {
