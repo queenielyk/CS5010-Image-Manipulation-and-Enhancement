@@ -16,7 +16,7 @@ public class BmpTest extends AbstractMIPTest {
    */
   @AfterClass
   public static void removeDstPpm() {
-    String dst = "res/processor.jpg";
+    String dst = "res/processor.bmp";
     File myObj = new File(dst);
     myObj.delete();
   }
