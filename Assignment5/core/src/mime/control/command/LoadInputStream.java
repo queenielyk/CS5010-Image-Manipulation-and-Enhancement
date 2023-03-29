@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import mime.model.MoreImageProcessor;
 
-public class LoadBufImg implements MoreImageCommand {
+public class LoadInputStream implements MoreImageCommand {
 
   private final String path;
   private final String imgName;
@@ -17,7 +17,7 @@ public class LoadBufImg implements MoreImageCommand {
    * @param path    string to load file from
    * @param imgName name of image file will be store as
    */
-  public LoadBufImg(String path, String imgName) {
+  public LoadInputStream(String path, String imgName) {
     this.path = path;
     this.imgName = imgName;
   }
@@ -32,6 +32,11 @@ public class LoadBufImg implements MoreImageCommand {
   public void execute(MoreImageProcessor model) throws IOException {
     InputStream inputStream = new FileInputStream(path);
     String format = path.split("\\.")[1];
+
+    if (!model.verifyFormat(path)) {
+      throw new IllegalArgumentException("Model do not support:" + format + "format");
+    }
+
     model.loadImage(inputStream, imgName, format);
 
   }

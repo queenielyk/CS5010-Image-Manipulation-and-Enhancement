@@ -13,8 +13,9 @@ import java.util.Scanner;
 import mime.control.command.ColorTrans;
 import mime.control.command.Dither;
 import mime.control.command.Filter;
-import mime.control.command.LoadBufImg;
+import mime.control.command.LoadInputStream;
 import mime.control.command.MoreImageCommand;
+import mime.control.command.SaveOutStream;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
 
@@ -58,7 +59,13 @@ public class MoreImageController extends ImageController  {
           if (args.size() != 2) {
             throw wnaE;
           }
-          cmd = new LoadBufImg(args.get(0), args.get(1));
+          cmd = new LoadInputStream(args.get(0), args.get(1));
+          break;
+        case "save":
+          if (args.size() != 2) {
+            throw wnaE;
+          }
+          cmd = new SaveOutStream(args.get(0), args.get(1));
           break;
         // color trans (greyscale)
         case "greyscale":
