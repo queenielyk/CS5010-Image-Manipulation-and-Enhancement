@@ -5,8 +5,12 @@ import org.junit.Test;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
@@ -31,18 +35,20 @@ public class JpgTest {
   public void testLoadJPEG() throws FileNotFoundException, IOException {
     String dst = "res/processor.jpeg";
     MoreImageProcessor processor = new MoreImageProcessorImpl();
-    BufferedImage image = ImageIO.read(new File("res/cat.jpeg"));
-    processor.loadImage(image, "original");
-    processor.save("original", dst);
+    InputStream stream = new FileInputStream("res/format/cat.jpeg");
+    processor.loadImage(stream, "original", "jpeg");
+    OutputStream outputStream = new FileOutputStream(dst);
+    processor.save("original", outputStream, "jpeg");
   }
 
   @Test
   public void testLoadJPG() throws FileNotFoundException, IOException {
     String dst = "res/processor.jpg";
     MoreImageProcessor processor = new MoreImageProcessorImpl();
-    BufferedImage image = ImageIO.read(new File("res/cat.jpg"));
-    processor.loadImage(image, "original");
-    processor.save("original", dst);
+    InputStream stream = new FileInputStream("res/format/cat.jpeg");
+    processor.loadImage(stream, "original", "jpeg");
+    OutputStream outputStream = new FileOutputStream(dst);
+    processor.save("original", outputStream, "jpg");
   }
 
 }

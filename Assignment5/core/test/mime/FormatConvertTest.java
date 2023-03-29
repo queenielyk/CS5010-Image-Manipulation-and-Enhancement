@@ -2,10 +2,16 @@ package mime;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import javax.imageio.ImageIO;
+
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
+
 import org.junit.Test;
 
 public class FormatConvertTest {
@@ -48,14 +54,16 @@ public class FormatConvertTest {
     for (int j = 0; j < type.length; j++) {
       for (int i = 0; i < type.length; i++) {
         MoreImageProcessor model = new MoreImageProcessorImpl();
+        InputStream stream = new FileInputStream("res/format/cat." + type[i]);
         BufferedImage img = ImageIO.read(new FileInputStream("res/format/cat." + type[i]));
-        model.loadImage(img, "cat");
-        model.save("cat", "res/new/cat-" + type[i] + "." + type[j]);
+        OutputStream outputStream = new FileOutputStream("res/new/cat-" + type[i] + "." + type[j]);
+        model.loadImage(stream, "cat", type[j]);
+        model.save("cat", outputStream, type[j]);
         BufferedImage NewImg = ImageIO.read(
-            new FileInputStream("res/new/cat-" + type[i] + "." + type[j]));
+                new FileInputStream("res/new/cat-" + type[i] + "." + type[j]));
         System.out.println(
-            "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareBufferImages(img,
-                NewImg));
+                "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareBufferImages(img,
+                        NewImg));
 
 //        assertTrue(compareBufferImages(img, NewImg));
       }

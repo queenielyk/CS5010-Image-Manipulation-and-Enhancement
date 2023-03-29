@@ -3,10 +3,11 @@ package mime;
 import org.junit.AfterClass;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class BmpTest extends AbstractMIPTest {
-  public BmpTest() {
-    super("res/cat.bmp", "res/processor.bmp", "bmp");
+  public BmpTest() throws FileNotFoundException {
+    super("res/format/cat.bmp", "res/processor.bmp", "bmp");
   }
 
   /**

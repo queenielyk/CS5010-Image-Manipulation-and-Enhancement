@@ -3,9 +3,10 @@ package mime;
 import org.junit.AfterClass;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class PpmTest extends AbstractMIPTest {
-  public PpmTest() {
+  public PpmTest() throws FileNotFoundException {
     super("res/cat.ppm", "res/processor.ppm", "ppm");
   }
 

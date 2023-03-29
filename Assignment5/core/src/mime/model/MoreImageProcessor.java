@@ -2,6 +2,8 @@ package mime.model;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import ime.model.ImageProcessor;
 
@@ -20,7 +22,16 @@ public interface MoreImageProcessor extends ImageProcessor {
    */
   boolean verifyFormat(String pathname);
 
-  void loadImage(BufferedImage image, String name);
+
+  /**
+   * A method to load image from an InputStream and store it.
+   *
+   * @param stream an InputStream
+   * @param name   the name of image
+   * @param format the format of image
+   * @throws IOException if unable to read file
+   */
+  void loadImage(InputStream stream, String name, String format) throws IOException;
 
   /**
    * A method to combine three channel-based greyscale images into one image, and named it.
@@ -39,7 +50,7 @@ public interface MoreImageProcessor extends ImageProcessor {
    * A method to apply a filter to the specified image.
    * There are two filtering mode:
    * - Blur
-   * - Sharpening
+   * - Sharpen
    *
    * @param mode filtering mode to be apply to the image
    * @param from name of image to be applied
@@ -62,11 +73,11 @@ public interface MoreImageProcessor extends ImageProcessor {
    * A method to export image to specified and acceptable image format then save at local
    * This method will overwrite the existing file if this path already exist.
    *
-   * @param from name of the image to be export
-   * @param path relative path to save the image at local
+   * @param from   name of the image to be export
+   * @param stream a output stream
+   * @param format the format of image
    * @throws IOException           unable to write file
    * @throws IllegalStateException the image format is not an option
    */
-  @Override
-  void save(String from, String path) throws IOException, IllegalStateException;
+  void save(String from, OutputStream stream, String format) throws IOException, IllegalStateException;
 }

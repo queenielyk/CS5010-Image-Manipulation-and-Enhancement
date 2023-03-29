@@ -2,11 +2,10 @@ package mime.model;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +13,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Function;
+
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -50,46 +50,21 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     return this.acceptFormat.contains(path.substring(path.lastIndexOf('.') + 1));
   }
 
-  @Override
-  public void loadImage(BufferedImage image, String name) throws IllegalStateException {
-
-    if (image == null) {
-      throw new IllegalStateException("Image is not accessible!");
-    }
-
-    int width = image.getWidth();
-    int height = image.getHeight();
-
-    int[] dataBuffInt = image.getRGB(0, 0, width, height, null, 0, width);
-    int[][][] imageArray = new int[height][width][3];
-    int row = 0;
-    int col = 0;
-
-    for (int rgb : dataBuffInt) {
-      int red = (rgb >> 16) & 0xFF;
-      int green = (rgb >> 8) & 0xFF;
-      int blue = (rgb) & 0xFF;
-      imageArray[row][col] = new int[]{red, green, blue};
-      col++;
-      if (col == width) {
-        col = 0;
-        row++;
-      }
-    }
-
-    infos.put(name, new int[]{width, height, 255});
-    images.put(name, imageArray);
+  @Deprecated
+  public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
   }
 
   @Override
-  public void loadImage(String path, String name) throws FileNotFoundException, IllegalStateException {
-
-    if (!path.endsWith(".ppm")) {
-      throw new IllegalStateException("This input format is not available");
+  public void loadImage(InputStream stream, String name, String format) throws IOException {
+    if (format.equals("ppm")) {
+      readPPM(stream, name);
+    } else {
+      readBJP(stream, name);
     }
+  }
 
-
-    Scanner sc = new Scanner(new FileInputStream(path));
+  private void readPPM(InputStream stream, String name) {
+    Scanner sc = new Scanner(stream);
 
     if (!sc.nextLine().equals("P3")) {
       throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
@@ -139,6 +114,38 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     infos.put(name, new int[]{width, height, maxi});
     images.put(name, imageArray);
   }
+
+  private void readBJP(InputStream stream, String name) throws IOException {
+    BufferedImage image = ImageIO.read(stream);
+
+    if (image == null) {
+      throw new IllegalStateException("Image is not accessible!");
+    }
+
+    int width = image.getWidth();
+    int height = image.getHeight();
+
+    int[] dataBuffInt = image.getRGB(0, 0, width, height, null, 0, width);
+    int[][][] imageArray = new int[height][width][3];
+    int row = 0;
+    int col = 0;
+
+    for (int rgb : dataBuffInt) {
+      int red = (rgb >> 16) & 0xFF;
+      int green = (rgb >> 8) & 0xFF;
+      int blue = (rgb) & 0xFF;
+      imageArray[row][col] = new int[]{red, green, blue};
+      col++;
+      if (col == width) {
+        col = 0;
+        row++;
+      }
+    }
+
+    infos.put(name, new int[]{width, height, 255});
+    images.put(name, imageArray);
+  }
+
 
   /**
    * A helper method to check existence of  the to be processed image.
@@ -190,7 +197,8 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         });
         break;
       case "sepia":
-        greyscaleLooper(from, to, RGB -> new int[]{
+        this.greyscale("greyscale", from, to);
+        greyscaleLooper(to, to, RGB -> new int[]{
                 (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
                 (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
                 (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
@@ -324,24 +332,30 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     images.put(to, toImage);
   }
 
+  @Deprecated
+  public void save(String from, String path) throws IOException {
+
+  }
+
   @Override
-  public void save(String from, String path) throws IOException, IllegalStateException {
+  public void save(String from, OutputStream stream, String format) throws IOException, IllegalStateException {
 
     checkImageExistence(from);
-    if (!verifyFormat(path)) {
+    if (!verifyFormat(format)) {
       throw new IllegalStateException("This output format is not available");
     }
 
 
-    if (path.endsWith(".ppm")) {
-      savePPM(from, path);
+    if (format.equals("ppm")) {
+      savePPM(from, stream);
       return;
     }
 
-    saveBJP(from, path);
+    saveBJP(from, stream, format);
   }
 
-  private void saveBJP(String from, String path) throws IOException {
+
+  private void saveBJP(String from, OutputStream stream, String format) throws IOException {
     int[] info = infos.get(from);
     int[][][] fromImage = images.get(from);
 
@@ -355,41 +369,39 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       }
     }
 
-
-    File outputfile = new File(path);
-    if (path.endsWith(".jpg") || path.endsWith("jpeg")) {
+    if (format.equals(".jpg") || format.equals("jpeg")) {
       ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
       ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
       jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
       jpgWriteParam.setCompressionQuality(1f);
 
-      jpgWriter.setOutput(ImageIO.createImageOutputStream(outputfile));
+      jpgWriter.setOutput(ImageIO.createImageOutputStream(stream));
       IIOImage outputImage = new IIOImage(image, null, null);
       jpgWriter.write(null, outputImage, jpgWriteParam);
       jpgWriter.dispose();
     }
 
-    ImageIO.write(image, path.substring(path.lastIndexOf('.') + 1), outputfile);
+    ImageIO.write(image, format, stream);
 
   }
 
-  private void savePPM(String from, String path) throws IOException {
+  private void savePPM(String from, OutputStream stream) throws IOException {
     int[] info = infos.get(from);
 
-    FileWriter imageWriter = new FileWriter(path);
-    imageWriter.write("P3" + System.lineSeparator());
-    imageWriter.write(info[0] + " " + info[1] + System.lineSeparator());
-    imageWriter.write(info[2] + System.lineSeparator());
+    stream.write(("P3" + System.lineSeparator()).getBytes());
+    stream.write((info[0] + " " + info[1] + System.lineSeparator()).getBytes());
+    stream.write((info[2] + System.lineSeparator()).getBytes());
 
     int[][][] fromImage = images.get(from);
     for (int row = 0; row < info[1]; row++) {
       for (int col = 0; col < info[0]; col++) {
         for (int tmp : fromImage[row][col]) {
-          imageWriter.write(tmp + System.lineSeparator());
+          stream.write(tmp);
+          stream.write(System.lineSeparator().getBytes());
         }
       }
     }
-    imageWriter.close();
+    stream.close();
   }
 
 

@@ -7,7 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Scanner;
 
 import javax.imageio.IIOException;
@@ -25,11 +28,13 @@ public abstract class AbstractMIPTest {
   protected String dst;
   protected final String format;
   protected MoreImageProcessor processor;
+  OutputStream outputStream;
 
-  protected AbstractMIPTest(String src, String dst, String format) {
+  protected AbstractMIPTest(String src, String dst, String format) throws FileNotFoundException {
     this.src = src;
     this.dst = dst;
     this.format = format;
+    this.outputStream = new FileOutputStream(dst);
   }
 
   @Before
@@ -117,12 +122,8 @@ public abstract class AbstractMIPTest {
   }
 
   private void loadImageInvoker(String path, String name) throws IOException {
-    if (path.endsWith(".ppm")) {
-      processor.loadImage(path, name);
-    } else {
-      BufferedImage image = ImageIO.read(new File(path));
-      processor.loadImage(image, name);
-    }
+    InputStream stream = new FileInputStream(path);
+    processor.loadImage(stream, name, this.format);
   }
 
   private void assertLooper(int[][][] sample, String dst) throws IOException {
@@ -145,7 +146,7 @@ public abstract class AbstractMIPTest {
   @Test
   public void testLoadCat() throws FileNotFoundException, IOException {
     loadImageInvoker(src, "original");
-    processor.save("original", dst);
+    processor.save("original", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
@@ -179,7 +180,7 @@ public abstract class AbstractMIPTest {
     loadImageInvoker("res/building.ppm", "original");
     loadImageInvoker(src, "original");
     loadImageInvoker("res/cat." + this.format, "original");
-    processor.save("original", dst);
+    processor.save("original", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
@@ -196,7 +197,7 @@ public abstract class AbstractMIPTest {
     loadImageInvoker("res/building.ppm", "building");
     loadImageInvoker("res/cat." + this.format, "original");
 
-    processor.save("building", dst);
+    processor.save("building", outputStream, dst);
     assertLooper(new int[][][]{
                     {{167, 172, 180}, {163, 168, 177}, {161, 166, 175}},
                     {{169, 178, 164}, {169, 178, 164}, {169, 178, 164}},
@@ -204,7 +205,7 @@ public abstract class AbstractMIPTest {
             }
             , dst);
 
-    processor.save("original", dst);
+    processor.save("original", outputStream, dst);
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
                     {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
@@ -226,7 +227,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.adjustBrightness("original", brightness, "brighter");
-    processor.save("brighter", dst);
+    processor.save("brighter", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
@@ -243,7 +244,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.adjustBrightness("original", brightness, "darker");
-    processor.save("darker", dst);
+    processor.save("darker", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
@@ -258,7 +259,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.horizontalFlip("original", "horizontal");
-    processor.save("horizontal", dst);
+    processor.save("horizontal", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
@@ -273,7 +274,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.verticalFlip("original", "vertical");
-    processor.save("vertical", dst);
+    processor.save("vertical", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
@@ -288,7 +289,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("red-component", "original", "red");
-    processor.save("red", dst);
+    processor.save("red", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
@@ -303,7 +304,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("green-component", "original", "green");
-    processor.save("green", dst);
+    processor.save("green", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
@@ -318,7 +319,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("blue-component", "original", "blue");
-    processor.save("blue", dst);
+    processor.save("blue", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
@@ -333,7 +334,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("value-component", "original", "value");
-    processor.save("value", dst);
+    processor.save("value", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
@@ -348,7 +349,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("intensity-component", "original", "intensity");
-    processor.save("intensity", dst);
+    processor.save("intensity", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
@@ -363,7 +364,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("luma-component", "original", "luma");
-    processor.save("luma", dst);
+    processor.save("luma", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
@@ -378,7 +379,7 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("sepia", "original", "sepia");
-    processor.save("sepia", dst);
+    processor.save("sepia", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
@@ -395,7 +396,7 @@ public abstract class AbstractMIPTest {
     processor.greyscale("green-component", "original", "green");
     processor.greyscale("blue-component", "original", "blue");
     processor.combines("red", "green", "blue", "combine");
-    processor.save("combine", dst);
+    processor.save("combine", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
@@ -408,7 +409,7 @@ public abstract class AbstractMIPTest {
   @Test(expected = IllegalStateException.class)
   public void testInvalidSaveExtension() throws FileNotFoundException, IOException {
     processor.loadImage(src, "original");
-    processor.save("original", "/test/cat.gif");
+    processor.save("original", outputStream, "/test/cat.gif");
   }
 
 
@@ -416,7 +417,7 @@ public abstract class AbstractMIPTest {
   public void testDithering() throws IOException {
     loadImageInvoker(src, "original");
     processor.dithering("original", "dithering");
-    processor.save("dithering", dst);
+    processor.save("dithering", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{255, 255, 255}, {255, 255, 255}, {255, 0, 0}},
@@ -431,7 +432,7 @@ public abstract class AbstractMIPTest {
   public void testBlur() throws IOException {
     loadImageInvoker(src, "original");
     processor.filter("blur", "original", "blur");
-    processor.save("blur", dst);
+    processor.save("blur", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
@@ -446,7 +447,7 @@ public abstract class AbstractMIPTest {
   public void testSharpening() throws IOException {
     loadImageInvoker(src, "original");
     processor.filter("sharpen", "original", "sharpen");
-    processor.save("sharpen", dst);
+    processor.save("sharpen", outputStream, dst);
 
 //    assertLooper(new int[][][]{
 //                    {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
@@ -462,7 +463,7 @@ public abstract class AbstractMIPTest {
     dst = dst.substring(0, dst.lastIndexOf(".")).concat(".ppm");
 
     loadImageInvoker(src, "original");
-    processor.save("original", dst);
+    processor.save("original", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
@@ -480,7 +481,7 @@ public abstract class AbstractMIPTest {
     dst = dst.substring(0, dst.lastIndexOf(".")).concat(".png");
 
     loadImageInvoker(src, "original");
-    processor.save("original", dst);
+    processor.save("original", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
@@ -497,7 +498,7 @@ public abstract class AbstractMIPTest {
     dst = dst.substring(0, dst.lastIndexOf(".")).concat(".bmp");
 
     loadImageInvoker(src, "original");
-    processor.save("original", dst);
+    processor.save("original", outputStream, dst);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
