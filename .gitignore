@@ -42,6 +42,9 @@ out/
 *.MF
 
 # images
-**/core/res/oldOut
-**/core/res/new
+**/core/res/ime
+**/core/res/mime
 **/core/res/format
+
+# javadoc
+**/javadoc
