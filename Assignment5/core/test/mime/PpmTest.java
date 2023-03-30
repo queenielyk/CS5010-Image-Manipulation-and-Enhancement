@@ -31,7 +31,7 @@ public class PpmTest extends AbstractMIPTest {
     InputStream stream = new FileInputStream(path);
     ImageHandler handler = new PpmHandler();
     handler.readImage(stream);
-    processor.loadImage(handler, name);
+    processor.loadImage(handler.getInfo(), handler.getImage(), name);
   }
 
 }

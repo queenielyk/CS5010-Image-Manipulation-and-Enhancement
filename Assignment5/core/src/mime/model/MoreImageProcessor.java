@@ -1,6 +1,7 @@
 package mime.model;
 
 import ime.model.ImageProcessor;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -20,11 +21,12 @@ public interface MoreImageProcessor extends ImageProcessor {
   /**
    * A method to load image from an ImageReader object and store it.
    *
-   * @param reader an ImageReader object
-   * @param name   the name of image
+   * @param info info of the image, int[width, height, maxi-value]
+   * @param image image in form of 3D-Array, int[Height][Width][RGB]
+   * @param name  the name of image
    */
 
-  void loadImage(ImageHandler reader, String name);
+  void loadImage(int[] info, int[][][] image, String name);
 
   /**
    * A method to combine three channel-based greyscale images into one image, and named it.
@@ -37,7 +39,7 @@ public interface MoreImageProcessor extends ImageProcessor {
    */
   @Override
   void combines(String redName, String greenName, String blueName, String to)
-      throws IllegalStateException;
+          throws IllegalStateException;
 
   /**
    * A method to apply a filter to the specified image. There are two filtering mode: - Blur -
@@ -71,5 +73,5 @@ public interface MoreImageProcessor extends ImageProcessor {
    * @throws IllegalStateException the image format is not an option
    */
   void save(String from, OutputStream stream, String format)
-      throws IOException, IllegalStateException;
+          throws IOException, IllegalStateException;
 }

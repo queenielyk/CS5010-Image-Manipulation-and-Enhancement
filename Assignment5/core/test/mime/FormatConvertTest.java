@@ -67,7 +67,7 @@ public class FormatConvertTest {
         ImageHandler imageH = new ImageIOHandler();
         imageH.readImage(stream);
         OutputStream outputStream = new FileOutputStream("res/mime/cat-" + type[i] + "." + type[j]);
-        model.loadImage(imageH, "cat");
+        model.loadImage(imageH.getInfo(), imageH.getImage(), "cat");
         model.save("cat", outputStream, type[j]);
 
         InputStream newStream = new FileInputStream("res/mime/cat-" + type[i] + "." + type[j]);

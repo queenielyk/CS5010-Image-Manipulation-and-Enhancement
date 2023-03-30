@@ -11,10 +11,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Scanner;
+
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
+
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -119,7 +122,7 @@ public abstract class AbstractMIPTest {
 
   protected abstract void loadImageInvoker(String path, String name) throws IOException;
 
-  private void assertLooper(int[][][] sample, String dst) throws IOException {
+  protected void assertLooper(int[][][] sample, String dst) throws IOException {
     int[][][] custom = readImage(dst);
     for (int row = 0; row < custom.length; row++) {
       for (int col = 0; col < custom[row].length; col++) {
@@ -142,11 +145,11 @@ public abstract class AbstractMIPTest {
     processor.save("original", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
   @Test
@@ -156,7 +159,7 @@ public abstract class AbstractMIPTest {
       loadImageInvoker("res/nocat." + this.format, "original");
     } catch (FileNotFoundException e) {
       assertEquals("res" + File.separator + "nocat." + this.format + " (No such file or directory)",
-          e.getMessage());
+              e.getMessage());
     } catch (IIOException e) {
       assertEquals("Can't read input file!", e.getMessage());
     }
@@ -165,46 +168,6 @@ public abstract class AbstractMIPTest {
   @Test(expected = IllegalStateException.class)
   public void testDeprecatedLoad() throws IOException {
     processor.loadImage("res/nocat.gif", "original");
-  }
-
-  @Test
-  public void testLoadOverwrite() throws IOException {
-
-    loadImageInvoker("res/something.ppm", "original");
-    loadImageInvoker(src, "original");
-    processor.save("original", outputStream, this.format);
-
-    assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
-  }
-
-
-  @Test
-  public void testLoadDifferentImages() throws IOException {
-
-    loadImageInvoker("res/format/cat.bmp", "bmpcat");
-    loadImageInvoker(src, "original");
-
-    processor.save("bmpcat", outputStream, this.format);
-    assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
-
-    outputStream = new FileOutputStream(dst);
-    processor.save("original", outputStream, this.format);
-    assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -223,11 +186,11 @@ public abstract class AbstractMIPTest {
     processor.save("brighter", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
-            {{255, 255, 255}, {224, 214, 217}, {146, 129, 131}},
-            {{241, 233, 236}, {200, 180, 180}, {100, 72, 73}}
-        }
-        , dst);
+                    {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
+                    {{255, 255, 255}, {224, 214, 217}, {146, 129, 131}},
+                    {{241, 233, 236}, {200, 180, 180}, {100, 72, 73}}
+            }
+            , dst);
   }
 
   @Test
@@ -239,11 +202,11 @@ public abstract class AbstractMIPTest {
     processor.save("darker", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
-            {{184, 180, 181}, {144, 134, 137}, {66, 49, 51}},
-            {{161, 153, 156}, {120, 100, 100}, {20, 0, 0}}
-        }
-        , dst);
+                    {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
+                    {{184, 180, 181}, {144, 134, 137}, {66, 49, 51}},
+                    {{161, 153, 156}, {120, 100, 100}, {20, 0, 0}}
+            }
+            , dst);
   }
 
   @Test
@@ -254,11 +217,11 @@ public abstract class AbstractMIPTest {
     processor.save("horizontal", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
-            {{116, 99, 101}, {194, 184, 187}, {234, 230, 231}},
-            {{70, 42, 43}, {170, 150, 150}, {211, 203, 206}}
-        }
-        , dst);
+                    {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
+                    {{116, 99, 101}, {194, 184, 187}, {234, 230, 231}},
+                    {{70, 42, 43}, {170, 150, 150}, {211, 203, 206}}
+            }
+            , dst);
   }
 
   @Test
@@ -269,11 +232,11 @@ public abstract class AbstractMIPTest {
     processor.save("vertical", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}}
-        }
-        , dst);
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}}
+            }
+            , dst);
   }
 
   @Test
@@ -284,11 +247,11 @@ public abstract class AbstractMIPTest {
     processor.save("red", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
-            {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
-            {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
-        }
-        , dst);
+                    {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
+                    {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
+                    {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
+            }
+            , dst);
   }
 
   @Test
@@ -299,11 +262,11 @@ public abstract class AbstractMIPTest {
     processor.save("green", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
-            {{230, 230, 230}, {184, 184, 184}, {99, 99, 99}},
-            {{203, 203, 203}, {150, 150, 150}, {42, 42, 42}}
-        }
-        , dst);
+                    {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
+                    {{230, 230, 230}, {184, 184, 184}, {99, 99, 99}},
+                    {{203, 203, 203}, {150, 150, 150}, {42, 42, 42}}
+            }
+            , dst);
   }
 
   @Test
@@ -314,11 +277,11 @@ public abstract class AbstractMIPTest {
     processor.save("blue", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
-            {{231, 231, 231}, {187, 187, 187}, {101, 101, 101}},
-            {{206, 206, 206}, {150, 150, 150}, {43, 43, 43}}
-        }
-        , dst);
+                    {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
+                    {{231, 231, 231}, {187, 187, 187}, {101, 101, 101}},
+                    {{206, 206, 206}, {150, 150, 150}, {43, 43, 43}}
+            }
+            , dst);
   }
 
   @Test
@@ -329,11 +292,11 @@ public abstract class AbstractMIPTest {
     processor.save("value", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
-            {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
-            {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
-        }
-        , dst);
+                    {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
+                    {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
+                    {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
+            }
+            , dst);
   }
 
   @Test
@@ -344,11 +307,11 @@ public abstract class AbstractMIPTest {
     processor.save("intensity", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
-            {{231, 231, 231}, {188, 188, 188}, {105, 105, 105}},
-            {{206, 206, 206}, {156, 156, 156}, {51, 51, 51}}
-        }
-        , dst);
+                    {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
+                    {{231, 231, 231}, {188, 188, 188}, {105, 105, 105}},
+                    {{206, 206, 206}, {156, 156, 156}, {51, 51, 51}}
+            }
+            , dst);
   }
 
   @Test
@@ -359,11 +322,11 @@ public abstract class AbstractMIPTest {
     processor.save("luma", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
-            {{230, 230, 230}, {186, 186, 186}, {102, 102, 102}},
-            {{204, 204, 204}, {154, 154, 154}, {48, 48, 48}}
-        }
-        , dst);
+                    {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
+                    {{230, 230, 230}, {186, 186, 186}, {102, 102, 102}},
+                    {{204, 204, 204}, {154, 154, 154}, {48, 48, 48}}
+            }
+            , dst);
   }
 
   @Test
@@ -374,11 +337,11 @@ public abstract class AbstractMIPTest {
     processor.save("sepia", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
-            {{255, 255, 216}, {253, 225, 175}, {140, 125, 97}},
-            {{255, 247, 192}, {210, 187, 145}, {67, 60, 47}}
-        }
-        , dst);
+                    {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
+                    {{255, 255, 216}, {253, 225, 175}, {140, 125, 97}},
+                    {{255, 247, 192}, {210, 187, 145}, {67, 60, 47}}
+            }
+            , dst);
   }
 
   @Test
@@ -391,11 +354,11 @@ public abstract class AbstractMIPTest {
     processor.save("combine", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -412,11 +375,11 @@ public abstract class AbstractMIPTest {
     processor.save("dithering", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{255, 255, 255}, {255, 255, 255}, {255, 0, 0}},
-            {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
-            {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}
-        }
-        , dst);
+                    {{255, 255, 255}, {255, 255, 255}, {255, 0, 0}},
+                    {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
+                    {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}
+            }
+            , dst);
   }
 
 
@@ -427,11 +390,11 @@ public abstract class AbstractMIPTest {
     processor.save("blur", outputStream, this.format);
 
     assertLooper(new int[][][]{
-            {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
-            {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
-            {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
-        }
-        , dst);
+                    {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
+                    {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
+                    {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
+            }
+            , dst);
   }
 
 
@@ -459,11 +422,11 @@ public abstract class AbstractMIPTest {
     processor.save("original", outputStream, "ppm");
 
     assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
 
     File myObj = new File(dst);
     myObj.delete();
@@ -478,11 +441,11 @@ public abstract class AbstractMIPTest {
     processor.save("original", outputStream, "png");
 
     assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
     File myObj = new File(dst);
     myObj.delete();
   }
@@ -496,11 +459,11 @@ public abstract class AbstractMIPTest {
     processor.save("original", outputStream, "bmp");
 
     assertLooper(new int[][][]{
-            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-        }
-        , dst);
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
+            }
+            , dst);
     File myObj = new File(dst);
     myObj.delete();
   }

@@ -3,6 +3,7 @@ package mime.control.command;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+
 import mime.model.ImageHandler;
 import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;
@@ -54,7 +55,7 @@ public class LoadInputStream implements MoreImageCommand {
     }
 
     handler.readImage(new FileInputStream(path));
-    model.loadImage(handler, imgName);
+    model.loadImage(handler.getInfo(), handler.getImage(), imgName);
   }
 
 

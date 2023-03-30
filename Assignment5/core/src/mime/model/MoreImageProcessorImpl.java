@@ -70,9 +70,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   @Override
-  public void loadImage(ImageHandler reader, String name) {
-    infos.put(name, reader.getInfo());
-    images.put(name, reader.getImage());
+  public void loadImage(int[] info, int[][][] image, String name) {
+    infos.put(name, info);
+    images.put(name, image);
   }
 
 
@@ -299,12 +299,12 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
           throws IOException, IllegalStateException {
 
 
-   if (format.equals("ppm")) {
-     savePPM(from, stream);
-     return;
-   }
+    if (format.equals("ppm")) {
+      savePPM(from, stream);
+      return;
+    }
 
-   saveBJP(from, stream, format);
+    saveBJP(from, stream, format);
   }
 
 
