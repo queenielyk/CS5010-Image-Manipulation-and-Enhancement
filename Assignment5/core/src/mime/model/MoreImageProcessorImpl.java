@@ -12,11 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-
 /**
  * A class to implement interface MoreImageProcessor.
  */
@@ -180,12 +175,10 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       for (int col = 0; col < info[0]; col++) {
         int[] rgb = conversion.apply(fromImage[row][col]);
         toImage[row][col] = new int[]{
-                Math.min(rgb[0], info[2]),
-                Math.min(rgb[1], info[2]),
-                Math.min(rgb[2], info[2])};
+                clampRGB(rgb[0], info[2]), clampRGB(rgb[1], info[2]), clampRGB(rgb[2], info[2])};
       }
     }
-    infos.put(to, info);
+    infos.put(to, info.clone());
     images.put(to, toImage);
   }
 
@@ -204,7 +197,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       }
     }
 
-    infos.put(to, info);
+    infos.put(to, info.clone());
     images.put(to, toImage);
   }
 
@@ -222,7 +215,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       toImage[row] = fromImage[info[1] - 1 - row];
     }
 
-    infos.put(to, info);
+    infos.put(to, info.clone());
     images.put(to, toImage);
   }
 
@@ -246,7 +239,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       }
     }
 
-    infos.put(to, info);
+    infos.put(to, info.clone());
     images.put(to, toImage);
   }
 
@@ -263,7 +256,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     int[] greenInfo = infos.get(greenName);
     int[] blueInfo = infos.get(blueName);
 
-    if (redInfo != greenInfo || greenInfo != blueInfo) {
+    if (!Arrays.equals(redInfo, greenInfo) || !Arrays.equals(greenInfo, blueInfo)) {
       throw new IllegalStateException("These images have different info, can't combine them!");
     }
 
@@ -334,7 +327,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         };
       }
     }
-    infos.put(to, info);
+    infos.put(to, info.clone());
     images.put(to, toImage);
   }
 
@@ -388,7 +381,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       }
     }
 
-    infos.put(to, info);
+    infos.put(to, info.clone());
     images.put(to, toImage);
   }
 
