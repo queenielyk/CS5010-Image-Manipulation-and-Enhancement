@@ -12,11 +12,17 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 
 /**
- * A class to be an image reader by using ImageIO library. Acceptable image format: - bmp - jpg -
- * jpeg - png
+ * A class to be an image handler by using ImageIO library. Acceptable image format:
+ * - bmp
+ * - jpg
+ * - jpeg
+ * - png
  */
 public class ImageIOHandler extends AbsrtuctImageHandler {
 
+  /**
+   * A constructor to construct an ImageIOHandler.
+   */
   public ImageIOHandler() {
     super();
   }

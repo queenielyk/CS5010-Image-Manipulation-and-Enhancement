@@ -30,12 +30,6 @@ public class LoadInputStream implements MoreImageCommand {
     this.imgName = imgName;
   }
 
-  /**
-   * delegate command to model's different method.
-   *
-   * @param model model to work on
-   * @throws IOException if IO error occurs in model's method(ex. load can not find file)
-   */
   @Override
   public void execute(MoreImageProcessor model) throws IOException, IllegalStateException {
     String format = path.split("\\.")[1];

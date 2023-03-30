@@ -6,10 +6,13 @@ import java.io.OutputStream;
 import java.util.Scanner;
 
 /**
- * A class to be na image reader reading ppm image.
+ * A class to be an image handler only handler ascii ppm image.
  */
 public class PpmHandler extends AbsrtuctImageHandler {
 
+  /**
+   * A constructor to construct a PpmHandler.
+   */
   public PpmHandler() {
     super();
   }

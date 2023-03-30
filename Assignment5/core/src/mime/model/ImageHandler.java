@@ -5,8 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * An interface to represent an image reader. An image reader is a reader to read image from an
- * InputStream, then store it as a 3D-Array `int[Height][Width][RGB]`.
+ * An interface to represent an image handler. An image handler is a reader and a writer.
+ * To read image from an InputStream, then store it as a 3D-Array `int[Height][Width][RGB]`.
+ * To write image from 3D-Array into an OutputStream.
  */
 public interface ImageHandler {
 
@@ -28,7 +29,7 @@ public interface ImageHandler {
   /**
    * A method to return the info of read image in terms of `int[width, height, maxi-value]`.
    *
-   * @return a int array of image info
+   * @return an int array of image info
    */
   int[] getInfo();
 

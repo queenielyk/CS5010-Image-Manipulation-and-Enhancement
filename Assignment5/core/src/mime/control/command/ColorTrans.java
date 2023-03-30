@@ -27,12 +27,7 @@ public class ColorTrans implements MoreImageCommand {
     this.to = to;
   }
 
-  /**
-   * delegate command to model's different method.
-   *
-   * @param model model to work on
-   * @throws IOException If IO error occurs in model’s method(ex. load can not find file)
-   */
+
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
     model.greyscale(mode, from, to);

@@ -21,12 +21,6 @@ public class SaveOutStream extends Save implements MoreImageCommand {
     super(path, from);
   }
 
-  /**
-   * delegate command to model's different method.
-   *
-   * @param model model to work on
-   * @throws IOException If IO error occurs in model’s method(ex. load can not find file)
-   */
   @Override
   public void execute(MoreImageProcessor model) throws IOException, IllegalStateException {
     OutputStream outputStream = new FileOutputStream(path);

@@ -34,7 +34,7 @@ public class ImageController implements IController {
   protected ImageProcessor model;
 
   /**
-   * Builder a controller and pass with In and Out a stream.
+   * Build a controller and pass with In and Out a stream.
    *
    * @param in  Input object
    * @param out Output object

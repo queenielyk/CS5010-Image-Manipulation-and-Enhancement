@@ -2,17 +2,13 @@ package mime;
 
 import static org.junit.Assert.assertEquals;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Scanner;
 
 import javax.imageio.IIOException;
-import javax.imageio.ImageIO;
 
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
@@ -20,8 +16,11 @@ import mime.model.MoreImageProcessorImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * An abstract test class for {@link MoreImageProcessor}.
+ * All test cases will be tested over each format.
+ */
 public abstract class AbstractMIPTest {
-
 
   protected final String src;
   protected final String format;
@@ -29,6 +28,14 @@ public abstract class AbstractMIPTest {
   protected MoreImageProcessor processor;
   OutputStream outputStream;
 
+  /**
+   * A constructor to construct an abstract test class.
+   *
+   * @param src    image source path
+   * @param dst    pathname to save image
+   * @param format image format
+   * @throws FileNotFoundException if dst is not a valid path to save image
+   */
   protected AbstractMIPTest(String src, String dst, String format) throws FileNotFoundException {
     this.src = src;
     this.dst = dst;
@@ -36,92 +43,31 @@ public abstract class AbstractMIPTest {
     this.outputStream = new FileOutputStream(dst);
   }
 
+  /**
+   * Initialize a processor before executing each test case.
+   */
   @Before
   public void setUp() {
     processor = new MoreImageProcessorImpl();
   }
 
-  private int[][][] readImage(String path) throws IOException {
-    if (path.endsWith(".ppm")) {
-      return readPPM(path);
-    }
-    return readBJP(path);
-  }
-
-  private int[][][] readPPM(String path) throws FileNotFoundException {
-
-    Scanner sc = new Scanner(new FileInputStream(path));
-
-    sc.nextLine();
-    String s = sc.nextLine();
-    if (s.charAt(0) == '#') {
-      s = sc.nextLine();
-    }
-    //Dimension
-    String[] splited = s.split(" ");
-    int width = Integer.parseInt(splited[0]);
-    int height = Integer.parseInt(splited[1]);
-    //Maxi Value
-    int maxi = Integer.parseInt(sc.nextLine());
-
-    int[][][] imageArray = new int[height][width][3];
-    int row = 0;
-    int col = 0;
-    int count = 0;
-
-    while (sc.hasNextLine()) {
-      s = sc.nextLine();
-      if (s.isEmpty()) {
-        continue;
-      }
-      if (s.charAt(0) != '#') {
-        splited = s.split(" ");
-        for (String ss : splited) {
-          if (!ss.equals("")) {
-            imageArray[row][col][count] = Integer.parseInt(ss);
-            count++;
-            if (count == 3) {
-              count = 0;
-              col++;
-              if (col == width) {
-                col = 0;
-                row++;
-              }
-            }
-          }
-        }
-      }
-    }
-    return imageArray;
-  }
-
-  private int[][][] readBJP(String path) throws IOException {
-    BufferedImage image = ImageIO.read(new File(path));
-    int width = image.getWidth();
-    int height = image.getHeight();
-
-    int[] dataBuffInt = image.getRGB(0, 0, width, height, null, 0, width);
-    int[][][] imageArray = new int[height][width][3];
-    int row = 0;
-    int col = 0;
-
-    for (int rgb : dataBuffInt) {
-      int red = (rgb >> 16) & 0xFF;
-      int green = (rgb >> 8) & 0xFF;
-      int blue = (rgb) & 0xFF;
-      imageArray[row][col] = new int[]{red, green, blue};
-      col++;
-      if (col == width) {
-        col = 0;
-        row++;
-      }
-    }
-    return imageArray;
-  }
-
+  /**
+   * A method to invoke related ImageHandler then pass image to processor.
+   *
+   * @param path pathname of source image
+   * @param name name of image in processor.
+   * @throws IOException if image is not accessible
+   */
   protected abstract void loadImageInvoker(String path, String name) throws IOException;
 
-  protected void assertLooper(int[][][] sample, int[][][] image) {
+
+  /**
+   * A method to loop over images and assert each pixel.
+   *
+   * @param sample a sample int[Height][Width][RGB] that an image should be
+   * @param image  the image to be compared
+   */
+  protected final void assertLooper(int[][][] sample, int[][][] image) {
     for (int row = 0; row < image.length; row++) {
       for (int col = 0; col < image[row].length; col++) {
         for (int rgb = 0; rgb < 3; rgb++) {
@@ -173,9 +119,7 @@ public abstract class AbstractMIPTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testAdjustBrightnessNotExist() throws IOException {
-
-//    loadImage(int[] info, int[][][] image, String name)
+  public void testAdjustBrightnessNotExist() {
     processor.loadImage(new int[]{3, 3, 255}, new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
                     {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},

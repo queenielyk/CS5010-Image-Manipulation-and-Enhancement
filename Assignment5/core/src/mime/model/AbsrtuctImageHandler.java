@@ -1,13 +1,16 @@
 package mime.model;
 
 /**
- * A abstract class to implement ImageHandler. Implement common methods here.
+ * An abstract class to implement ImageHandler. Implement common methods here.
  */
 public abstract class AbsrtuctImageHandler implements ImageHandler {
 
   protected int[][][] image;
   protected int[] info;
 
+  /**
+   * A constructor the construct an AbsrtuctImageHandler.
+   */
   public AbsrtuctImageHandler() {
   }
 
@@ -20,7 +23,6 @@ public abstract class AbsrtuctImageHandler implements ImageHandler {
   public int[] getInfo() {
     return this.info;
   }
-
 
 
 }

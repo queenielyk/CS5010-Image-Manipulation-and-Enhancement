@@ -2,19 +2,16 @@ package mime.model;
 
 import ime.model.ImageProcessor;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 /**
- * A new interface provides more operations other than the operations mentioned in
+ * This interface extends interface ImageProcessor.
+ * Override methods various to previous version, e.g. adding exceptions
+ * It provides more operations other than the operations mentioned in
  * interface ImageProcessor.
  * New operations:
  * - Filter
  * - Blur
  * - Sharpen
  * - Dithering
- * Some operations mentioned in interface ImageProcessor are no longer supported in this version,
- * they are marked as @Deprecated and throw IllegalStateException.
  */
 public interface MoreImageProcessor extends ImageProcessor {
 
@@ -61,8 +58,20 @@ public interface MoreImageProcessor extends ImageProcessor {
    */
   void dithering(String from, String to);
 
+  /**
+   * A method to return an image
+   *
+   * @param name name of image
+   * @return image in form of int[][][]
+   */
   int[][][] getImage(String name);
 
+  /**
+   * A method to return info of image
+   *
+   * @param name name of image
+   * @return info in form of int[]
+   */
   int[] getInfo(String name);
 
 

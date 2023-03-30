@@ -6,7 +6,7 @@ import mime.control.MoreImageCommand;
 import mime.model.MoreImageProcessor;
 
 /**
- * This represent a dither command.
+ * This represents a dither command.
  */
 public class Dither implements MoreImageCommand {
 
@@ -24,12 +24,7 @@ public class Dither implements MoreImageCommand {
     this.to = to;
   }
 
-  /**
-   * delegate command to model's different method.
-   *
-   * @param model model to work on
-   * @throws IOException if IO error occurs in model's method(ex. load can not find file)
-   */
+
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
     model.dithering(from, to);

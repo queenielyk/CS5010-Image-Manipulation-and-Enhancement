@@ -1,10 +1,7 @@
 package mime.model;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +19,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   protected Set<String> acceptFormat;
   protected Map<String, float[][]> filterings; // <name, 2d-array filter matrix>
 
+  /**
+   * A constructor to construct a MoreImageProcessor.
+   */
   public MoreImageProcessorImpl() {
     this.images = new HashMap<String, int[][][]>();
     this.infos = new HashMap<>();
@@ -48,7 +48,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param maxi maximum value of an image
    * @return a clamped rgb value
    */
-  protected int clampRGB(int rgb, int maxi) {
+  protected final int clampRGB(int rgb, int maxi) {
     return Math.max(0, Math.min(rgb, maxi));
   }
 
@@ -60,7 +60,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    */
   @Deprecated
   public void loadImage(String path, String name)
-          throws FileNotFoundException, UnsupportedOperationException {
+          throws FileNotFoundException {
     throw new UnsupportedOperationException("This method is deprecated!");
   }
 
@@ -77,7 +77,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param name image to be processed
    * @throws IllegalStateException image is not exist
    */
-  private void checkImageExistence(String name) throws IllegalStateException {
+  protected final void checkImageExistence(String name) throws IllegalStateException {
     if (!images.containsKey(name)) {
       throw new IllegalStateException("This image is not exist!");
     }
@@ -132,7 +132,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param RGB int[red, green, blue] of a pixel
    * @return the value value
    */
-  protected int calValueValue(int[] RGB) {
+  protected final int calValueValue(int[] RGB) {
     return Math.max(Math.max(RGB[0], RGB[1]), RGB[2]);
   }
 
@@ -142,7 +142,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param RGB int[red, green, blue] of a pixel
    * @return the intensity value
    */
-  protected int calIntensityValue(int[] RGB) {
+  protected final int calIntensityValue(int[] RGB) {
     return (RGB[0] + RGB[1] + RGB[2]) / 3;
   }
 
@@ -152,7 +152,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param RGB int[red, green, blue] of a pixel
    * @return the luma value
    */
-  protected int calLumaValue(int[] RGB) {
+  protected final int calLumaValue(int[] RGB) {
     return (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]);
   }
 
@@ -165,7 +165,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param to         new image's name
    * @param conversion function define how a new component to be constructed
    */
-  protected void greyscaleLooper(String from, String to, Function<int[], int[]> conversion) {
+  protected final void greyscaleLooper(String from, String to, Function<int[], int[]> conversion) {
 
     int[][][] fromImage = images.get(from);
     int[] info = infos.get(from);
