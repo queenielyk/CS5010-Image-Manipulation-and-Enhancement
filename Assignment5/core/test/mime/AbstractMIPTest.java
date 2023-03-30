@@ -375,7 +375,7 @@ public abstract class AbstractMIPTest {
     processor.save("dithering", outputStream, this.format);
 
     assertLooper(new int[][][]{
-                    {{255, 255, 255}, {255, 255, 255}, {255, 0, 0}},
+                    {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
                     {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
                     {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}
             }
@@ -404,12 +404,12 @@ public abstract class AbstractMIPTest {
     processor.filter("sharpen", "original", "sharpen");
     processor.save("sharpen", outputStream, this.format);
 
-//    assertLooper(new int[][][]{
-//                    {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
-//                    {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
-//                    {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
-//            }
-//            , dst);
+    assertLooper(new int[][][]{
+                    {{255, 255, 255}, {255, 255, 255}, {182, 162, 160}},
+                    {{255, 255, 255}, {255, 255, 255}, {233, 195, 197}},
+                    {{255, 254, 255}, {255, 255, 255}, {58, 24, 25}}
+            }
+            , dst);
   }
 
 
