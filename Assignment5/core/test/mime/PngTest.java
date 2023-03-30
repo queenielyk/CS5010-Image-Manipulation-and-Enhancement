@@ -12,6 +12,9 @@ import mime.model.ImageIOHandler;
 import org.junit.AfterClass;
 import org.junit.Test;
 
+/**
+ * A test class for png image.
+ */
 public class PngTest extends AbstractMIPTest {
 
   public PngTest() throws FileNotFoundException {
@@ -44,11 +47,9 @@ public class PngTest extends AbstractMIPTest {
     loadImageInvoker(src, "original");
 
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , processor.getImage("original"));
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}}, processor.getImage("original"));
   }
 
   @Test
@@ -57,18 +58,14 @@ public class PngTest extends AbstractMIPTest {
     loadImageInvoker(src, "original");
 
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{9, 230, 231}, {194, 164, 187}, {116, 99, 101}},
-                    {{211, 203, 106}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , processor.getImage("something"));
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{9, 230, 231}, {194, 164, 187}, {116, 99, 101}},
+            {{211, 203, 106}, {170, 150, 150}, {70, 42, 43}}}, processor.getImage("something"));
 
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , processor.getImage("original"));
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}}, processor.getImage("original"));
   }
 
 

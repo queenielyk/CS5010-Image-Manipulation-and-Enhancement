@@ -10,7 +10,7 @@ Developing a text-based Image Process program with MVC design idea.
 
 ## Project Structure
 
-![UML Diagram](UML.jpeg)
+![UML Diagram](UML.png)
 
 ## Overview
 

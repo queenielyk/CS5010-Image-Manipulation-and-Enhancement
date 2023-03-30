@@ -9,6 +9,9 @@ import mime.model.ImageHandler;
 import mime.model.ImageIOHandler;
 import org.junit.AfterClass;
 
+/**
+ * A test class for bmp image.
+ */
 public class BmpTest extends AbstractMIPTest {
 
   public BmpTest() throws FileNotFoundException {

@@ -68,7 +68,8 @@ public class PpmHandler extends AbsrtuctImageHandler {
   }
 
   @Override
-  public void saveImage(OutputStream stream, String format, int[] info, int[][][] image) throws IOException {
+  public void saveImage(OutputStream stream, String format, int[] info, int[][][] image)
+          throws IOException {
 
     stream.write(("P3" + System.lineSeparator()).getBytes());
     stream.write((info[0] + " " + info[1] + System.lineSeparator()).getBytes());

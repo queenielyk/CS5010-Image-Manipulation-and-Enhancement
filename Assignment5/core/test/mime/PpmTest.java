@@ -9,6 +9,9 @@ import mime.model.ImageHandler;
 import mime.model.PpmHandler;
 import org.junit.AfterClass;
 
+/**
+ * A test class for ppm image.
+ */
 public class PpmTest extends AbstractMIPTest {
 
   public PpmTest() throws FileNotFoundException {

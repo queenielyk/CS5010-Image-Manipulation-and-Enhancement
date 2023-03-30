@@ -59,7 +59,7 @@ public interface MoreImageProcessor extends ImageProcessor {
   void dithering(String from, String to);
 
   /**
-   * A method to return an image
+   * A method to return an image.
    *
    * @param name name of image
    * @return image in form of int[][][]
@@ -67,7 +67,7 @@ public interface MoreImageProcessor extends ImageProcessor {
   int[][][] getImage(String name);
 
   /**
-   * A method to return info of image
+   * A method to return info of image.
    *
    * @param name name of image
    * @return info in form of int[]
