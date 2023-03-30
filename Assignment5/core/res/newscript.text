@@ -111,3 +111,6 @@ save res/mime/cat-dither.bmp cat-dither
 
 #save to ppm
 save res/mime/cat-dither.ppm cat-dither
+
+#run the old srcipt.text
+run res/script.text
