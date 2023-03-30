@@ -36,7 +36,7 @@ public class LoadInputStream implements MoreImageCommand {
    * @throws IOException if IO error occurs in model's method(ex. load can not find file)
    */
   @Override
-  public void execute(MoreImageProcessor model) throws IOException {
+  public void execute(MoreImageProcessor model) throws IOException, IllegalStateException {
     String format = path.split("\\.")[1];
     ImageHandler handler = null;
 
@@ -51,7 +51,7 @@ public class LoadInputStream implements MoreImageCommand {
         handler = new ImageIOHandler();
         break;
       default:
-        throw new IllegalArgumentException("Handler do not support:" + format + "format");
+        throw new IllegalStateException("Handler do not support:" + format + "format");
     }
 
     handler.readImage(new FileInputStream(path));

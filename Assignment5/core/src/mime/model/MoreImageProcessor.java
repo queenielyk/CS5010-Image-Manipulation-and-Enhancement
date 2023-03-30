@@ -21,7 +21,7 @@ public interface MoreImageProcessor extends ImageProcessor {
   /**
    * A method to load image from an ImageReader object and store it.
    *
-   * @param info info of the image, int[width, height, maxi-value]
+   * @param info  info of the image, int[width, height, maxi-value]
    * @param image image in form of 3D-Array, int[Height][Width][RGB]
    * @param name  the name of image
    */
@@ -61,17 +61,9 @@ public interface MoreImageProcessor extends ImageProcessor {
    */
   void dithering(String from, String to);
 
+  int[][][] getImage(String name);
 
-  /**
-   * A method to export image to specified and acceptable image format then save at local This
-   * method will overwrite the existing file if this path already exist.
-   *
-   * @param from   name of the image to be export
-   * @param stream a output stream
-   * @param format the format of image
-   * @throws IOException           unable to write file
-   * @throws IllegalStateException the image format is not an option
-   */
-  void save(String from, OutputStream stream, String format)
-          throws IOException, IllegalStateException;
+  int[] getInfo(String name);
+
+
 }

@@ -135,7 +135,7 @@ public class MoreImageController extends ImageController {
       } catch (FileNotFoundException fne) {
         output.append("!<Error>!: \t" + fne.toString()
             .replaceAll("The system cannot find the path specified", "No such file or directory")
-            + "\n");
+                + "\n");
       }
     }
 

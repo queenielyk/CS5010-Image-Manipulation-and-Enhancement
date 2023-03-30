@@ -42,7 +42,7 @@ public class MoreImageControllerTest extends ImageControllerTest {
     IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MoreMockModel(log));
-    assertEquals("from:cat-greyscale format:ppm\n", log.toString());
+    assertEquals("Name: cat-greyscale" + System.lineSeparator() + "Name: cat-greyscale" + System.lineSeparator(), log.toString());
   }
 
   @Test
@@ -118,17 +118,8 @@ public class MoreImageControllerTest extends ImageControllerTest {
 
     @Override
     public void loadImage(int[] info, int[][][] image, String name) {
-//      log.append("Handler:" + Arrays.deepToString(reader.getImage()) + " " + "name:" + name + "\n");
       log.append("Info:" + Arrays.toString(info) + " Image:" + Arrays.deepToString(image) + " " + "name:" + name + "\n");
     }
-
-
-    @Override
-    public void save(String from, OutputStream stream, String format)
-            throws IllegalStateException {
-      log.append("from:" + from + " " + "format:" + format + "\n");
-    }
-
 
     @Override
     public void filter(String mode, String from, String to) {
@@ -138,6 +129,20 @@ public class MoreImageControllerTest extends ImageControllerTest {
     @Override
     public void dithering(String from, String to) {
       log.append("From:" + from + " " + "To:" + to + "\n");
+    }
+
+    @Override
+    public int[][][] getImage(String name) {
+      log.append("Name: " + name + "\n");
+      return new int[][][]{{{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+              {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+              {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}};
+    }
+
+    @Override
+    public int[] getInfo(String name) {
+      log.append("Name: " + name + "\n");
+      return new int[]{3, 3, 255};
     }
 
   }

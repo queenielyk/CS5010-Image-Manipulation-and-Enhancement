@@ -1,7 +1,6 @@
 package mime;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -122,13 +121,12 @@ public abstract class AbstractMIPTest {
 
   protected abstract void loadImageInvoker(String path, String name) throws IOException;
 
-  protected void assertLooper(int[][][] sample, String dst) throws IOException {
-    int[][][] custom = readImage(dst);
-    for (int row = 0; row < custom.length; row++) {
-      for (int col = 0; col < custom[row].length; col++) {
+  protected void assertLooper(int[][][] sample, int[][][] image) {
+    for (int row = 0; row < image.length; row++) {
+      for (int col = 0; col < image[row].length; col++) {
         for (int rgb = 0; rgb < 3; rgb++) {
           try {
-            assertEquals(sample[row][col][rgb], custom[row][col][rgb]);
+            assertEquals(sample[row][col][rgb], image[row][col][rgb]);
           } catch (AssertionError e) {
             System.out.println(row + " " + col + " " + rgb);
             throw e;
@@ -142,14 +140,13 @@ public abstract class AbstractMIPTest {
   @Test
   public void testLoadCat() throws IOException {
     loadImageInvoker(src, "original");
-    processor.save("original", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
                     {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
             }
-            , dst);
+            , processor.getImage("original"));
   }
 
   @Test
@@ -183,14 +180,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.adjustBrightness("original", brightness, "brighter");
-    processor.save("brighter", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
                     {{255, 255, 255}, {224, 214, 217}, {146, 129, 131}},
                     {{241, 233, 236}, {200, 180, 180}, {100, 72, 73}}
             }
-            , dst);
+            , processor.getImage("brighter"));
   }
 
   @Test
@@ -199,14 +195,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.adjustBrightness("original", brightness, "darker");
-    processor.save("darker", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
                     {{184, 180, 181}, {144, 134, 137}, {66, 49, 51}},
                     {{161, 153, 156}, {120, 100, 100}, {20, 0, 0}}
             }
-            , dst);
+            , processor.getImage("darker"));
   }
 
   @Test
@@ -214,14 +209,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.horizontalFlip("original", "horizontal");
-    processor.save("horizontal", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
                     {{116, 99, 101}, {194, 184, 187}, {234, 230, 231}},
                     {{70, 42, 43}, {170, 150, 150}, {211, 203, 206}}
             }
-            , dst);
+            , processor.getImage("horizontal"));
   }
 
   @Test
@@ -229,14 +223,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.verticalFlip("original", "vertical");
-    processor.save("vertical", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
                     {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}}
             }
-            , dst);
+            , processor.getImage("vertical"));
   }
 
   @Test
@@ -244,14 +237,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("red-component", "original", "red");
-    processor.save("red", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
                     {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
                     {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
             }
-            , dst);
+            , processor.getImage("red"));
   }
 
   @Test
@@ -259,14 +251,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("green-component", "original", "green");
-    processor.save("green", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
                     {{230, 230, 230}, {184, 184, 184}, {99, 99, 99}},
                     {{203, 203, 203}, {150, 150, 150}, {42, 42, 42}}
             }
-            , dst);
+            , processor.getImage("green"));
   }
 
   @Test
@@ -274,14 +265,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("blue-component", "original", "blue");
-    processor.save("blue", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
                     {{231, 231, 231}, {187, 187, 187}, {101, 101, 101}},
                     {{206, 206, 206}, {150, 150, 150}, {43, 43, 43}}
             }
-            , dst);
+            , processor.getImage("blue"));
   }
 
   @Test
@@ -289,14 +279,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("value-component", "original", "value");
-    processor.save("value", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
                     {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
                     {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
             }
-            , dst);
+            , processor.getImage("value"));
   }
 
   @Test
@@ -304,14 +293,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("intensity-component", "original", "intensity");
-    processor.save("intensity", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
                     {{231, 231, 231}, {188, 188, 188}, {105, 105, 105}},
                     {{206, 206, 206}, {156, 156, 156}, {51, 51, 51}}
             }
-            , dst);
+            , processor.getImage("intensity"));
   }
 
   @Test
@@ -319,14 +307,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("luma-component", "original", "luma");
-    processor.save("luma", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
                     {{230, 230, 230}, {186, 186, 186}, {102, 102, 102}},
                     {{204, 204, 204}, {154, 154, 154}, {48, 48, 48}}
             }
-            , dst);
+            , processor.getImage("luma"));
   }
 
   @Test
@@ -334,14 +321,13 @@ public abstract class AbstractMIPTest {
 
     loadImageInvoker(src, "original");
     processor.greyscale("sepia", "original", "sepia");
-    processor.save("sepia", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
                     {{255, 255, 216}, {253, 225, 175}, {140, 125, 97}},
                     {{255, 247, 192}, {210, 187, 145}, {67, 60, 47}}
             }
-            , dst);
+            , processor.getImage("sepia"));
   }
 
   @Test
@@ -351,20 +337,13 @@ public abstract class AbstractMIPTest {
     processor.greyscale("green-component", "original", "green");
     processor.greyscale("blue-component", "original", "blue");
     processor.combines("red", "green", "blue", "combine");
-    processor.save("combine", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
                     {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
                     {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
             }
-            , dst);
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testInvalidSaveExtension() throws IOException {
-    processor.loadImage(src, "original");
-    processor.save("original", outputStream, "/test/cat.gif");
+            , processor.getImage("combine"));
   }
 
 
@@ -372,14 +351,13 @@ public abstract class AbstractMIPTest {
   public void testDithering() throws IOException {
     loadImageInvoker(src, "original");
     processor.dithering("original", "dithering");
-    processor.save("dithering", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
                     {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
                     {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}
             }
-            , dst);
+            , processor.getImage("dithering"));
   }
 
 
@@ -387,14 +365,13 @@ public abstract class AbstractMIPTest {
   public void testBlur() throws IOException {
     loadImageInvoker(src, "original");
     processor.filter("blur", "original", "blur");
-    processor.save("blur", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
                     {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
                     {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
             }
-            , dst);
+            , processor.getImage("blur"));
   }
 
 
@@ -402,70 +379,13 @@ public abstract class AbstractMIPTest {
   public void testSharpening() throws IOException {
     loadImageInvoker(src, "original");
     processor.filter("sharpen", "original", "sharpen");
-    processor.save("sharpen", outputStream, this.format);
 
     assertLooper(new int[][][]{
                     {{255, 255, 255}, {255, 255, 255}, {182, 162, 160}},
                     {{255, 255, 255}, {255, 255, 255}, {233, 195, 197}},
                     {{255, 254, 255}, {255, 255, 255}, {58, 24, 25}}
             }
-            , dst);
-  }
-
-
-  @Test
-  public void testSavePPM() throws IOException {
-    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".ppm");
-
-    loadImageInvoker(src, "original");
-    outputStream = new FileOutputStream(dst);
-    processor.save("original", outputStream, "ppm");
-
-    assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , dst);
-
-    File myObj = new File(dst);
-    myObj.delete();
-  }
-
-  @Test
-  public void testSavePNG() throws IOException {
-    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".png");
-
-    loadImageInvoker(src, "original");
-    outputStream = new FileOutputStream(dst);
-    processor.save("original", outputStream, "png");
-
-    assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , dst);
-    File myObj = new File(dst);
-    myObj.delete();
-  }
-
-  @Test
-  public void testSaveBMP() throws IOException {
-    dst = dst.substring(0, dst.lastIndexOf(".")).concat(".bmp");
-
-    loadImageInvoker(src, "original");
-    outputStream = new FileOutputStream(dst);
-    processor.save("original", outputStream, "bmp");
-
-    assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , dst);
-    File myObj = new File(dst);
-    myObj.delete();
+            , processor.getImage("sharpen"));
   }
 
 }

@@ -295,70 +295,6 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   @Override
-  public void save(String from, OutputStream stream, String format)
-          throws IOException, IllegalStateException {
-
-
-    if (format.equals("ppm")) {
-      savePPM(from, stream);
-      return;
-    }
-
-    saveBJP(from, stream, format);
-  }
-
-
-  private void saveBJP(String from, OutputStream stream, String format) throws IOException {
-    int[] info = infos.get(from);
-    int[][][] fromImage = images.get(from);
-
-    BufferedImage image = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_RGB);
-    int[] rgb;
-    for (int row = 0; row < info[1]; row++) {
-      for (int col = 0; col < info[0]; col++) {
-        rgb = fromImage[row][col];
-        Color c = new Color(rgb[0], rgb[1], rgb[2]);
-        image.setRGB(col, row, c.getRGB());
-      }
-    }
-
-    if (format.equals(".jpg") || format.equals("jpeg")) {
-      ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName(format).next();
-      ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
-      jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-      jpgWriteParam.setCompressionQuality(1f);
-
-      jpgWriter.setOutput(ImageIO.createImageOutputStream(stream));
-      IIOImage outputImage = new IIOImage(image, null, null);
-      jpgWriter.write(null, outputImage, jpgWriteParam);
-      jpgWriter.dispose();
-    } else {
-      ImageIO.write(image, format, stream);
-    }
-
-  }
-
-  private void savePPM(String from, OutputStream stream) throws IOException {
-    int[] info = infos.get(from);
-
-    stream.write(("P3" + System.lineSeparator()).getBytes());
-    stream.write((info[0] + " " + info[1] + System.lineSeparator()).getBytes());
-    stream.write((info[2] + System.lineSeparator()).getBytes());
-
-    int[][][] fromImage = images.get(from);
-    for (int row = 0; row < info[1]; row++) {
-      for (int col = 0; col < info[0]; col++) {
-        for (int tmp : fromImage[row][col]) {
-          stream.write(String.format("%s", tmp).getBytes());
-          stream.write(System.lineSeparator().getBytes());
-        }
-      }
-    }
-    stream.close();
-  }
-
-
-  @Override
   public void filter(String mode, String from, String to) throws IllegalStateException {
     checkImageExistence(from);
 
@@ -455,4 +391,17 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     infos.put(to, info);
     images.put(to, toImage);
   }
+
+
+  @Override
+  public int[][][] getImage(String name) {
+    return images.get(name);
+  }
+
+  @Override
+  public int[] getInfo(String name) {
+    return infos.get(name);
+  }
+
+
 }

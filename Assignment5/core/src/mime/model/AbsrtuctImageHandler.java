@@ -19,6 +19,8 @@ public abstract class AbsrtuctImageHandler implements ImageHandler {
   @Override
   public int[] getInfo() {
     return this.info;
-
   }
+
+
+
 }

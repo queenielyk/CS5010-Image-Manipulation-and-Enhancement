@@ -1,6 +1,8 @@
 package mime.model;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Scanner;
 
 /**
@@ -61,4 +63,24 @@ public class PpmHandler extends AbsrtuctImageHandler {
       }
     }
   }
+
+  @Override
+  public void saveImage(OutputStream stream, String format, int[] info, int[][][] image) throws IOException {
+
+    stream.write(("P3" + System.lineSeparator()).getBytes());
+    stream.write((info[0] + " " + info[1] + System.lineSeparator()).getBytes());
+    stream.write((info[2] + System.lineSeparator()).getBytes());
+
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        for (int tmp : image[row][col]) {
+          stream.write(String.format("%s", tmp).getBytes());
+          stream.write(System.lineSeparator().getBytes());
+        }
+      }
+    }
+    stream.close();
+  }
+
+
 }

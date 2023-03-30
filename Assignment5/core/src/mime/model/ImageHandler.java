@@ -2,6 +2,7 @@ package mime.model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * An interface to represent an image reader. An image reader is a reader to read image from an
@@ -30,4 +31,8 @@ public interface ImageHandler {
    */
   int[] getInfo();
 
+  /**
+   * A method to save image from model through OutputStream
+   */
+  void saveImage(OutputStream stream, String format, int[] info, int[][][] image) throws IOException;
 }
