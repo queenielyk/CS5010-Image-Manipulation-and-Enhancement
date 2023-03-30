@@ -168,14 +168,9 @@ public abstract class AbstractMIPTest {
   }
 
   @Test
-  public void testLoadInvalidExtension() {
-    assertFalse(processor.verifyFormat("gif"));
-  }
-
-  @Test
   public void testLoadOverwrite() throws IOException {
 
-    loadImageInvoker("res/format/cat.bmp", "original");
+    loadImageInvoker("res/something.ppm", "original");
     loadImageInvoker(src, "original");
     processor.save("original", outputStream, this.format);
 

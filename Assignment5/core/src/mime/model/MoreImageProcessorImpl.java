@@ -11,11 +11,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 
+/**
+ * A class to implement interface MoreImageProcessor.
+ */
 public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   private final Map<String, int[][][]> images; // <name, int[row, col, [r, g, b]]>
@@ -29,16 +33,16 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     this.acceptFormat = new HashSet<>(Arrays.asList("ppm", "jpg", "jpeg", "png", "bmp"));
     this.filterings = new HashMap<>();
     this.filterings.put("blur", new float[][]{
-        {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16},
-        {(float) 1 / 8, (float) 1 / 4, (float) 1 / 8},
-        {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16}
+            {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16},
+            {(float) 1 / 8, (float) 1 / 4, (float) 1 / 8},
+            {(float) 1 / 16, (float) 1 / 8, (float) 1 / 16}
     });
     this.filterings.put("sharpen", new float[][]{
-        {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8},
-        {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
-        {(float) -1 / 8, (float) 1 / 4, 1, (float) 1 / 4, (float) -1 / 8},
-        {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
-        {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8}
+            {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8},
+            {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
+            {(float) -1 / 8, (float) 1 / 4, 1, (float) 1 / 4, (float) -1 / 8},
+            {(float) -1 / 8, (float) 1 / 4, (float) 1 / 4, (float) 1 / 4, (float) -1 / 8},
+            {(float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8, (float) -1 / 8}
     });
   }
 
@@ -53,14 +57,15 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     return Math.max(0, Math.min(rgb, maxi));
   }
 
-  @Override
-  public boolean verifyFormat(String path) {
-    return this.acceptFormat.contains(path.substring(path.lastIndexOf('.') + 1));
-  }
 
+  /**
+   * @deprecated This method is no longer be supported because of supporting more image format.
+   * Replaced by {@link #loadImage(String path, String name)}
+   * Using this method will throw IllegalStateException.
+   */
   @Deprecated
   public void loadImage(String path, String name)
-      throws FileNotFoundException, IllegalStateException {
+          throws FileNotFoundException, IllegalStateException {
     throw new IllegalStateException("This method is deprecated!");
   }
 
@@ -100,25 +105,25 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         break;
       case "value-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-            calValueValue(RGB), calValueValue(RGB), calValueValue(RGB)
+                calValueValue(RGB), calValueValue(RGB), calValueValue(RGB)
         });
         break;
       case "intensity-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-            calIntensityValue(RGB), calIntensityValue(RGB), calIntensityValue(RGB)
+                calIntensityValue(RGB), calIntensityValue(RGB), calIntensityValue(RGB)
         });
         break;
       case "greyscale":
       case "luma-component":
         greyscaleLooper(from, to, RGB -> new int[]{
-            calLumaValue(RGB), calLumaValue(RGB), calLumaValue(RGB),
+                calLumaValue(RGB), calLumaValue(RGB), calLumaValue(RGB),
         });
         break;
       case "sepia":
         greyscaleLooper(from, to, RGB -> new int[]{
-            (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
-            (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
-            (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
+                (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
+                (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
+                (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
         });
         break;
       default:
@@ -175,9 +180,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       for (int col = 0; col < info[0]; col++) {
         int[] rgb = conversion.apply(fromImage[row][col]);
         toImage[row][col] = new int[]{
-            Math.min(rgb[0], info[2]),
-            Math.min(rgb[1], info[2]),
-            Math.min(rgb[2], info[2])};
+                Math.min(rgb[0], info[2]),
+                Math.min(rgb[1], info[2]),
+                Math.min(rgb[2], info[2])};
       }
     }
     infos.put(to, info);
@@ -234,9 +239,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
       for (int col = 0; col < info[0]; col++) {
         int[] rgb = fromImage[row][col];
         toImage[row][col] = new int[]{
-            clampRGB(rgb[0] + add, info[2]),
-            clampRGB(rgb[1] + add, info[2]),
-            clampRGB(rgb[2] + add, info[2])
+                clampRGB(rgb[0] + add, info[2]),
+                clampRGB(rgb[1] + add, info[2]),
+                clampRGB(rgb[2] + add, info[2])
         };
       }
     }
@@ -248,7 +253,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   @Override
   public void combines(String redName, String greenName, String blueName, String to)
-      throws IllegalStateException {
+          throws IllegalStateException {
 
     checkImageExistence(redName);
     checkImageExistence(greenName);
@@ -270,7 +275,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     for (int row = 0; row < redInfo[1]; row++) {
       for (int col = 0; col < redInfo[0]; col++) {
         toImage[row][col] = new int[]{
-            redImage[row][col][0], greenImage[row][col][1], blueImage[row][col][2]
+                redImage[row][col][0], greenImage[row][col][1], blueImage[row][col][2]
         };
       }
     }
@@ -279,6 +284,11 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     images.put(to, toImage);
   }
 
+  /**
+   * @deprecated This method is no longer be supported because of supporting more image format.
+   * Replaced by {@link #save(String from, OutputStream stream, String format)}
+   * Using this method will throw IllegalStateException.
+   */
   @Deprecated
   public void save(String from, String path) throws IOException, IllegalStateException {
     throw new IllegalStateException("This operation is not supported!");
@@ -286,19 +296,15 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   @Override
   public void save(String from, OutputStream stream, String format)
-      throws IOException, IllegalStateException {
+          throws IOException, IllegalStateException {
 
-    checkImageExistence(from);
-    if (!verifyFormat(format)) {
-      throw new IllegalStateException("This output format is not available");
-    }
 
-    if (format.equals("ppm")) {
-      savePPM(from, stream);
-      return;
-    }
+   if (format.equals("ppm")) {
+     savePPM(from, stream);
+     return;
+   }
 
-    saveBJP(from, stream, format);
+   saveBJP(from, stream, format);
   }
 
 
@@ -373,11 +379,11 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         double blue = 0;
 
         for (int fRow = Math.abs(Math.min(row - halfmatrix, 0));
-            fRow < ((row + halfmatrix) >= info[1] ? info[1] - row + halfmatrix
-                : filterMatrix.length); fRow++) {
+             fRow < ((row + halfmatrix) >= info[1] ? info[1] - row + halfmatrix
+                     : filterMatrix.length); fRow++) {
           for (int fCol = Math.abs(Math.min(col - halfmatrix, 0));
-              fCol < ((col + halfmatrix) >= info[0] ? info[0] - col + halfmatrix
-                  : filterMatrix.length); fCol++) {
+               fCol < ((col + halfmatrix) >= info[0] ? info[0] - col + halfmatrix
+                       : filterMatrix.length); fCol++) {
             int[] rgb = fromImage[row - halfmatrix + fRow][col - halfmatrix + fCol];
             red += rgb[0] * filterMatrix[fRow][fCol];
             green += rgb[1] * filterMatrix[fRow][fCol];
@@ -386,9 +392,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         }
 
         toImage[row][col] = new int[]{
-            clampRGB((int) red, info[2]),
-            clampRGB((int) green, info[2]),
-            clampRGB((int) blue, info[2]),
+                clampRGB((int) red, info[2]),
+                clampRGB((int) green, info[2]),
+                clampRGB((int) blue, info[2]),
         };
       }
     }

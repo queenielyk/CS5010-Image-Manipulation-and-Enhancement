@@ -4,27 +4,26 @@ import ime.model.ImageProcessor;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * A new interface provides more operations other than the operations mentioned in
+ * interface ImageProcessor.
+ * New operations:
+ * - Filter
+ * - Blur
+ * - Sharpen
+ * - Dithering
+ * Some operations mentioned in interface ImageProcessor are no longer supported in this version,
+ * they are marked as @Deprecated and throw IllegalStateException.
+ */
 public interface MoreImageProcessor extends ImageProcessor {
 
   /**
-   * A method to verify whether accepting them image format. Accepted image format includes: - ppm -
-   * jpg - png - bmp
+   * A method to load image from an ImageReader object and store it.
    *
-   * @param pathname pathname of incoming image
-   * @return true if acceptable; else otherwise
-   */
-  boolean verifyFormat(String pathname);
-
-
-  /**
-   * A method to load image from an InputStream and store it.
-   *
-   * @param stream an InputStream
+   * @param reader an ImageReader object
    * @param name   the name of image
-   * @param format the format of image
-   * @throws IOException           if unable to read file
-   * @throws IllegalStateException if format is not supported
    */
+
   void loadImage(ImageHandler reader, String name);
 
   /**
