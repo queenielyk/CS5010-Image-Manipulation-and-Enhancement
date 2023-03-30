@@ -13,7 +13,7 @@ public class Save implements ImageCommand {
   protected final String from;
 
   /**
-   * Build a save command
+   * Build a save command.
    *
    * @param path file path to save to
    * @param from source image name

@@ -5,12 +5,10 @@ import static org.junit.Assert.assertEquals;
 import ime.control.IController;
 import ime.control.ImageController;
 import ime.model.ImageProcessor;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
 import org.junit.ComparisonFailure;
 import org.junit.Test;
 
@@ -47,8 +45,8 @@ public class ImageControllerTest {
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Mode:red-component From:cat To:cat-red\n"
-            + "Mode:green-component From:cat To:cat-green\n"
-            + "Mode:blue-component From:cat To:cat-blue\n", log.toString());
+        + "Mode:green-component From:cat To:cat-green\n"
+        + "Mode:blue-component From:cat To:cat-blue\n", log.toString());
   }
 
   @Test
@@ -111,15 +109,19 @@ public class ImageControllerTest {
 
     try {
       assertEquals(
-              "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME" + File.separator + "test" + File.separator + "IME" + File.separator + "fake.text (The system cannot find the path specified)\n"
-                      + "\n"
-                      + "Enter Command:", out.toString());
+          "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME" + File.separator + "test"
+              + File.separator + "IME" + File.separator
+              + "fake.text (The system cannot find the path specified)\n"
+              + "\n"
+              + "Enter Command:", out.toString());
     } catch (ComparisonFailure e) {
       try {
         assertEquals(
-                "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME" + File.separator + "test" + File.separator + "IME" + File.separator + "fake.text (No such file or directory)\n"
-                        + "\n"
-                        + "Enter Command:", out.toString());
+            "Enter Command:!<Error>!: \tjava.io.FileNotFoundException: IME" + File.separator
+                + "test" + File.separator + "IME" + File.separator
+                + "fake.text (No such file or directory)\n"
+                + "\n"
+                + "Enter Command:", out.toString());
       } catch (ComparisonFailure failure) {
         throw failure;
       }
@@ -134,9 +136,10 @@ public class ImageControllerTest {
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: Wrong number of arguments\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: "
+            + "Wrong number of arguments\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
@@ -147,9 +150,10 @@ public class ImageControllerTest {
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: Wrong number of arguments\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.IllegalArgumentException: "
+            + "Wrong number of arguments\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   @Test
@@ -160,8 +164,8 @@ public class ImageControllerTest {
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals("Enter Command:!<Error>!: \tUnknown command [grey]\n"
-            + "\n"
-            + "Enter Command:", out.toString());
+        + "\n"
+        + "Enter Command:", out.toString());
   }
 
   @Test
@@ -172,9 +176,10 @@ public class ImageControllerTest {
     StringBuilder log = new StringBuilder();
     controller.run(new MockModel(log));
     assertEquals(
-            "Enter Command:!<Error>!: \tjava.lang.NumberFormatException: For input string: \"a\"\n"
-                    + "\n"
-                    + "Enter Command:", out.toString());
+        "Enter Command:!<Error>!: \tjava.lang.NumberFormatException: "
+            + "For input string: \"a\"\n"
+            + "\n"
+            + "Enter Command:", out.toString());
   }
 
   /**
@@ -217,7 +222,7 @@ public class ImageControllerTest {
     @Override
     public void combines(String redName, String greenName, String blueName, String to) {
       log.append("R:" + redName + " " + "G:" + greenName + " " + "B:" + blueName + " "
-              + "To:" + to + "\n");
+          + "To:" + to + "\n");
     }
 
     @Override

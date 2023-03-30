@@ -12,7 +12,7 @@ public class Vflip implements ImageCommand {
   private final String to;
 
   /**
-   * Build a vflip command
+   * Build a vflip command.
    *
    * @param from Source Image Name
    * @param to   Dest Image Name

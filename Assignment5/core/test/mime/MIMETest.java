@@ -67,26 +67,7 @@ public class MIMETest extends IMETest {
         + "Enter Command:", out.toString());
   }
 
-  @Test
-  public void OutImageFormatNotInMap() {
 
-  }
-
-  @Test
-  public void InImageFormatNotInMap() {
-
-  }
-
-
-  @Test
-  public void greyNotInMap() {
-
-  }
-
-  @Test
-  public void filterNotInMap() {
-
-  }
 
 
 }
