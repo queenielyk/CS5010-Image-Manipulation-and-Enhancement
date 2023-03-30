@@ -201,10 +201,10 @@ If an attempting image is not supported, the processor will throw exception.
 
 2. Run packed `core.jar` file on command promote with command lind option.
     - -file res/script.text
-      **(ex. ">java -jar core.jar res/script.text")**
+      **(ex. ">java -jar core.jar res/newscript.text")**
     - Program will run the script and shows
 
-> This scripts will run on images files under res/folder and output file will produce to the same
+> This scripts will run on images files under res/ folder and output file will produce to the same
 > folder.
 
 ## Citation

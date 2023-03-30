@@ -18,7 +18,7 @@ import org.junit.Test;
 public class IMETest {
 
   @Test
-  public void RunScriptTest() throws IOException {
+  public void RunScriptForIMETest() throws IOException {
     StringBuilder out = new StringBuilder();
     Reader in = new StringReader("run res/error.text");
     IController controller = new ImageController(in, out);
