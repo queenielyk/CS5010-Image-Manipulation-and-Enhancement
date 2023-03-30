@@ -1,6 +1,8 @@
 package mime.control.command;
 
 import java.io.IOException;
+
+import mime.control.MoreImageCommand;
 import mime.model.MoreImageProcessor;
 
 /**

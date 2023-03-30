@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import mime.control.MoreImageCommand;
 import mime.model.ImageHandler;
 import mime.model.ImageIOHandler;
 import mime.model.MoreImageProcessor;

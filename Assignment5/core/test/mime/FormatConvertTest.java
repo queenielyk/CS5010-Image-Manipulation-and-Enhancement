@@ -4,7 +4,7 @@ package mime;
 import java.io.IOException;
 
 import mime.control.command.LoadInputStream;
-import mime.control.command.MoreImageCommand;
+import mime.control.MoreImageCommand;
 import mime.control.command.SaveOutStream;
 
 import mime.model.MoreImageProcessor;

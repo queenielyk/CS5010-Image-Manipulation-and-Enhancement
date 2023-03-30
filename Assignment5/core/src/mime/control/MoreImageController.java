@@ -14,7 +14,6 @@ import mime.control.command.ColorTrans;
 import mime.control.command.Dither;
 import mime.control.command.Filter;
 import mime.control.command.LoadInputStream;
-import mime.control.command.MoreImageCommand;
 import mime.control.command.SaveOutStream;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;

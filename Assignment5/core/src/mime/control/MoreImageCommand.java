@@ -1,4 +1,4 @@
-package mime.control.command;
+package mime.control;
 
 import java.io.IOException;
 
