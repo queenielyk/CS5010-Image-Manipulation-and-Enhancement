@@ -88,11 +88,9 @@ public abstract class AbstractMIPTest {
     loadImageInvoker(src, "original");
 
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , processor.getImage("original"));
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}}, processor.getImage("original"));
   }
 
   @Test
@@ -121,10 +119,9 @@ public abstract class AbstractMIPTest {
   @Test(expected = IllegalStateException.class)
   public void testAdjustBrightnessNotExist() {
     processor.loadImage(new int[]{3, 3, 255}, new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}},
-            "original");
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}}, "original");
     processor.adjustBrightness("origin", 0, "brighter");
   }
 
@@ -136,11 +133,9 @@ public abstract class AbstractMIPTest {
     processor.adjustBrightness("original", brightness, "brighter");
 
     assertLooper(new int[][][]{
-                    {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
-                    {{255, 255, 255}, {224, 214, 217}, {146, 129, 131}},
-                    {{241, 233, 236}, {200, 180, 180}, {100, 72, 73}}
-            }
-            , processor.getImage("brighter"));
+            {{255, 255, 255}, {239, 224, 223}, {198, 180, 178}},
+            {{255, 255, 255}, {224, 214, 217}, {146, 129, 131}},
+            {{241, 233, 236}, {200, 180, 180}, {100, 72, 73}}}, processor.getImage("brighter"));
   }
 
   @Test
@@ -151,11 +146,9 @@ public abstract class AbstractMIPTest {
     processor.adjustBrightness("original", brightness, "darker");
 
     assertLooper(new int[][][]{
-                    {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
-                    {{184, 180, 181}, {144, 134, 137}, {66, 49, 51}},
-                    {{161, 153, 156}, {120, 100, 100}, {20, 0, 0}}
-            }
-            , processor.getImage("darker"));
+            {{184, 182, 186}, {159, 144, 143}, {118, 100, 98}},
+            {{184, 180, 181}, {144, 134, 137}, {66, 49, 51}},
+            {{161, 153, 156}, {120, 100, 100}, {20, 0, 0}}}, processor.getImage("darker"));
   }
 
   @Test
@@ -165,11 +158,9 @@ public abstract class AbstractMIPTest {
     processor.horizontalFlip("original", "horizontal");
 
     assertLooper(new int[][][]{
-                    {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
-                    {{116, 99, 101}, {194, 184, 187}, {234, 230, 231}},
-                    {{70, 42, 43}, {170, 150, 150}, {211, 203, 206}}
-            }
-            , processor.getImage("horizontal"));
+            {{168, 150, 148}, {209, 194, 193}, {234, 232, 236}},
+            {{116, 99, 101}, {194, 184, 187}, {234, 230, 231}},
+            {{70, 42, 43}, {170, 150, 150}, {211, 203, 206}}}, processor.getImage("horizontal"));
   }
 
   @Test
@@ -179,11 +170,9 @@ public abstract class AbstractMIPTest {
     processor.verticalFlip("original", "vertical");
 
     assertLooper(new int[][][]{
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}}
-            }
-            , processor.getImage("vertical"));
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}}}, processor.getImage("vertical"));
   }
 
   @Test
@@ -193,11 +182,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("red-component", "original", "red");
 
     assertLooper(new int[][][]{
-                    {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
-                    {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
-                    {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
-            }
-            , processor.getImage("red"));
+            {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
+            {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
+            {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}}, processor.getImage("red"));
   }
 
   @Test
@@ -207,11 +194,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("green-component", "original", "green");
 
     assertLooper(new int[][][]{
-                    {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
-                    {{230, 230, 230}, {184, 184, 184}, {99, 99, 99}},
-                    {{203, 203, 203}, {150, 150, 150}, {42, 42, 42}}
-            }
-            , processor.getImage("green"));
+            {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
+            {{230, 230, 230}, {184, 184, 184}, {99, 99, 99}},
+            {{203, 203, 203}, {150, 150, 150}, {42, 42, 42}}}, processor.getImage("green"));
   }
 
   @Test
@@ -221,11 +206,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("blue-component", "original", "blue");
 
     assertLooper(new int[][][]{
-                    {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
-                    {{231, 231, 231}, {187, 187, 187}, {101, 101, 101}},
-                    {{206, 206, 206}, {150, 150, 150}, {43, 43, 43}}
-            }
-            , processor.getImage("blue"));
+            {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
+            {{231, 231, 231}, {187, 187, 187}, {101, 101, 101}},
+            {{206, 206, 206}, {150, 150, 150}, {43, 43, 43}}}, processor.getImage("blue"));
   }
 
   @Test
@@ -235,11 +218,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("value-component", "original", "value");
 
     assertLooper(new int[][][]{
-                    {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
-                    {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
-                    {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}
-            }
-            , processor.getImage("value"));
+            {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
+            {{234, 234, 234}, {194, 194, 194}, {116, 116, 116}},
+            {{211, 211, 211}, {170, 170, 170}, {70, 70, 70}}}, processor.getImage("value"));
   }
 
   @Test
@@ -249,11 +230,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("intensity-component", "original", "intensity");
 
     assertLooper(new int[][][]{
-                    {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
-                    {{231, 231, 231}, {188, 188, 188}, {105, 105, 105}},
-                    {{206, 206, 206}, {156, 156, 156}, {51, 51, 51}}
-            }
-            , processor.getImage("intensity"));
+            {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
+            {{231, 231, 231}, {188, 188, 188}, {105, 105, 105}},
+            {{206, 206, 206}, {156, 156, 156}, {51, 51, 51}}}, processor.getImage("intensity"));
   }
 
   @Test
@@ -263,11 +242,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("luma-component", "original", "luma");
 
     assertLooper(new int[][][]{
-                    {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
-                    {{230, 230, 230}, {186, 186, 186}, {102, 102, 102}},
-                    {{204, 204, 204}, {154, 154, 154}, {48, 48, 48}}
-            }
-            , processor.getImage("luma"));
+            {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
+            {{230, 230, 230}, {186, 186, 186}, {102, 102, 102}},
+            {{204, 204, 204}, {154, 154, 154}, {48, 48, 48}}}, processor.getImage("luma"));
   }
 
   @Test
@@ -277,11 +254,9 @@ public abstract class AbstractMIPTest {
     processor.greyscale("sepia", "original", "sepia");
 
     assertLooper(new int[][][]{
-                    {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
-                    {{255, 255, 216}, {253, 225, 175}, {140, 125, 97}},
-                    {{255, 247, 192}, {210, 187, 145}, {67, 60, 47}}
-            }
-            , processor.getImage("sepia"));
+            {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
+            {{255, 255, 216}, {253, 225, 175}, {140, 125, 97}},
+            {{255, 247, 192}, {210, 187, 145}, {67, 60, 47}}}, processor.getImage("sepia"));
   }
 
   @Test
@@ -293,11 +268,9 @@ public abstract class AbstractMIPTest {
     processor.combines("red", "green", "blue", "combine");
 
     assertLooper(new int[][][]{
-                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
-                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
-                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}
-            }
-            , processor.getImage("combine"));
+            {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+            {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+            {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}}, processor.getImage("combine"));
   }
 
 
@@ -307,11 +280,9 @@ public abstract class AbstractMIPTest {
     processor.dithering("original", "dithering");
 
     assertLooper(new int[][][]{
-                    {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
-                    {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
-                    {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}
-            }
-            , processor.getImage("dithering"));
+            {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
+            {{255, 255, 255}, {255, 255, 255}, {0, 0, 0}},
+            {{255, 255, 255}, {0, 0, 0}, {0, 0, 0}}}, processor.getImage("dithering"));
   }
 
 
@@ -321,11 +292,9 @@ public abstract class AbstractMIPTest {
     processor.filter("blur", "original", "blur");
 
     assertLooper(new int[][][]{
-                    {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
-                    {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
-                    {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}
-            }
-            , processor.getImage("blur"));
+            {{126, 122, 123}, {148, 139, 140}, {94, 85, 85}},
+            {{162, 156, 157}, {182, 169, 170}, {106, 93, 93}},
+            {{115, 109, 110}, {123, 111, 112}, {65, 53, 53}}}, processor.getImage("blur"));
   }
 
 
@@ -335,11 +304,9 @@ public abstract class AbstractMIPTest {
     processor.filter("sharpen", "original", "sharpen");
 
     assertLooper(new int[][][]{
-                    {{255, 255, 255}, {255, 255, 255}, {182, 162, 160}},
-                    {{255, 255, 255}, {255, 255, 255}, {233, 195, 197}},
-                    {{255, 254, 255}, {255, 255, 255}, {58, 24, 25}}
-            }
-            , processor.getImage("sharpen"));
+            {{255, 255, 255}, {255, 255, 255}, {182, 162, 160}},
+            {{255, 255, 255}, {255, 255, 255}, {233, 195, 197}},
+            {{255, 254, 255}, {255, 255, 255}, {58, 24, 25}}}, processor.getImage("sharpen"));
   }
 
 }

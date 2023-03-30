@@ -54,6 +54,8 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
 
   /**
+   * This method is deprecated.
+   *
    * @throws UnsupportedOperationException when calling this method
    * @deprecated This method is no longer be supported because of supporting more image format.
    * Replaced by {@link #loadImage(int[] info, int[][][] image, String name)}
@@ -278,6 +280,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   /**
+   * This method is deprecated.
    * @throws UnsupportedOperationException when calling this method
    * @deprecated This method is no longer be supported because of supporting more image format.
    * Saving the image is Controller duty now.

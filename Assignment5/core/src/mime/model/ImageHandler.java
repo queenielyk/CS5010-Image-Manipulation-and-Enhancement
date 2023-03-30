@@ -34,7 +34,7 @@ public interface ImageHandler {
   int[] getInfo();
 
   /**
-   * A method to save image from model through OutputStream
+   * A method to save image from model through OutputStream.
    *
    * @param stream an OutputStream Object
    * @param format the format of exporting image
@@ -42,5 +42,6 @@ public interface ImageHandler {
    * @param image  the image
    * @throws IOException Writing the image is problematic
    */
-  void saveImage(OutputStream stream, String format, int[] info, int[][][] image) throws IOException;
+  void saveImage(OutputStream stream, String format, int[] info, int[][][] image)
+          throws IOException;
 }

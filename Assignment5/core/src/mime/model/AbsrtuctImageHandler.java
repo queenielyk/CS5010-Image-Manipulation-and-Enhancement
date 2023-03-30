@@ -12,6 +12,7 @@ public abstract class AbsrtuctImageHandler implements ImageHandler {
    * A constructor the construct an AbsrtuctImageHandler.
    */
   public AbsrtuctImageHandler() {
+    //No initialization is required.
   }
 
   @Override
