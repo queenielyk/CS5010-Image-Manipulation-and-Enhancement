@@ -149,7 +149,8 @@ Once the controller recognized a command is related to read/write image, it will
 
 ## Model
 
-**This model design is not compatible to the previous model design. For more details, read [Change Log](#1-image-representation-linked-list---3d-array)**
+**This model design is not compatible to the previous model design. For more details,
+read [Change Log.](#1-image-representation-linked-list---3d-array)**
 
 ``` bash
 ime/model
@@ -230,13 +231,14 @@ An image Dimension: 2x4
    - sharpen sourceImg destImg
    ```
 
-2. Run packed `core.jar` file on command promote with command lind option.
+2. Run packed `core.jar` file under `/res` on command promote with command lind option.
     ```bash
     java -jar core.jar -file {script}
     ```
-    > java -jar core.jar -file res/newscript.text
+   > ex: java -jar core.jar -file res/newscript.text
 
-    This scripts will run on images files under res/ folder and output file will be produced to the same folder.
+   This scripts will run on images files under res/ folder and output file will be produced to the
+   `res/ime/` and `res/mime/` folder.
 
 ## Citation
 
