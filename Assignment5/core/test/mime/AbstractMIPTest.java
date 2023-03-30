@@ -162,15 +162,25 @@ public abstract class AbstractMIPTest {
     }
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = UnsupportedOperationException.class)
+  public void testDeprecatedSave() throws IOException {
+    processor.save("fake", "fake");
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
   public void testDeprecatedLoad() throws IOException {
-    processor.loadImage("res/nocat.gif", "original");
+    processor.save("fake", "fake");
   }
 
   @Test(expected = IllegalStateException.class)
   public void testAdjustBrightnessNotExist() throws IOException {
 
-    processor.loadImage(src, "original");
+//    loadImage(int[] info, int[][][] image, String name)
+    processor.loadImage(new int[]{3, 3, 255}, new int[][][]{
+                    {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
+                    {{234, 230, 231}, {194, 184, 187}, {116, 99, 101}},
+                    {{211, 203, 206}, {170, 150, 150}, {70, 42, 43}}},
+            "original");
     processor.adjustBrightness("origin", 0, "brighter");
   }
 

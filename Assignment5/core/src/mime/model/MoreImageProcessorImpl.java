@@ -42,7 +42,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   /**
-   * A protected helper method to clamp a RGB that 0 < RGB < maxi-value.
+   * A protected helper method to clamp a RGB that 0 &lt; RGB &lt; maxi-value.
    *
    * @param rgb  rgb value
    * @param maxi maximum value of an image
@@ -54,14 +54,14 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
 
   /**
+   * @throws UnsupportedOperationException when calling this method
    * @deprecated This method is no longer be supported because of supporting more image format.
-   * Replaced by {@link #loadImage(String path, String name)}
-   * Using this method will throw IllegalStateException.
+   * Replaced by {@link #loadImage(int[] info, int[][][] image, String name)}
    */
   @Deprecated
   public void loadImage(String path, String name)
-          throws FileNotFoundException, IllegalStateException {
-    throw new IllegalStateException("This method is deprecated!");
+          throws FileNotFoundException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("This method is deprecated!");
   }
 
   @Override
@@ -278,13 +278,13 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   /**
+   * @throws UnsupportedOperationException when calling this method
    * @deprecated This method is no longer be supported because of supporting more image format.
-   * Replaced by {@link #save(String from, OutputStream stream, String format)}
-   * Using this method will throw IllegalStateException.
+   * Saving the image is Controller duty now.
    */
   @Deprecated
-  public void save(String from, String path) throws IOException, IllegalStateException {
-    throw new IllegalStateException("This operation is not supported!");
+  public void save(String from, String path) throws IOException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("This operation is not supported!");
   }
 
   @Override
