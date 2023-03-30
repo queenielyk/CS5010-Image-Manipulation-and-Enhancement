@@ -23,10 +23,27 @@ where computation takes place.
 In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model
 if those operations are valid, return 'unknown' to user otherwise.
 
+### Format limitation
+
+Extending this project from assignment 4, we are now able to support more formats other than ASCII
+PPM.
+Overall, the supporting formats are:
+
+- ASCII PPM
+- BMP
+- JPG
+- JPEG
+- PNG
+
+For those formats are not listed above, we are not able to provide any operations,
+even the most basic operations load and save.
+
+If an attempting image is not supported, the processor will throw exception.
+
 ## Controller
 
 ``` bash
-ime/controller
+ime/control
     ├── IController.java
     ├── ImageController.java
     ├── ImageCommand.java
@@ -39,8 +56,6 @@ ime/controller
         ├── RgbSplit.java
         ├── Save.java
         └── Vflip.java
-        └── Filter.java
-        └── Dithering.java
 ```
 
 ### Design
@@ -64,19 +79,19 @@ command to implements other command base on sequences of these atomic command.
 (For example, we can do RGB split by just use Greyscale three time.） This makes it easy for future
 extensions.
 
-``` bash
 We add few more class to extend an reused the previous /ime package inorder to support 
 more features.
 
-mime/controller
-    ├── MoreImageController.java
+``` bash
+mime/control
     ├── MoreImageCommand.java
+    ├── MoreImageController.java
     └── command
         ├── ColorTrans.java
         ├── Dither.java
         ├── Filter.java
         ├── LoadInputStream.java
-        ├── SaveOutStream.java
+        └── SaveOutStream.java
 ``` 
 
 After all these extension, we now support load image from Input-stream and Save to OutputStream
@@ -109,8 +124,13 @@ This makes the controller capable to take not just *System.in/ out* but also fil
 
 ## Model
 
+**This model design is not compatible to the previous model design. For more details, read [Change Log](#1-image-representation-linked-list---3d-array)**
+
 ``` bash
 ime/model
+    └── ImageProcessor.java
+
+mime/model
     ├── MoreImageProcessor.java
     └── MoreImageProcessorImpl.java
 ```
@@ -136,11 +156,9 @@ An image Dimension: 2x4
 
 ### Computation
 
-`MoreImageProcessor` is an interface to indicate what kind of actions a processor should have:
-
+`ImageProcessor` is an interface indicates actions that an image processor should have:
 - Load
-- Dithering
-- Save
+- Save `@Deprecated`
 - Combine
 - Greyscale
     - red-component
@@ -149,31 +167,19 @@ An image Dimension: 2x4
     - value-component
     - intensity-component
     - luma-component
-    - sepia
 - Flip
     - Horizontal
     - Vertical
 
+`MoreImageProcessor` is an interface extends `ImageProcessor` and indicates what kind of new actions a processor should have:
+
+- Dithering
+- Greyscale
+    - greyscale
+    - sepia
 - Filter
     - Blur
     - Sharpen
-
-### Format limitation
-
-Extending this project from assignment 4, we are now able to support more formats other than ASCII
-PPM.
-Overall, the supporting formats are:
-
-- ASCII PPM
-- BMP
-- JPG
-- JPEG
-- PNG
-
-For those formats are not listed above, we are not able to provide any operations,
-even the most basic operations load and save.
-
-If an attempting image is not supported, the processor will throw exception.
 
 ## Instruction
 
@@ -200,18 +206,27 @@ If an attempting image is not supported, the processor will throw exception.
    ```
 
 2. Run packed `core.jar` file on command promote with command lind option.
-    - -file res/script.text
-      **(ex. ">java -jar core.jar res/newscript.text")**
-    - Program will run the script and shows
+    ```bash
+    java -jar core.jar -file {script}
+    ```
+    > java -jar core.jar -file res/newscript.text
 
-> This scripts will run on images files under res/ folder and output file will produce to the same
-> folder.
+    This scripts will run on images files under res/ folder and output file will be produced to the same folder.
 
 ## Citation
 
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
-> - res/cat.ppm
-> - res/building.ppm
+```bash
+core/res
+    ├── cat.ppm
+    ├── format
+    │   ├── cat.bmp
+    │   ├── cat.jpeg
+    │   ├── cat.jpg
+    │   ├── cat.png
+    │   ├── cat.ppm
+    │   └── something.png
+```
 
 ## Change Log
 
