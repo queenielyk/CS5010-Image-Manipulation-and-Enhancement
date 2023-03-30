@@ -35,7 +35,7 @@ public class MoreImageControllerTest extends ImageControllerTest {
   @Test
   public void mockSaveOutputStreamTest() throws IOException {
     StringBuffer out = new StringBuffer();
-    Reader in = new StringReader("save res/cat-gs.ppm cat-greyscale");
+    Reader in = new StringReader("save res/mime/cat-gs.ppm cat-greyscale");
     IController controller = new MoreImageController(in, out);
     StringBuilder log = new StringBuilder();
     controller.run(new MoreMockModel(log));
@@ -112,19 +112,7 @@ public class MoreImageControllerTest extends ImageControllerTest {
       super(log);
     }
 
-    /**
-     * A method to verify whether accepting them image format. Accepted image format includes: - ppm
-     * - jpg - png - bmp
-     *
-     * @param pathname pathname of incoming image
-     * @return true if acceptable; else otherwise
-     */
-    @Override
-    public boolean verifyFormat(String pathname) {
-      return true;
-    }
-
-
+    
     @Override
     public void loadImage(ImageHandler reader, String name) {
       log.append("Handler:" + Arrays.deepToString(reader.getImage()) + " " + "name:" + name + "\n");

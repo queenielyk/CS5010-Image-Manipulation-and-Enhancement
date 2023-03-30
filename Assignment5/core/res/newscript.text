@@ -26,88 +26,88 @@ load res/cat.ppm cat
 greyscale cat cat-grey2
 
 #save to jpeg
-save res/new/cat-grey2.jpeg cat-grey2
+save res/mime/cat-grey2.jpeg cat-grey2
 
 #save to jpg
-save res/new/cat-grey2.jpg cat-grey2
+save res/mime/cat-grey2.jpg cat-grey2
 
 #save to png
-save res/new/cat-grey2.png cat-grey2
+save res/mime/cat-grey2.png cat-grey2
 
 #save to bmp
-save res/new/cat-grey2.bmp cat-grey2
+save res/mime/cat-grey2.bmp cat-grey2
 
 #save to ppm
-save res/new/cat-grey2.ppm cat-grey2
+save res/mime/cat-grey2.ppm cat-grey2
 
 #call sepia-------------------------------------
 sepia cat cat-sepia
 
 #save to jpeg
-save res/new/cat-sepia.jpeg cat-sepia
+save res/mime/cat-sepia.jpeg cat-sepia
 
 #save to jpg
-save res/new/cat-sepia.jpg cat-sepia
+save res/mime/cat-sepia.jpg cat-sepia
 
 #save to png
-save res/new/cat-sepia.png cat-sepia
+save res/mime/cat-sepia.png cat-sepia
 
 #save to bmp
-save res/new/cat-sepia.bmp cat-sepia
+save res/mime/cat-sepia.bmp cat-sepia
 
 #save to ppm
-save res/new/cat-sepia.ppm cat-sepia
+save res/mime/cat-sepia.ppm cat-sepia
 
 #call sharpen-------------------------------------
 sharpen cat cat-sharpen
 
 #save to jpeg
-save res/new/cat-sharpen.jpeg cat-sharpen
+save res/mime/cat-sharpen.jpeg cat-sharpen
 
 #save to jpg
-save res/new/cat-sharpen.jpg cat-sharpen
+save res/mime/cat-sharpen.jpg cat-sharpen
 
 #save to png
-save res/new/cat-sharpen.png cat-sharpen
+save res/mime/cat-sharpen.png cat-sharpen
 
 #save to bmp
-save res/new/cat-sharpen.bmp cat-sharpen
+save res/mime/cat-sharpen.bmp cat-sharpen
 
 #save to ppm
-save res/new/cat-sharpen.ppm cat-sharpen
+save res/mime/cat-sharpen.ppm cat-sharpen
 
 #call blur-------------------------------------
 blur cat cat-blur
 
 #save to jpeg
-save res/new/cat-blur.jpeg cat-blur
+save res/mime/cat-blur.jpeg cat-blur
 
 #save to jpg
-save res/new/cat-blur.jpg cat-blur
+save res/mime/cat-blur.jpg cat-blur
 
 #save to png
-save res/new/cat-blur.png cat-blur
+save res/mime/cat-blur.png cat-blur
 
 #save to bmp
-save res/new/cat-blur.bmp cat-blur
+save res/mime/cat-blur.bmp cat-blur
 
 #save to ppm
-save res/new/cat-blur.ppm cat-blur
+save res/mime/cat-blur.ppm cat-blur
 
 #call dither-------------------------------------
 dither cat cat-dither
 
 #save to jpeg
-save res/new/cat-dither.jpeg cat-dither
+save res/mime/cat-dither.jpeg cat-dither
 
 #save to jpg
-save res/new/cat-dither.jpg cat-dither
+save res/mime/cat-dither.jpg cat-dither
 
 #save to png
-save res/new/cat-dither.png cat-dither
+save res/mime/cat-dither.png cat-dither
 
 #save to bmp
-save res/new/cat-dither.bmp cat-dither
+save res/mime/cat-dither.bmp cat-dither
 
 #save to ppm
-save res/new/cat-dither.ppm cat-dither
+save res/mime/cat-dither.ppm cat-dither

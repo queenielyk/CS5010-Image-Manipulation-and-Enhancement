@@ -66,21 +66,16 @@ public class FormatConvertTest {
         InputStream stream = new FileInputStream("res/format/cat." + type[i]);
         ImageHandler imageH = new ImageIOHandler();
         imageH.readImage(stream);
-//        BufferedImage img = ImageIO.read(new FileInputStream("res/format/cat." + type[i]));
-        OutputStream outputStream = new FileOutputStream("res/new/cat-" + type[i] + "." + type[j]);
+        OutputStream outputStream = new FileOutputStream("res/mime/cat-" + type[i] + "." + type[j]);
         model.loadImage(imageH, "cat");
         model.save("cat", outputStream, type[j]);
 
-        InputStream newStream = new FileInputStream("res/new/cat-" + type[i] + "." + type[j]);
+        InputStream newStream = new FileInputStream("res/mime/cat-" + type[i] + "." + type[j]);
         ImageHandler newImageH = new ImageIOHandler();
         newImageH.readImage(newStream);
-//        BufferedImage NewImg = ImageIO.read(
-//                new FileInputStream("res/new/cat-" + type[i] + "." + type[j]));
         System.out.println(
             "In:\t" + type[i] + " \tOut:\t" + type[j] + "\t-----\t" + compareImage(imageH,
                 newImageH));
-
-//        assertTrue(compareBufferImages(img, NewImg));
       }
     }
   }
