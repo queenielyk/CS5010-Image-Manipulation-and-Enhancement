@@ -23,7 +23,7 @@ where computation takes place.
 In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model
 if those operations are valid, return 'unknown' to user otherwise.
 
-### Format limitation
+## Format limitation
 
 Extending this project from assignment 4, we are now able to support more formats other than ASCII
 PPM.
@@ -122,6 +122,31 @@ Output
 as *Appendable*.
 This makes the controller capable to take not just *System.in/ out* but also files or simple string.
 
+## Read/Write Image
+
+This program support various image format, however they need a different way to read/write. We isolated this handling to keep the dependency of Model.
+```bash
+mime/model
+    ├── AbsrtuctImageHandler.java
+    ├── ImageHandler.java
+    ├── ImageIOHandler.java
+    └── PpmHandler.java
+```
+`ImageHandler.java` is an interface that indicates what kind of actions a hadnler should have:
+- Read image
+- Get image
+- Get info
+- Save image
+
+`AbstractImageHandler.java` is an abstract class to implement methods that indicated by interface `ImageHandler.java` and each concrete class behaves the same.
+
+`ImageIOHandler.java` and `PpmHandler.java` extends `AbstractImageHandler.java` and implements methods that the behavior is depends on itself.
+
+Once the controller recognized a command is related to read/write image, it will determine which handler it should invoke based on the format of that image.
+> ppm → PpmHandler
+> 
+> bmp / jpg / jpeg / png → ImageIOHandler
+
 ## Model
 
 **This model design is not compatible to the previous model design. For more details, read [Change Log](#1-image-representation-linked-list---3d-array)**
@@ -218,21 +243,21 @@ An image Dimension: 2x4
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
 ```bash
 core/res
-    ├── cat.ppm
-    ├── format
-    │   ├── cat.bmp
-    │   ├── cat.jpeg
-    │   ├── cat.jpg
-    │   ├── cat.png
-    │   ├── cat.ppm
-    │   └── something.png
+   ├── cat.ppm
+   └── format
+       ├── cat.bmp
+       ├── cat.jpeg
+       ├── cat.jpg
+       ├── cat.png
+       ├── cat.ppm
+       └── something.png
 ```
 
 ## Change Log
 
 ### From Assignment 4 to Assignment 5
 
-#### 1. Image representation: Linked List -> 3D-Array
+#### 1. Image representation: Linked List → 3D-Array
 
 We used Linked List to represent an image in assignment 4;
 however this is not convenient for us to apply filter matrix.
@@ -263,6 +288,6 @@ Assignment 5 supports:
 
 Besides, regardless the format of the image being loaded, it's always an option to save the image to
 another format.
-> e.g. load xxx.ppm -> save xxx.bmp
+> e.g. load xxx.ppm → save xxx.bmp
 
 To apply these new operations, please refer to [Instruction](#Instruction).
