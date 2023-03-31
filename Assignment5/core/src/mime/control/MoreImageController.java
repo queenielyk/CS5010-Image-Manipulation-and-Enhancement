@@ -2,6 +2,7 @@ package mime.control;
 
 import ime.control.IController;
 import ime.control.ImageController;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
 import mime.control.command.ColorTrans;
 import mime.control.command.Dither;
 import mime.control.command.Filter;
@@ -49,7 +51,7 @@ public class MoreImageController extends ImageController {
     //cmd line option
     if (args.length > 0 && fileOption != -1) {
       IController ctrl = new MoreImageController(new StringReader("run " + args[fileOption + 1]),
-          System.out);
+              System.out);
       ctrl.run(new MoreImageProcessorImpl());
     } else {
       //Example main program
@@ -93,9 +95,9 @@ public class MoreImageController extends ImageController {
           if (args.size() != 2 && args.size() != 3) {
             throw wnaE;
           }
-          cmd = args.size() == 2 ?
-              new ColorTrans("luma-component", args.get(0), args.get(1))
-              : new ColorTrans(args.get(0), args.get(1), args.get(2));
+          cmd = args.size() == 2
+                  ? new ColorTrans("luma-component", args.get(0), args.get(1))
+                  : new ColorTrans(args.get(0), args.get(1), args.get(2));
           break;
         case "sepia":
           if (args.size() != 2) {
@@ -133,8 +135,8 @@ public class MoreImageController extends ImageController {
         output.append("!<Error>!: \t" + iae + "\n");
       } catch (FileNotFoundException fne) {
         output.append("!<Error>!: \t" + fne.toString()
-            .replaceAll("The system cannot find the path specified",
-                "No such file or directory") + "\n");
+                .replaceAll("The system cannot find the path specified",
+                        "No such file or directory") + "\n");
       }
     }
 

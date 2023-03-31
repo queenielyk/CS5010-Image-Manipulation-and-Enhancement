@@ -58,7 +58,8 @@ public class ImageIOHandler extends AbsrtuctImageHandler {
   }
 
   @Override
-  public void saveImage(OutputStream stream, String format, int[] info, int[][][] image) throws IOException {
+  public void saveImage(OutputStream stream, String format, int[] info, int[][][] image)
+          throws IOException {
 
     BufferedImage buffImage = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_RGB);
     int[] rgb;

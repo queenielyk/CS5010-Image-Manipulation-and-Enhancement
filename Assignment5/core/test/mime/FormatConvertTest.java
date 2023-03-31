@@ -50,31 +50,31 @@ public class FormatConvertTest {
     }
   }
 
-//  @Test
-//  public void Test() throws IOException {
-//    String[] type = {"png", "bmp", "ppm"};
-//
-//    MoreImageProcessor model = null;
-//    MoreImageCommand commandLoad = null;
-//    MoreImageCommand commandSave = null;
-//    for (int j = 0; j < type.length; j++) {
-//      for (int i = 0; i < type.length; i++) {
-//        model = new MoreImageProcessorImpl();
-//        commandLoad = new LoadInputStream("res/format/cat." + type[i], "cat-" + type[i]);
-//        commandLoad.execute(model);
-//
-//        commandSave = new SaveOutStream("res/mime/cat-" + type[i] + "." + type[j],
-//            "cat-" + type[i]);
-//        commandSave.execute(model);
-//
-//        commandLoad = new LoadInputStream("res/mime/cat-" + type[i] + "." + type[j],
-//            "cat-" + type[j]);
-//        commandLoad.execute(model);
-//
-//        compareImage(model, "cat-" + type[i], "cat-" + type[j]);
-//      }
-//    }
-//  }
+  //  @Test
+  //  public void Test() throws IOException {
+  //    String[] type = {"png", "bmp", "ppm"};
+  //
+  //    MoreImageProcessor model = null;
+  //    MoreImageCommand commandLoad = null;
+  //    MoreImageCommand commandSave = null;
+  //    for (int j = 0; j < type.length; j++) {
+  //      for (int i = 0; i < type.length; i++) {
+  //        model = new MoreImageProcessorImpl();
+  //        commandLoad = new LoadInputStream("res/format/cat." + type[i], "cat-" + type[i]);
+  //        commandLoad.execute(model);
+  //
+  //        commandSave = new SaveOutStream("res/mime/cat-" + type[i] + "." + type[j],
+  //            "cat-" + type[i]);
+  //        commandSave.execute(model);
+  //
+  //        commandLoad = new LoadInputStream("res/mime/cat-" + type[i] + "." + type[j],
+  //            "cat-" + type[j]);
+  //        commandLoad.execute(model);
+  //
+  //        compareImage(model, "cat-" + type[i], "cat-" + type[j]);
+  //      }
+  //    }
+  //  }
 
 
 }

@@ -55,10 +55,10 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   /**
    * This method is deprecated.
+   * Replaced by {@link #loadImage(int[] info, int[][][] image, String name)}
    *
    * @throws UnsupportedOperationException when calling this method
    * @deprecated This method is no longer be supported because of supporting more image format.
-   * Replaced by {@link #loadImage(int[] info, int[][][] image, String name)}
    */
   @Deprecated
   public void loadImage(String path, String name)
@@ -92,36 +92,35 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
     switch (mode) {
       case "red-component":
-        greyscaleLooper(from, to, RGB -> new int[]{RGB[0], RGB[0], RGB[0]});
+        greyscaleLooper(from, to, rgb -> new int[]{rgb[0], rgb[0], rgb[0]});
         break;
       case "green-component":
-        greyscaleLooper(from, to, RGB -> new int[]{RGB[1], RGB[1], RGB[1]});
+        greyscaleLooper(from, to, rgb -> new int[]{rgb[1], rgb[1], rgb[1]});
         break;
       case "blue-component":
-        greyscaleLooper(from, to, RGB -> new int[]{RGB[2], RGB[2], RGB[2]});
+        greyscaleLooper(from, to, rgb -> new int[]{rgb[2], rgb[2], rgb[2]});
         break;
       case "value-component":
-        greyscaleLooper(from, to, RGB -> new int[]{
-                calValueValue(RGB), calValueValue(RGB), calValueValue(RGB)
+        greyscaleLooper(from, to, rgb -> new int[]{
+                calValueValue(rgb), calValueValue(rgb), calValueValue(rgb)
         });
         break;
       case "intensity-component":
-        greyscaleLooper(from, to, RGB -> new int[]{
-                calIntensityValue(RGB), calIntensityValue(RGB), calIntensityValue(RGB)
+        greyscaleLooper(from, to, rgb -> new int[]{
+                calIntensityValue(rgb), calIntensityValue(rgb), calIntensityValue(rgb)
         });
         break;
       case "greyscale":
       case "luma-component":
-        greyscaleLooper(from, to, RGB -> new int[]{
-                calLumaValue(RGB), calLumaValue(RGB), calLumaValue(RGB),
+        greyscaleLooper(from, to, rgb -> new int[]{
+                calLumaValue(rgb), calLumaValue(rgb), calLumaValue(rgb)
         });
         break;
       case "sepia":
-        greyscaleLooper(from, to, RGB -> new int[]{
-                (int) (0.393 * RGB[0] + 0.769 * RGB[1] + 0.189 * RGB[2]),
-                (int) (0.349 * RGB[0] + 0.686 * RGB[1] + 0.168 * RGB[2]),
-                (int) (0.272 * RGB[0] + 0.534 * RGB[1] + 0.131 * RGB[2])
-        });
+        greyscaleLooper(from, to, rgb -> new int[]{
+          (int) (0.393 * rgb[0] + 0.769 * rgb[1] + 0.189 * rgb[2]),
+          (int) (0.349 * rgb[0] + 0.686 * rgb[1] + 0.168 * rgb[2]),
+          (int) (0.272 * rgb[0] + 0.534 * rgb[1] + 0.131 * rgb[2])});
         break;
       default:
         throw new IllegalArgumentException("This grayscale component is not an option!");
@@ -131,31 +130,31 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   /**
    * A protected helper method to assist calculating value value.
    *
-   * @param RGB int[red, green, blue] of a pixel
+   * @param rgb int[red, green, blue] of a pixel
    * @return the value value
    */
-  protected final int calValueValue(int[] RGB) {
-    return Math.max(Math.max(RGB[0], RGB[1]), RGB[2]);
+  protected final int calValueValue(int[] rgb) {
+    return Math.max(Math.max(rgb[0], rgb[1]), rgb[2]);
   }
 
   /**
    * A protected helper method to assist calculating intensity value.
    *
-   * @param RGB int[red, green, blue] of a pixel
+   * @param rgb int[red, green, blue] of a pixel
    * @return the intensity value
    */
-  protected final int calIntensityValue(int[] RGB) {
-    return (RGB[0] + RGB[1] + RGB[2]) / 3;
+  protected final int calIntensityValue(int[] rgb) {
+    return (rgb[0] + rgb[1] + rgb[2]) / 3;
   }
 
   /**
    * A protected helper method to assist calculating luma value.
    *
-   * @param RGB int[red, green, blue] of a pixel
+   * @param rgb int[red, green, blue] of a pixel
    * @return the luma value
    */
-  protected final int calLumaValue(int[] RGB) {
-    return (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]);
+  protected final int calLumaValue(int[] rgb) {
+    return (int) (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]);
   }
 
   /**
@@ -281,9 +280,10 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   /**
    * This method is deprecated.
+   * Saving the image is Controller duty now.
+   *
    * @throws UnsupportedOperationException when calling this method
    * @deprecated This method is no longer be supported because of supporting more image format.
-   * Saving the image is Controller duty now.
    */
   @Deprecated
   public void save(String from, String path) throws IOException, UnsupportedOperationException {

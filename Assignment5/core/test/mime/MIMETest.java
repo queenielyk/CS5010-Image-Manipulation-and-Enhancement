@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import ime.IMETest;
 import ime.control.IController;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
