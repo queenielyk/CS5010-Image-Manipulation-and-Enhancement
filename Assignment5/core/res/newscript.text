@@ -19,7 +19,7 @@ load res/format/cat.jpeg cat
 #load png
 load res/format/cat.png cat
 
-#load png
+#load ppm
 load res/cat.ppm cat
 
 #call new greyscale with two arg----------------------------------------

@@ -28,7 +28,7 @@ Professor: Amit Shesh
    - sharpen sourceImg destImg
    ```
 
-2. Run packed `core.jar` file under `/res` on command promote with command lind option.
+2. Run packed `core.jar` file under root path on command promote with command lind option.
     ```bash
     java -jar core.jar -file {script}
     ```
