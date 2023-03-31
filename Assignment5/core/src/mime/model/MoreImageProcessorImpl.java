@@ -118,9 +118,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
         break;
       case "sepia":
         greyscaleLooper(from, to, rgb -> new int[]{
-          (int) (0.393 * rgb[0] + 0.769 * rgb[1] + 0.189 * rgb[2]),
-          (int) (0.349 * rgb[0] + 0.686 * rgb[1] + 0.168 * rgb[2]),
-          (int) (0.272 * rgb[0] + 0.534 * rgb[1] + 0.131 * rgb[2])});
+            (int) (0.393 * rgb[0] + 0.769 * rgb[1] + 0.189 * rgb[2]),
+            (int) (0.349 * rgb[0] + 0.686 * rgb[1] + 0.168 * rgb[2]),
+            (int) (0.272 * rgb[0] + 0.534 * rgb[1] + 0.131 * rgb[2])});
         break;
       default:
         throw new IllegalArgumentException("This grayscale component is not an option!");
