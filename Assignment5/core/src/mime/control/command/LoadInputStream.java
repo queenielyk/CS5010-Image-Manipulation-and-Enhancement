@@ -32,7 +32,8 @@ public class LoadInputStream implements MoreImageCommand {
 
   @Override
   public void execute(MoreImageProcessor model) throws IOException, IllegalStateException {
-    String format = path.split("\\.")[1];
+    String format = path.substring(path.lastIndexOf(".") + 1);
+
     ImageHandler handler = null;
 
     switch (format) {

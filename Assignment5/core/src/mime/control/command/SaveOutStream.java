@@ -24,7 +24,7 @@ public class SaveOutStream extends Save implements MoreImageCommand {
   @Override
   public void execute(MoreImageProcessor model) throws IOException, IllegalStateException {
     OutputStream outputStream = new FileOutputStream(path);
-    String format = path.split("\\.")[1];
+    String format = path.substring(path.lastIndexOf(".") + 1);
 
     ImageHandler handler = null;
     switch (format) {
