@@ -8,10 +8,10 @@ import ime.model.ImageProcessor;
  */
 public class RgbCombine implements ImageCommand {
 
-  private String to;
-  private String r;
-  private String g;
-  private String b;
+  private final String to;
+  private final String r;
+  private final String g;
+  private final String b;
 
   /**
    * Build a Rgb Combine command.

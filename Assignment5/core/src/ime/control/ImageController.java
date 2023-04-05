@@ -16,9 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +30,13 @@ import java.util.Set;
  */
 public class ImageController implements IController {
 
-  private ImageProcessor model;
   private final Readable in;
   private final Appendable out;
-  private Set<String> setScript;
+  private final Set<String> setScript;
+  protected ImageProcessor model;
 
   /**
-   * Builder a controller and pass with In and Out stream.
+   * Build a controller and pass with In and Out a stream.
    *
    * @param in  Input object
    * @param out Output object
@@ -47,6 +45,19 @@ public class ImageController implements IController {
     this.in = in;
     this.out = out;
     this.setScript = new HashSet<>();
+  }
+
+  /**
+   * Main method to run for controller.
+   *
+   * @param args command line argument passing in
+   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
+   *                     such path).
+   */
+  public static void main(String[] args) throws IOException {
+    //Example main program
+    IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
+    ctrl.run(new PpmProcessor());
   }
 
   @Override
@@ -79,11 +90,9 @@ public class ImageController implements IController {
           if (this.setScript.contains(args.get(0))) {
             throw new IllegalStateException("Encountered looping through scripts");
           }
-
           setScript.add(args.get(0));
           Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
           output.append(processFileScript(fileScan));
-
           setScript.remove(args.get(0));
           break;
         case "load":
@@ -156,8 +165,8 @@ public class ImageController implements IController {
           cmd = null;
           break;
       }
-    } catch (IllegalArgumentException wnag) {
-      output.append("!<Error>!: \t" + wnag + "\n");
+    } catch (IllegalArgumentException | FileNotFoundException fne) {
+      output.append("!<Error>!: \t" + fne + "\n");
     }
 
     if (cmd != null) {
@@ -183,7 +192,7 @@ public class ImageController implements IController {
    * @return String of execution result.
    * @throws IOException if command in script try to run script file that can not be found
    */
-  private String processFileScript(Scanner fileScan) throws IOException {
+  protected String processFileScript(Scanner fileScan) throws IOException {
     StringBuilder outputs = new StringBuilder();
 
     while (fileScan.hasNextLine()) {
@@ -217,29 +226,6 @@ public class ImageController implements IController {
         break;
       }
       out.append("\nEnter Command:");
-    }
-  }
-
-
-  /**
-   * Main method to run for controller.
-   *
-   * @param args command line argument passing in
-   * @throws IOException if command input into program cuase IOException (such as nosuchfile or no
-   *                     such path).
-   */
-  public static void main(String[] args) throws IOException {
-    int fileOption = Arrays.asList(args).indexOf("-file");
-
-    //cmd line option
-    if (args.length > 0 && fileOption != -1) {
-      IController ctrl = new ImageController(new StringReader("run " + args[fileOption + 1]),
-          System.out);
-      ctrl.run(new PpmProcessor());
-    } else {
-      //Example main program
-      IController ctrl = new ImageController(new InputStreamReader(System.in), System.out);
-      ctrl.run(new PpmProcessor());
     }
   }
 

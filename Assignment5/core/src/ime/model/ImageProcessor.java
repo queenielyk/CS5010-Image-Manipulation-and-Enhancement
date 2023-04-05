@@ -18,8 +18,8 @@ public interface ImageProcessor {
    * @throws FileNotFoundException the provided file is not exist
    * @throws IllegalStateException the magic number of the image is not P3
    */
-  public void loadImage(String path, String name)
-          throws FileNotFoundException, IllegalStateException;
+  void loadImage(String path, String name)
+      throws FileNotFoundException, IllegalStateException;
 
   /**
    * A method to convert specified image to greyscale based on specified mode. Modes to convert
@@ -31,7 +31,7 @@ public interface ImageProcessor {
    * @param to   new image's name
    * @throws IllegalArgumentException greyscale mode is not an option
    */
-  public void greyscale(String mode, String from, String to) throws IllegalArgumentException;
+  void greyscale(String mode, String from, String to) throws IllegalArgumentException;
 
   /**
    * A method to flip the specified image horizontally, and named it.
@@ -39,7 +39,7 @@ public interface ImageProcessor {
    * @param from name of image to be converted
    * @param to   new image's name
    */
-  public void horizontalFlip(String from, String to);
+  void horizontalFlip(String from, String to);
 
   /**
    * A method to flip the specified image vertically, and named it.
@@ -47,7 +47,7 @@ public interface ImageProcessor {
    * @param from name of image to be converted
    * @param to   new image's name
    */
-  public void verticalFlip(String from, String to);
+  void verticalFlip(String from, String to);
 
 
   /**
@@ -58,7 +58,7 @@ public interface ImageProcessor {
    * @param add  the brightness level to be added to the current level
    * @param to   new image's name
    */
-  public void adjustBrightness(String from, int add, String to);
+  void adjustBrightness(String from, int add, String to);
 
 
   /**
@@ -70,7 +70,7 @@ public interface ImageProcessor {
    * @param to        new image's name
    * @throws IllegalStateException Either image info is different to others
    */
-  public void combines(String redName, String greenName, String blueName, String to) throws IllegalStateException;
+  void combines(String redName, String greenName, String blueName, String to);
 
   /**
    * A method to export image to class dependent format and save at local. This method will
@@ -80,6 +80,6 @@ public interface ImageProcessor {
    * @param path relative path to save the image at local
    * @throws IOException unable to write file
    */
-  public void save(String from, String path) throws IOException;
+  void save(String from, String path) throws IOException;
 
 }

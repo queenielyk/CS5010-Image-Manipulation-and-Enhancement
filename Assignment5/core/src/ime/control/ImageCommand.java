@@ -1,8 +1,7 @@
 package ime.control;
 
-import java.io.IOException;
-
 import ime.model.ImageProcessor;
+import java.io.IOException;
 
 /**
  * This interface represent a Command can be preformed on ImageProcessor Model.

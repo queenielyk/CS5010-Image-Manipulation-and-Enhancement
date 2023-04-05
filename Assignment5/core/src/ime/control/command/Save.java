@@ -1,18 +1,23 @@
 package ime.control.command;
 
-import java.io.IOException;
-
 import ime.control.ImageCommand;
 import ime.model.ImageProcessor;
+import java.io.IOException;
 
 /**
  * This class represent a save command.
  */
 public class Save implements ImageCommand {
 
-  private String path;
-  private String from;
+  protected final String path;
+  protected final String from;
 
+  /**
+   * Build a save command.
+   *
+   * @param path file path to save to
+   * @param from source image name
+   */
   public Save(String path, String from) {
     this.path = path;
     this.from = from;

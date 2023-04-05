@@ -18,8 +18,10 @@ import javax.imageio.ImageIO;
  */
 public class PpmProcessor implements ImageProcessor {
 
-  private Map<String, int[][][]> images;
-  private Map<String, int[]> infos;
+  private final Map<String, ImageComp> images;
+  private int height;
+  private int width;
+  private int maxValue;
 
   /**
    * A constructor to construct a new IME.model.PpmProcessor.

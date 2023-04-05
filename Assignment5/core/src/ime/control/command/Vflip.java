@@ -8,9 +8,15 @@ import ime.model.ImageProcessor;
  */
 public class Vflip implements ImageCommand {
 
-  private String from;
-  private String to;
+  private final String from;
+  private final String to;
 
+  /**
+   * Build a vflip command.
+   *
+   * @param from Source Image Name
+   * @param to   Dest Image Name
+   */
   public Vflip(String from, String to) {
     this.from = from;
     this.to = to;

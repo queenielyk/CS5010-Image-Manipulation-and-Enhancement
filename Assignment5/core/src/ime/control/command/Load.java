@@ -1,22 +1,21 @@
 package ime.control.command;
 
-import java.io.FileNotFoundException;
-
 import ime.control.ImageCommand;
 import ime.model.ImageProcessor;
+import java.io.FileNotFoundException;
 
 /**
  * This class represent a load command.
  */
 public class Load implements ImageCommand {
 
-  private String path;
-  private String imgName;
+  private final String path;
+  private final String imgName;
 
   /**
    * Build a load command.
    *
-   * @param path string to load file from
+   * @param path    string to load file from
    * @param imgName name of image file will be store as
    */
   public Load(String path, String imgName) {
