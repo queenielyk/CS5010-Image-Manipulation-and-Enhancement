@@ -1,0 +1,116 @@
+#new script supported by MIEM package
+
+#convert image to other format----------------------------------
+load res/cat.ppm cat
+save res/format/cat.jpg cat
+save res/format/cat.jpeg cat
+save res/format/cat.png cat
+save res/format/cat.bmp cat
+
+#load jpg----------------------------------------------------------------
+load res/format/cat.jpg cat
+
+#load bmp
+load res/format/cat.bmp cat
+
+#load jpeg
+load res/format/cat.jpeg cat
+
+#load png
+load res/format/cat.png cat
+
+#load ppm
+load res/cat.ppm cat
+
+#call new greyscale with two arg----------------------------------------
+greyscale cat cat-grey2
+
+#save to jpeg
+save res/mime/cat-grey2.jpeg cat-grey2
+
+#save to jpg
+save res/mime/cat-grey2.jpg cat-grey2
+
+#save to png
+save res/mime/cat-grey2.png cat-grey2
+
+#save to bmp
+save res/mime/cat-grey2.bmp cat-grey2
+
+#save to ppm
+save res/mime/cat-grey2.ppm cat-grey2
+
+#call sepia-------------------------------------
+sepia cat cat-sepia
+
+#save to jpeg
+save res/mime/cat-sepia.jpeg cat-sepia
+
+#save to jpg
+save res/mime/cat-sepia.jpg cat-sepia
+
+#save to png
+save res/mime/cat-sepia.png cat-sepia
+
+#save to bmp
+save res/mime/cat-sepia.bmp cat-sepia
+
+#save to ppm
+save res/mime/cat-sepia.ppm cat-sepia
+
+#call sharpen-------------------------------------
+sharpen cat cat-sharpen
+
+#save to jpeg
+save res/mime/cat-sharpen.jpeg cat-sharpen
+
+#save to jpg
+save res/mime/cat-sharpen.jpg cat-sharpen
+
+#save to png
+save res/mime/cat-sharpen.png cat-sharpen
+
+#save to bmp
+save res/mime/cat-sharpen.bmp cat-sharpen
+
+#save to ppm
+save res/mime/cat-sharpen.ppm cat-sharpen
+
+#call blur-------------------------------------
+blur cat cat-blur
+
+#save to jpeg
+save res/mime/cat-blur.jpeg cat-blur
+
+#save to jpg
+save res/mime/cat-blur.jpg cat-blur
+
+#save to png
+save res/mime/cat-blur.png cat-blur
+
+#save to bmp
+save res/mime/cat-blur.bmp cat-blur
+
+#save to ppm
+save res/mime/cat-blur.ppm cat-blur
+
+#call dither-------------------------------------
+dither cat cat-dither
+
+#save to jpeg
+save res/mime/cat-dither.jpeg cat-dither
+
+#save to jpg
+save res/mime/cat-dither.jpg cat-dither
+
+#save to png
+save res/mime/cat-dither.png cat-dither
+
+#save to bmp
+save res/mime/cat-dither.bmp cat-dither
+
+#save to ppm
+save res/mime/cat-dither.ppm cat-dither
+
+#run the old srcipt.text
+run res/script.text
