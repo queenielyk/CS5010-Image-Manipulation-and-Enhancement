@@ -1,15 +1,16 @@
 package ime.model;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.function.Function;
+import javax.imageio.ImageIO;
 
 /**
  * A class to implement interface IME.model.ImageProcessor than specialized to ppm format image. A
@@ -26,12 +27,13 @@ public class PpmProcessor implements ImageProcessor {
    * A constructor to construct a new IME.model.PpmProcessor.
    */
   public PpmProcessor() {
-    images = new HashMap<>();
+    images = new HashMap<String, int[][][]>();
+    infos = new HashMap<>();
   }
 
   @Override
   public void loadImage(String path, String name)
-      throws FileNotFoundException, IllegalStateException {
+          throws FileNotFoundException, IllegalStateException {
 
     if (!path.endsWith(".ppm")) {
       throw new IllegalStateException("Invalid Image file: Only ppm images are accepted");
@@ -47,29 +49,19 @@ public class PpmProcessor implements ImageProcessor {
     if (!token.equals("P3")) {
       throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
     }
-    this.width = sc.nextInt();
-    this.height = sc.nextInt();
-    this.maxValue = sc.nextInt();
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+    int max = sc.nextInt();
+    infos.put(name, new int[]{width, height, max});
+    int[][][] imageArray = new int[height][width][];
 
-    ImageComp chain = null;
-    ImageComp traveler = null;
-    for (int row = 0; row < this.height; row++) {
-      for (int col = 0; col < this.width; col++) {
-        int r = sc.nextInt();
-        int g = sc.nextInt();
-        int b = sc.nextInt();
-
-        if (row == 0 && col == 0) {
-          chain = new ImageCompImp(r, g, b);
-          traveler = chain;
-        } else {
-          ImageComp current = new ImageCompImp(r, g, b);
-          traveler.setNext(current);
-          traveler = current;
-        }
+    for (int row = 0; row < height; row++) {
+      for (int col = 0; col < width; col++) {
+        imageArray[row][col] = new int[]{sc.nextInt(), sc.nextInt(), sc.nextInt()};
       }
     }
-    images.put(name, chain);
+    images.put(name, imageArray);
+
   }
 
   /**
@@ -95,6 +87,34 @@ public class PpmProcessor implements ImageProcessor {
     return builder.toString();
   }
 
+
+  /**
+   * Read Image file (.jpg .png) from path
+   * @param path path of the .ppm image
+   * @return a String of image content
+   * @throws IOException the path and file name is not exist
+   */
+  public void readImage(String path,String name) throws IOException {
+    //Read file from path
+    BufferedImage image = ImageIO.read(new FileInputStream(path));
+
+    int width = image.getWidth();
+    int height = image.getHeight();
+    int[][][] imageArray = new int[height][width][3];
+
+    for(int j=0;j<height;j++) {
+      for (int i = 0; i < width; i++) {
+        Color c= new Color(image.getRGB(i,j));
+        images.values();
+        imageArray[i][j][0]=c.getRed();
+        imageArray[i][j][1]=c.getGreen();
+        imageArray[i][j][2]=c.getBlue();
+      }
+    }
+    images.put(name,imageArray);
+    infos.put(name,new int[]{width, height, 255});
+  }
+
   /**
    * A helper method to check existence of  the to be processed image.
    *
@@ -112,38 +132,36 @@ public class PpmProcessor implements ImageProcessor {
 
     checkImageExistence(from);
 
-    ImageComp fromChain = images.get(from);
-
     switch (mode) {
       case "red-component":
-        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(RGB[0], RGB[0], RGB[0]));
+        greyscaleLooper(from, to, RGB -> new int[]{RGB[0], RGB[0], RGB[0]});
         break;
       case "green-component":
-        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(RGB[1], RGB[1], RGB[1]));
+        greyscaleLooper(from, to, RGB -> new int[]{RGB[1], RGB[1], RGB[1]});
         break;
       case "blue-component":
-        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(RGB[2], RGB[2], RGB[2]));
+        greyscaleLooper(from, to, RGB -> new int[]{RGB[2], RGB[2], RGB[2]});
         break;
       case "value-component":
-        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
-            Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
-            Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
-            Math.max(Math.max(RGB[0], RGB[1]), RGB[2]))
-        );
+        greyscaleLooper(from, to, RGB -> new int[]{
+                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
+                Math.max(Math.max(RGB[0], RGB[1]), RGB[2]),
+                Math.max(Math.max(RGB[0], RGB[1]), RGB[2])
+        });
         break;
       case "intensity-component":
-        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
-            (RGB[0] + RGB[1] + RGB[2]) / 3,
-            (RGB[0] + RGB[1] + RGB[2]) / 3,
-            (RGB[0] + RGB[1] + RGB[2]) / 3)
-        );
+        greyscaleLooper(from, to, RGB -> new int[]{
+                (RGB[0] + RGB[1] + RGB[2]) / 3,
+                (RGB[0] + RGB[1] + RGB[2]) / 3,
+                (RGB[0] + RGB[1] + RGB[2]) / 3
+        });
         break;
       case "luma-component":
-        greyscaleLooper(fromChain, to, RGB -> new ImageCompImp(
-            (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
-            (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
-            (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]))
-        );
+        greyscaleLooper(from, to, RGB -> new int[]{
+                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
+                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]),
+                (int) (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2])
+        });
         break;
       default:
         throw new IllegalArgumentException("This grayscale component is not an option!");
@@ -155,27 +173,23 @@ public class PpmProcessor implements ImageProcessor {
    * specified function to each component to attain a new component. The function is passed by
    * invoker that is specified based on the visualization mode.
    *
-   * @param fromChain  component chain of the target image
+   * @param from       name of image to be converted
    * @param to         new image's name
    * @param conversion function define how a new component to be constructed
    */
-  private void greyscaleLooper(ImageComp fromChain, String to,
-      Function<int[], ImageComp> conversion) {
-    ImageComp toChain = null;
-    ImageComp prevComp = null;
-    while (fromChain != null) {
-      ImageComp current = conversion.apply(fromChain.getRGB());
-      if (toChain == null) {
-        toChain = current;
-      }
-      if (prevComp != null) {
-        prevComp.setNext(current);
-      }
-      prevComp = current;
+  private void greyscaleLooper(String from, String to, Function<int[], int[]> conversion) {
 
-      fromChain = fromChain.getNext();
+    int[][][] fromImage = images.get(from);
+    int[] info = infos.get(from);
+    int[][][] toImage = new int[info[1]][info[0]][];
+
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        toImage[row][col] = conversion.apply(fromImage[row][col]);
+      }
     }
-    images.put(to, toChain);
+    infos.put(to, info);
+    images.put(to, toImage);
   }
 
   @Override
@@ -183,74 +197,36 @@ public class PpmProcessor implements ImageProcessor {
 
     checkImageExistence(from);
 
-    ImageComp fromChain = images.get(from);
-    ImageComp toChain = null;
-    Queue<ImageComp> prevRowEnds = new LinkedList<>();
-    ImageComp prevCol = null;
-    int column = 0;
+    int[][][] fromImage = images.get(from);
+    int[] info = infos.get(from);
+    int[][][] toImage = new int[info[1]][info[0]][];
 
-    while (fromChain != null) {
-      int[] rgb = fromChain.getRGB();
-      ImageComp current = new ImageCompImp(rgb[0], rgb[1], rgb[2]);
-      column += 1;
-      if (prevCol != null) {
-        current.setNext(prevCol);
-      } else {
-        prevRowEnds.add(current);
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        toImage[row][col] = fromImage[row][info[0] - 1 - col];
       }
-      prevCol = current;
-
-      if (column == this.width) {
-        column = 0;
-        if (toChain == null) {
-          toChain = current;
-        }
-        prevCol = null;
-
-        if (toChain != current) {
-          ImageComp ending = prevRowEnds.poll();
-          if (ending != null) {
-            ending.setNext(current);
-          }
-        }
-      }
-
-      fromChain = fromChain.getNext();
     }
-    images.put(to, toChain);
+
+    infos.put(to, info);
+    images.put(to, toImage);
   }
+
 
   @Override
   public void verticalFlip(String from, String to) {
 
     checkImageExistence(from);
 
-    ImageComp fromChain = images.get(from);
-    Queue<ImageComp> prevRowStarts = new LinkedList<>();
-    ImageComp prevStart = null;
-    int column = 0;
+    int[][][] fromImage = images.get(from);
+    int[] info = infos.get(from);
+    int[][][] toImage = new int[info[1]][info[0]][];
 
-    while (fromChain != null) {
-      int[] rgb = fromChain.getRGB();
-      ImageComp current = new ImageCompImp(rgb[0], rgb[1], rgb[2]);
-      column += 1;
-      if (prevStart != null) {
-        prevStart.setNext(current);
-      } else {
-        prevRowStarts.add(current);
-      }
-      prevStart = current;
-
-      if (column == this.width) {
-        column = 0;
-        if (prevRowStarts.size() == 2) {
-          current.setNext(prevRowStarts.poll());
-        }
-        prevStart = null;
-      }
-      fromChain = fromChain.getNext();
+    for (int row = 0; row < info[1]; row++) {
+      toImage[row] = fromImage[info[1] - 1 - row];
     }
-    images.put(to, prevRowStarts.poll());
+
+    infos.put(to, info);
+    images.put(to, toImage);
   }
 
   @Override
@@ -258,79 +234,79 @@ public class PpmProcessor implements ImageProcessor {
 
     checkImageExistence(from);
 
-    ImageComp fromChain = images.get(from);
-    ImageComp toChain = null;
-    ImageComp prev = null;
+    int[][][] fromImage = images.get(from);
+    int[] info = infos.get(from);
+    int[][][] toImage = new int[info[1]][info[0]][];
 
-    while (fromChain != null) {
-      int[] rgb = fromChain.getRGB();
-      ImageComp current = new ImageCompImp(
-          Math.max(0, Math.min(rgb[0] + add, this.maxValue)),
-          Math.max(0, Math.min(rgb[1] + add, this.maxValue)),
-          Math.max(0, Math.min(rgb[2] + add, this.maxValue))
-      );
-      if (toChain == null) {
-        toChain = current;
-      } else {
-        prev.setNext(current);
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        int[] rgb = fromImage[row][col];
+        toImage[row][col] = new int[]{
+                Math.max(0, Math.min(rgb[0] + add, info[2])),
+                Math.max(0, Math.min(rgb[1] + add, info[2])),
+                Math.max(0, Math.min(rgb[2] + add, info[2]))
+        };
       }
-      prev = current;
-      fromChain = fromChain.getNext();
     }
-    images.put(to, toChain);
+
+    infos.put(to, info);
+    images.put(to, toImage);
   }
 
+
   @Override
-  public void combines(String redName, String greenName, String blueName, String to) {
+  public void combines(String redName, String greenName, String blueName, String to)
+          throws IllegalStateException {
 
     checkImageExistence(redName);
     checkImageExistence(greenName);
     checkImageExistence(blueName);
 
-    ImageComp redChain = images.get(redName);
-    ImageComp greenChain = images.get(greenName);
-    ImageComp blueChain = images.get(blueName);
-    ImageComp toChain = null;
-    ImageComp prev = null;
+    int[] redInfo = infos.get(redName);
+    int[] greenInfo = infos.get(greenName);
+    int[] blueInfo = infos.get(blueName);
 
-    while (redChain != null && greenChain != null && blueChain != null) {
-
-      ImageComp current = new ImageCompImp(
-          redChain.getRGB()[0], greenChain.getRGB()[1], blueChain.getRGB()[2]);
-
-      if (toChain == null) {
-        toChain = current;
-      }
-      if (prev != null) {
-        prev.setNext(current);
-      }
-      prev = current;
-
-      redChain = redChain.getNext();
-      greenChain = greenChain.getNext();
-      blueChain = blueChain.getNext();
+    if (redInfo != greenInfo || greenInfo != blueInfo) {
+      throw new IllegalStateException("These images have different info, can't combine them!");
     }
-    images.put(to, toChain);
+
+    int[][][] redImage = images.get(redName);
+    int[][][] greenImage = images.get(greenName);
+    int[][][] blueImage = images.get(blueName);
+    int[][][] toImage = new int[redInfo[1]][redInfo[0]][];
+
+    for (int row = 0; row < redInfo[1]; row++) {
+      for (int col = 0; col < redInfo[0]; col++) {
+        toImage[row][col] = new int[]{
+                redImage[row][col][0], greenImage[row][col][1], blueImage[row][col][2]
+        };
+      }
+    }
+
+    infos.put(to, redInfo);
+    images.put(to, toImage);
   }
 
   @Override
   public void save(String from, String path) throws IOException {
 
     checkImageExistence(from);
+    int[] info = infos.get(from);
 
     FileWriter imageWriter = new FileWriter(path);
     imageWriter.write("P3" + System.lineSeparator());
-    imageWriter.write(this.width + " " + this.height + System.lineSeparator());
-    imageWriter.write(this.maxValue + System.lineSeparator());
+    imageWriter.write(info[0] + " " + info[1] + System.lineSeparator());
+    imageWriter.write(info[2] + System.lineSeparator());
 
-    ImageComp temp = images.get(from);
-    while (temp != null) {
-      int[] rgb = temp.getRGB();
-      imageWriter.write(rgb[0] + System.lineSeparator());
-      imageWriter.write(rgb[1] + System.lineSeparator());
-      imageWriter.write(rgb[2] + System.lineSeparator());
-      temp = temp.getNext();
+    int[][][] fromImage = images.get(from);
+    for (int row = 0; row < info[1]; row++) {
+      for (int col = 0; col < info[0]; col++) {
+        for (int tmp : fromImage[row][col]) {
+          imageWriter.write(tmp + System.lineSeparator());
+        }
+      }
     }
+
     imageWriter.close();
   }
 }
