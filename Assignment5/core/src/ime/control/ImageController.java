@@ -1,8 +1,6 @@
 package ime.control;
 
 import ime.control.command.Brighten;
-import ime.control.command.Dither;
-import ime.control.command.Filter;
 import ime.control.command.Greyscale;
 import ime.control.command.Hflip;
 import ime.control.command.Load;
@@ -94,6 +92,7 @@ public class ImageController implements IController {
           Scanner fileScan = new Scanner(new FileInputStream(args.get(0)));
           output.append(processFileScript(fileScan));
           setScript.remove(args.get(0));
+
           break;
         case "load":
           if (args.size() != 2) {
@@ -125,6 +124,12 @@ public class ImageController implements IController {
           }
           cmd = new Brighten(Integer.parseInt(args.get(0)), args.get(1), args.get(2));
           break;
+        case "greyscale":
+          if (args.size() != 3) {
+            throw wnaE;
+          }
+          cmd = new Greyscale(args.get(0), args.get(1), args.get(2));
+          break;
         case "vertical-flip":
           if (args.size() != 2) {
             throw wnaE;
@@ -137,29 +142,6 @@ public class ImageController implements IController {
           }
           cmd = new Hflip(args.get(0), args.get(1));
           break;
-        // color Trans
-        case "greyscale":
-        case "sepia":
-          if (args.size() != 2 && args.size() != 3) {
-            throw wnaE;
-          }
-          cmd = args.size() == 2 ?
-              new Greyscale(in, args.get(0), args.get(1))
-              : new Greyscale(args.get(0), args.get(1), args.get(2));
-          break;
-        // filter
-        case "blur":
-        case "sharpen":
-          if (args.size() != 2) {
-            throw wnaE;
-          }
-          cmd = new Filter(in, args.get(0), args.get(1));
-          break;
-        case "dither":
-          if (args.size() != 2) {
-            throw wnaE;
-          }
-          cmd = new Dither(args.get(0),args.get(1));
         default:
           output.append("!<Error>!: \t" + String.format("Unknown command [%s]", in) + "\n");
           cmd = null;

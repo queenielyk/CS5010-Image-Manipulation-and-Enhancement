@@ -68,7 +68,6 @@ public interface ImageProcessor {
    * @param greenName the name of green-based greyscale image
    * @param blueName  the name of blue-based greyscale image
    * @param to        new image's name
-   * @throws IllegalStateException Either image info is different to others
    */
   void combines(String redName, String greenName, String blueName, String to);
 
