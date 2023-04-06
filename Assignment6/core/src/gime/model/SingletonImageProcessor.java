@@ -1,6 +1,6 @@
 package gime.model;
 
-public interface ImageProcessor extends ReadOnlyImageProcessor{
+public interface SingletonImageProcessor extends ReadOnlyImageProcessor{
   /**
    * A method to load image from an ImageReader object and store it.
    *

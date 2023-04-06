@@ -5,7 +5,7 @@ public class ReadOnlyImageProcessorImpl implements ReadOnlyImageProcessor {
   ReadOnlyImageProcessor processor;
 
   public ReadOnlyImageProcessorImpl() {
-    this.processor = ImageProcessorImpl.getInstance();
+    this.processor = SingletonImageProcessorImpl.getInstance();
   }
 
   @Override

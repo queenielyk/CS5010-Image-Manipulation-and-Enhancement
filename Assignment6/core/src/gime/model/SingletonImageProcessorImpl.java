@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-public class ImageProcessorImpl implements ImageProcessor {
+public class SingletonImageProcessorImpl implements SingletonImageProcessor {
 
-  private static ImageProcessorImpl instance;
+  private static SingletonImageProcessorImpl instance;
 
   private final Map<String, int[][][]> images; // <name, int[row, col, [r, g, b]]>
   private final Map<String, int[]> infos; // <name, int[width, height, maxi value]>
@@ -19,7 +19,7 @@ public class ImageProcessorImpl implements ImageProcessor {
   /**
    * A constructor to construct a MoreImageProcessor.
    */
-  private ImageProcessorImpl() {
+  private SingletonImageProcessorImpl() {
     this.images = new HashMap<>();
     this.infos = new HashMap<>();
     this.acceptFormat = new HashSet<>(Arrays.asList("ppm", "jpg", "jpeg", "png", "bmp"));
@@ -39,9 +39,9 @@ public class ImageProcessorImpl implements ImageProcessor {
   }
 
 
-  public static ImageProcessorImpl getInstance() {
+  public static SingletonImageProcessorImpl getInstance() {
     if (instance == null) {
-      instance = new ImageProcessorImpl();
+      instance = new SingletonImageProcessorImpl();
     }
     return instance;
   }
