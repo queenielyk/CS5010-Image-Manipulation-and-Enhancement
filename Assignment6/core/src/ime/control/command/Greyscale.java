@@ -27,6 +27,6 @@ public class Greyscale implements ImageCommand {
 
   @Override
   public void execute(ImageProcessor model) {
-    model.greyscale(mode, from, to);
+    model.colorTrans(mode, from, to);
   }
 }

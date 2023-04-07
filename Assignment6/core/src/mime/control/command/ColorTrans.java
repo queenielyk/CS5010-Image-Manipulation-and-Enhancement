@@ -30,6 +30,6 @@ public class ColorTrans implements MoreImageCommand {
 
   @Override
   public void execute(MoreImageProcessor model) throws IOException {
-    model.greyscale(mode, from, to);
+    model.colorTrans(mode, from, to);
   }
 }

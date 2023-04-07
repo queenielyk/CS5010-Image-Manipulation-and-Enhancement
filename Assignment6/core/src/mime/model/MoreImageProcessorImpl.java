@@ -85,8 +85,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     }
   }
 
-  @Override
-  public void greyscale(String mode, String from, String to) throws IllegalArgumentException {
+  public void colorTrans(String mode, String from, String to) throws IllegalArgumentException {
 
     checkImageExistence(from);
 
@@ -338,7 +337,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   public void dithering(String from, String to) {
     checkImageExistence(from);
 
-    this.greyscale("greyscale", from, to);
+    this.colorTrans("greyscale", from, to);
     int[] info = infos.get(to);
     int[][][] fromImage = images.get(to);
 

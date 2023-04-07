@@ -31,8 +31,8 @@ public class RgbSplit implements ImageCommand {
 
   @Override
   public void execute(ImageProcessor model) {
-    model.greyscale("red-component", from, r);
-    model.greyscale("green-component", from, g);
-    model.greyscale("blue-component", from, b);
+    model.colorTrans("red-component", from, r);
+    model.colorTrans("green-component", from, g);
+    model.colorTrans("blue-component", from, b);
   }
 }

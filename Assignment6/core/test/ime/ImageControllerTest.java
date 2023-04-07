@@ -200,7 +200,7 @@ public class ImageControllerTest {
     }
 
     @Override
-    public void greyscale(String mode, String from, String to) {
+    public void colorTrans(String mode, String from, String to) {
       log.append("Mode:" + mode + " " + "From:" + from + " " + "To:" + to + "\n");
     }
 

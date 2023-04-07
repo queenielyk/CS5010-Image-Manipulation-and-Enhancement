@@ -31,7 +31,7 @@ public interface ImageProcessor {
    * @param to   new image's name
    * @throws IllegalArgumentException greyscale mode is not an option
    */
-  void greyscale(String mode, String from, String to) throws IllegalArgumentException;
+  void colorTrans(String mode, String from, String to) throws IllegalArgumentException;
 
   /**
    * A method to flip the specified image horizontally, and named it.

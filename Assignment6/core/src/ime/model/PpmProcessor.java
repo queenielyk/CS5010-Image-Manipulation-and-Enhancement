@@ -108,7 +108,7 @@ public class PpmProcessor implements ImageProcessor {
   }
 
   @Override
-  public void greyscale(String mode, String from, String to) throws IllegalArgumentException {
+  public void colorTrans(String mode, String from, String to) throws IllegalArgumentException {
 
     checkImageExistence(from);
 

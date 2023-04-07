@@ -1,11 +1,13 @@
 package gime.model;
 
+import mime.model.MoreImageProcessor;
+
 public class ReadOnlyImageProcessorImpl implements ReadOnlyImageProcessor {
 
   ReadOnlyImageProcessor processor;
 
-  public ReadOnlyImageProcessorImpl() {
-    this.processor = SingletonImageProcessorImpl.getInstance();
+  public ReadOnlyImageProcessorImpl(MoreImageProcessor processor) {
+    this.processor = processor;
   }
 
   @Override

@@ -1,5 +1,6 @@
 package mime.model;
 
+import gime.model.ReadOnlyImageProcessor;
 import ime.model.ImageProcessor;
 
 /**
@@ -13,7 +14,7 @@ import ime.model.ImageProcessor;
  * - Sharpen
  * - Dithering
  */
-public interface MoreImageProcessor extends ImageProcessor {
+public interface MoreImageProcessor extends ImageProcessor, ReadOnlyImageProcessor {
 
   /**
    * A method to load image from an ImageReader object and store it.
@@ -57,22 +58,5 @@ public interface MoreImageProcessor extends ImageProcessor {
    * @param to   new image's name
    */
   void dithering(String from, String to);
-
-  /**
-   * A method to return an image.
-   *
-   * @param name name of image
-   * @return image in form of int[][][]
-   */
-  int[][][] getImage(String name);
-
-  /**
-   * A method to return info of image.
-   *
-   * @param name name of image
-   * @return info in form of int[]
-   */
-  int[] getInfo(String name);
-
 
 }

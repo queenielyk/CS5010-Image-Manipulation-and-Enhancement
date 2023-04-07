@@ -179,7 +179,7 @@ public abstract class AbstractMIPTest {
   public void testGreyscaleRed() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("red-component", "original", "red");
+    processor.colorTrans("red-component", "original", "red");
 
     assertLooper(new int[][][]{
             {{234, 234, 234}, {209, 209, 209}, {168, 168, 168}},
@@ -191,7 +191,7 @@ public abstract class AbstractMIPTest {
   public void testGreyscaleGreen() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("green-component", "original", "green");
+    processor.colorTrans("green-component", "original", "green");
 
     assertLooper(new int[][][]{
             {{232, 232, 232}, {194, 194, 194}, {150, 150, 150}},
@@ -203,7 +203,7 @@ public abstract class AbstractMIPTest {
   public void testGreyscaleBlue() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("blue-component", "original", "blue");
+    processor.colorTrans("blue-component", "original", "blue");
 
     assertLooper(new int[][][]{
             {{236, 236, 236}, {193, 193, 193}, {148, 148, 148}},
@@ -215,7 +215,7 @@ public abstract class AbstractMIPTest {
   public void testGreyscaleValue() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("value-component", "original", "value");
+    processor.colorTrans("value-component", "original", "value");
 
     assertLooper(new int[][][]{
             {{236, 236, 236}, {209, 209, 209}, {168, 168, 168}},
@@ -227,7 +227,7 @@ public abstract class AbstractMIPTest {
   public void testGreyscaleIntensity() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("intensity-component", "original", "intensity");
+    processor.colorTrans("intensity-component", "original", "intensity");
 
     assertLooper(new int[][][]{
             {{234, 234, 234}, {198, 198, 198}, {155, 155, 155}},
@@ -239,7 +239,7 @@ public abstract class AbstractMIPTest {
   public void testGreyscaleLuma() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("luma-component", "original", "luma");
+    processor.colorTrans("luma-component", "original", "luma");
 
     assertLooper(new int[][][]{
             {{232, 232, 232}, {197, 197, 197}, {153, 153, 153}},
@@ -251,7 +251,7 @@ public abstract class AbstractMIPTest {
   public void testGreyScaleSepia() throws IOException {
 
     loadImageInvoker(src, "original");
-    processor.greyscale("sepia", "original", "sepia");
+    processor.colorTrans("sepia", "original", "sepia");
 
     assertLooper(new int[][][]{
             {{255, 255, 218}, {255, 238, 185}, {209, 186, 145}},
@@ -262,9 +262,9 @@ public abstract class AbstractMIPTest {
   @Test
   public void testCombine() throws IOException {
     loadImageInvoker(src, "original");
-    processor.greyscale("red-component", "original", "red");
-    processor.greyscale("green-component", "original", "green");
-    processor.greyscale("blue-component", "original", "blue");
+    processor.colorTrans("red-component", "original", "red");
+    processor.colorTrans("green-component", "original", "green");
+    processor.colorTrans("blue-component", "original", "blue");
     processor.combines("red", "green", "blue", "combine");
 
     assertLooper(new int[][][]{
