@@ -13,8 +13,6 @@ import java.util.NoSuchElementException;
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
 
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -75,13 +73,7 @@ public class JFrameView extends JFrame implements IView {
     topbar.setLayout(new BoxLayout(topbar, BoxLayout.X_AXIS));
 
 
-    commandDD = new JComboBox<>() {
-      protected void fireActionEvent() {
-        if (this.hasFocus()) {
-          super.fireActionEvent();
-        }
-      }
-    };
+    commandDD = new CustomJComboBox();
     for (String key : commandsMap.keySet()) {
       commandDD.addItem(key);
     }
@@ -92,22 +84,10 @@ public class JFrameView extends JFrame implements IView {
     namep.setLayout(new BoxLayout(namep, BoxLayout.X_AXIS));
     namep.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
 
-    imagenameDD = new JComboBox<>() {
-      protected void fireActionEvent() {
-        if (this.hasFocus()) {
-          super.fireActionEvent();
-        }
-      }
-    };
+    imagenameDD = new CustomJComboBox();
     namep.add(imagenameDD);
 
-    imagenameEffectDD = new JComboBox<>() {
-      protected void fireActionEvent() {
-        if (this.hasFocus()) {
-          super.fireActionEvent();
-        }
-      }
-    };
+    imagenameEffectDD = new CustomJComboBox();
     namep.add(imagenameEffectDD);
 
     namep.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
@@ -117,101 +97,60 @@ public class JFrameView extends JFrame implements IView {
     btnp.setLayout(new BoxLayout(btnp, BoxLayout.X_AXIS));
     btnp.add(Box.createHorizontalGlue());
 
-    splitBtn = new JButton();
     try {
-      Image img = ImageIO.read(getClass().getResource("resources/arrows.png"));
-      splitBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+      splitBtn = new CustomJButton("resources/arrows.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    splitBtn.setOpaque(false);
-    splitBtn.setFocusPainted(false);
-    splitBtn.setBorderPainted(false);
-    splitBtn.setContentAreaFilled(false);
-    splitBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
     splitBtn.setActionCommand("rgb-split");
     btnp.add(splitBtn);
 
     Dimension boxFiller = new Dimension(20, 30);
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
-    combineBtn = new JButton();
     try {
-      Image img = ImageIO.read(getClass().getResource("resources/intersection.png"));
-      combineBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+      combineBtn = new CustomJButton("resources/intersection.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    combineBtn.setOpaque(false);
-    combineBtn.setFocusPainted(false);
-    combineBtn.setBorderPainted(false);
-    combineBtn.setContentAreaFilled(false);
-    combineBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
     combineBtn.setActionCommand("rgb-combine");
     btnp.add(combineBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
-    horizontalBtn = new JButton();
     try {
-      Image img = ImageIO.read(getClass().getResource("resources/horizontal-flip.png"));
-      horizontalBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+      horizontalBtn = new CustomJButton("resources/horizontal-flip.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    horizontalBtn.setOpaque(false);
-    horizontalBtn.setFocusPainted(false);
-    horizontalBtn.setBorderPainted(false);
-    horizontalBtn.setContentAreaFilled(false);
-    horizontalBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
     btnp.add(horizontalBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
-    verticalBtn = new JButton();
+
     try {
-      Image img = ImageIO.read(getClass().getResource("resources/vertical-flip.png"));
-      verticalBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+      verticalBtn = new CustomJButton("resources/vertical-flip.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    verticalBtn.setOpaque(false);
-    verticalBtn.setFocusPainted(false);
-    verticalBtn.setBorderPainted(false);
-    verticalBtn.setContentAreaFilled(false);
-    verticalBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
     btnp.add(verticalBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
-    addBtn = new JButton();
     try {
-      Image img = ImageIO.read(getClass().getResource("resources/add-new-50.png"));
-      addBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+      addBtn = new CustomJButton("resources/add-new-50.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    addBtn.setOpaque(false);
-    addBtn.setFocusPainted(false);
-    addBtn.setBorderPainted(false);
-    addBtn.setContentAreaFilled(false);
-    addBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
     btnp.add(addBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
-    saveBtn = new JButton();
     try {
-      Image img = ImageIO.read(getClass().getResource("resources/save-50.png"));
-      saveBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+      saveBtn = new CustomJButton("resources/save-50.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    saveBtn.setOpaque(false);
-    saveBtn.setFocusPainted(false);
-    saveBtn.setBorderPainted(false);
-    saveBtn.setContentAreaFilled(false);
-    saveBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
     btnp.add(saveBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
