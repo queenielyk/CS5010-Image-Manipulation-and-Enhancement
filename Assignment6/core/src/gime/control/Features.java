@@ -7,17 +7,17 @@ public interface Features {
 
   void save(String SavingPath, String ImgName);
 
-  void rgbSplit(String from, String r, String g, String b);
+  void rgbSplit(String from);
 
-  void rgbCombine(String to, String r, String g, String b);
+  void rgbCombine(String r, String g, String b);
 
   void brighten(int level, String from, String to);
 
   void greyscale(String mode, String from, String to);
 
-  void vflip(String from, String to);
+  void vflip(String from);
 
-  void hflip(String from, String to);
+  void hflip(String from);
 
   void sepia(String from, String to);
 

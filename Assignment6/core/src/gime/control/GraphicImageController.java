@@ -1,5 +1,7 @@
 package gime.control;
 
+import javax.swing.JOptionPane;
+
 import gime.view.IView;
 import ime.control.ImageCommand;
 import ime.control.command.Brighten;
@@ -39,39 +41,43 @@ public class GraphicImageController implements IGraphicController, Features {
       MoreImageCommand cmd = new LoadInputStream(path, imgName);
       cmd.execute((MoreImageProcessor) model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
     view.showImage(imgName);
-    view.updateNameList(imgName);
   }
 
   @Override
   public void save(String SavingPath, String ImgName) {
     try {
       MoreImageCommand cmd = new SaveOutStream(SavingPath, ImgName);
+      System.out.println();
       cmd.execute((MoreImageProcessor) model);
+      view.showDialog(JOptionPane.INFORMATION_MESSAGE, "Completed!");
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
   @Override
-  public void rgbSplit(String from, String r, String g, String b) {
+  public void rgbSplit(String from) {
     try {
-      ImageCommand cmd = new RgbSplit(from, r, g, b);
+      String[] rgb = new String[]{from + "-r", from + "-g", from + "-b"};
+      ImageCommand cmd = new RgbSplit(from, rgb[0], rgb[1], rgb[2]);
       cmd.execute(model);
+      view.dialogAskImgAfterSplit(rgb);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
   @Override
-  public void rgbCombine(String to, String r, String g, String b) {
+  public void rgbCombine(String r, String g, String b) {
     try {
-      ImageCommand cmd = new RgbCombine(to, r, g, b);
+      ImageCommand cmd = new RgbCombine(r + "-combine", r, g, b);
       cmd.execute(model);
+      view.showImage(r + "-combine");
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
@@ -81,7 +87,7 @@ public class GraphicImageController implements IGraphicController, Features {
       ImageCommand cmd = new Brighten(level, from, to);
       cmd.execute(model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
@@ -91,28 +97,30 @@ public class GraphicImageController implements IGraphicController, Features {
       MoreImageCommand cmd = new ColorTrans(mode, from, to);
       cmd.execute((MoreImageProcessor) model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
   @Override
-  public void vflip(String from, String to) {
+  public void vflip(String from) {
     try {
-      ImageCommand cmd = new Vflip(from, to);
+      ImageCommand cmd = new Vflip(from, from + "-vflip");
       cmd.execute(model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
+    view.showImage(from + "-vflip");
   }
 
   @Override
-  public void hflip(String from, String to) {
+  public void hflip(String from) {
     try {
-      ImageCommand cmd = new Hflip(from, to);
+      ImageCommand cmd = new Hflip(from, from + "-hflip");
       cmd.execute(model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
+    view.showImage(from + "-hflip");
   }
 
   @Override
@@ -121,7 +129,7 @@ public class GraphicImageController implements IGraphicController, Features {
       MoreImageCommand cmd = new ColorTrans("sepia", from, to);
       cmd.execute((MoreImageProcessor) model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
@@ -131,7 +139,7 @@ public class GraphicImageController implements IGraphicController, Features {
       MoreImageCommand cmd = new Filter("blur", from, to);
       cmd.execute((MoreImageProcessor) model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
@@ -141,7 +149,7 @@ public class GraphicImageController implements IGraphicController, Features {
       MoreImageCommand cmd = new Filter("sharpen", from, to);
       cmd.execute((MoreImageProcessor) model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
@@ -151,7 +159,7 @@ public class GraphicImageController implements IGraphicController, Features {
       MoreImageCommand cmd = new Dither(from, to);
       cmd.execute((MoreImageProcessor) model);
     } catch (Exception error) {
-      view.showErrorDialog(error.getMessage());
+      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 }
