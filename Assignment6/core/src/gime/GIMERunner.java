@@ -1,13 +1,17 @@
 package gime;
 
 import gime.control.GraphicImageController;
+import gime.model.ReadOnlyImageProcessorImpl;
 import gime.view.JFrameView;
 import ime.control.IController;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.Arrays;
+
 import mime.control.MoreImageController;
+import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
 
 public class GIMERunner {
@@ -19,7 +23,7 @@ public class GIMERunner {
     //RUN script then END
     if (args.length > 0 && fileOption != -1) {
       IController ctrl = new MoreImageController(new StringReader("run " + args[fileOption + 1]),
-          System.out);
+              System.out);
       ctrl.run(new MoreImageProcessorImpl());
       //Text-Mode
     } else if (textOption != -1) {
@@ -29,7 +33,8 @@ public class GIMERunner {
     // GUI-Mode
     else {
       GraphicImageController ctrl = new GraphicImageController();
-      ctrl.runGUI(new JFrameView("GIME APP"),new MoreImageProcessorImpl());
+      MoreImageProcessor processor = new MoreImageProcessorImpl();
+      ctrl.runGUI(new JFrameView("GIME APP", new ReadOnlyImageProcessorImpl(processor)), processor);
     }
   }
 
