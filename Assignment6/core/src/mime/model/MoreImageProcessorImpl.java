@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -79,9 +80,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param name image to be processed
    * @throws IllegalStateException image is not exist
    */
-  protected final void checkImageExistence(String name) throws IllegalStateException {
+  protected final void checkImageExistence(String name) throws NoSuchElementException {
     if (!images.containsKey(name)) {
-      throw new IllegalStateException("This image is not exist!");
+      throw new NoSuchElementException("Image: " + name + " is not exist!");
     }
   }
 
@@ -390,11 +391,13 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
 
   @Override
   public int[][][] getImage(String name) {
+    checkImageExistence(name);
     return images.get(name);
   }
 
   @Override
   public int[] getInfo(String name) {
+    checkImageExistence(name);
     return infos.get(name);
   }
 
