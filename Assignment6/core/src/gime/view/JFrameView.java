@@ -5,8 +5,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
@@ -34,6 +36,9 @@ public class JFrameView extends JFrame implements IView {
   private JButton horizontalBtn;
   private JButton verticalBtn;
 
+  private JButton splitBtn;
+  private JButton combineBtn;
+
   private JComboBox<String> commandDD;
   private JComboBox<String> imagenameDD;
   private JComboBox<String> imagenameEffectDD;
@@ -50,7 +55,6 @@ public class JFrameView extends JFrame implements IView {
     commandsMap.put("Color Transform - Greyscale", "colorTrans greyscale");
     commandsMap.put("Color Transform - Sepia", "colorTrans sepia");
     commandsMap.put("Brighten", "brighten");
-    commandsMap.put("RGB combines", "rgb-combine");
     commandsMap.put("Blur", "blur");
     commandsMap.put("Sharpen", "sharpen");
     commandsMap.put("Dither", "dither");
@@ -78,11 +82,10 @@ public class JFrameView extends JFrame implements IView {
         }
       }
     };
-    commandDD.addItem("Raw");
-    commandDD.setSelectedItem("Raw");
     for (String key : commandsMap.keySet()) {
       commandDD.addItem(key);
     }
+    commandDD.setSelectedIndex(-1);
     topbar.add(commandDD);
 
     namep = new JPanel();
@@ -114,23 +117,55 @@ public class JFrameView extends JFrame implements IView {
     btnp.setLayout(new BoxLayout(btnp, BoxLayout.X_AXIS));
     btnp.add(Box.createHorizontalGlue());
 
+    splitBtn = new JButton();
+    try {
+      Image img = ImageIO.read(getClass().getResource("resources/arrows.png"));
+      splitBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    } catch (Exception ex) {
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
+    }
+    splitBtn.setOpaque(false);
+    splitBtn.setFocusPainted(false);
+    splitBtn.setBorderPainted(false);
+    splitBtn.setContentAreaFilled(false);
+    splitBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
+    splitBtn.setActionCommand("rgb-split");
+    btnp.add(splitBtn);
+
+    Dimension boxFiller = new Dimension(20, 30);
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
+
+    combineBtn = new JButton();
+    try {
+      Image img = ImageIO.read(getClass().getResource("resources/intersection.png"));
+      combineBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    } catch (Exception ex) {
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
+    }
+    combineBtn.setOpaque(false);
+    combineBtn.setFocusPainted(false);
+    combineBtn.setBorderPainted(false);
+    combineBtn.setContentAreaFilled(false);
+    combineBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
+    combineBtn.setActionCommand("rgb-combine");
+    btnp.add(combineBtn);
+
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
     horizontalBtn = new JButton();
     try {
       Image img = ImageIO.read(getClass().getResource("resources/horizontal-flip.png"));
       horizontalBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     } catch (Exception ex) {
-      System.out.println(ex.getMessage());
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
     horizontalBtn.setOpaque(false);
     horizontalBtn.setFocusPainted(false);
     horizontalBtn.setBorderPainted(false);
     horizontalBtn.setContentAreaFilled(false);
     horizontalBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
-    horizontalBtn.setActionCommand("horizontal-flip");
     btnp.add(horizontalBtn);
 
-    Dimension boxFiller = new Dimension(20, 30);
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
     verticalBtn = new JButton();
@@ -138,14 +173,13 @@ public class JFrameView extends JFrame implements IView {
       Image img = ImageIO.read(getClass().getResource("resources/vertical-flip.png"));
       verticalBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     } catch (Exception ex) {
-      System.out.println(ex.getMessage());
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
     verticalBtn.setOpaque(false);
     verticalBtn.setFocusPainted(false);
     verticalBtn.setBorderPainted(false);
     verticalBtn.setContentAreaFilled(false);
     verticalBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
-    verticalBtn.setActionCommand("vertical-flip");
     btnp.add(verticalBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
@@ -155,7 +189,7 @@ public class JFrameView extends JFrame implements IView {
       Image img = ImageIO.read(getClass().getResource("resources/add-new-50.png"));
       addBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     } catch (Exception ex) {
-      System.out.println(ex.getMessage());
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
     addBtn.setOpaque(false);
     addBtn.setFocusPainted(false);
@@ -171,7 +205,7 @@ public class JFrameView extends JFrame implements IView {
       Image img = ImageIO.read(getClass().getResource("resources/save-50.png"));
       saveBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     } catch (Exception ex) {
-      System.out.println(ex.getMessage());
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
     saveBtn.setOpaque(false);
     saveBtn.setFocusPainted(false);
@@ -206,8 +240,26 @@ public class JFrameView extends JFrame implements IView {
   @Override
   public void addFeatures(Features features) {
 
-    horizontalBtn.addActionListener(evt -> System.out.println(evt.getActionCommand()));
-    verticalBtn.addActionListener(evt -> System.out.println(evt.getActionCommand()));
+    horizontalBtn.addActionListener(evt -> {
+      try {
+        features.hflip(getImgName());
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+      } catch (Exception msg) {
+        showDialog(JOptionPane.ERROR_MESSAGE, msg.getMessage());
+
+      }
+    });
+
+    verticalBtn.addActionListener(evt -> {
+      try {
+        features.vflip(getImgName());
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+      } catch (Exception msg) {
+        showDialog(JOptionPane.ERROR_MESSAGE, msg.getMessage());
+      }
+    });
 
 
     addBtn.addActionListener(evt -> {
@@ -218,45 +270,118 @@ public class JFrameView extends JFrame implements IView {
       int selected = addChooser.showOpenDialog(JFrameView.this);
       if (selected == JFileChooser.APPROVE_OPTION) {
         File selectedFile = addChooser.getSelectedFile();
-        System.out.println("Selected file: " + selectedFile.getAbsolutePath() + " " + selectedFile.getName());
         features.loadImage(selectedFile.getAbsolutePath(), selectedFile.getName());
       }
     });
 
     saveBtn.addActionListener(evt -> {
-      JFileChooser saveChooser = new JFileChooser(".");
-      int selected = saveChooser.showSaveDialog(JFrameView.this);
-      if (selected == JFileChooser.APPROVE_OPTION) {
-        File selectedFile = saveChooser.getSelectedFile();
-        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+      try {
+        String name = getImgName();
+        JFileChooser saveChooser = new JFileChooser(".");
+        int selected = saveChooser.showSaveDialog(JFrameView.this);
+        if (selected == JFileChooser.APPROVE_OPTION) {
+          File selectedFile = saveChooser.getSelectedFile();
+          features.save(selectedFile.getAbsolutePath(), name);
+        }
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+      }
+    });
+
+    splitBtn.addActionListener(evt -> {
+      try {
+        String name = getImgName();
+        features.rgbSplit(name);
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+      }
+    });
+
+    combineBtn.addActionListener(evt -> {
+      try {
+        String name = getImgName();
+        String prefix = imagenameDD.getSelectedItem().toString();
+        String[] options = processedImgNames.get(prefix).toArray(new String[0]);
+        String green = (String) JOptionPane.showInputDialog(this, "Choose GREEN layer", "Combine Image",
+                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        String blue = (String) JOptionPane.showInputDialog(this, "Choose BLUE layer", "Combine Image",
+                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        System.out.println(name + " " + green + " " + blue);
+        features.rgbCombine(name, prefix + "-" + green, prefix + "-" + blue);
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
       }
     });
 
 
     commandDD.addActionListener(evt -> {
-      System.out.println("Selected command: " + commandDD.getSelectedItem());
+      try {
+        commandDispather(features);
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+      } catch (Exception msg) {
+        showDialog(JOptionPane.ERROR_MESSAGE, msg.getMessage());
+      }
     });
 
-    imagenameDD.addActionListener(evt -> showImage(imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString()));
+    imagenameDD.addActionListener(evt -> {
+      ArrayList<String> names = processedImgNames.get(imagenameDD.getSelectedItem().toString());
+      if (names.contains(imagenameEffectDD.getSelectedItem().toString())) {
+        showImage(getImgName());
+      } else {
+        showImage(imagenameDD.getSelectedItem().toString() + "-raw");
+      }
+    });
 
-    imagenameEffectDD.addActionListener(evt -> showImage(imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString()));
+    imagenameEffectDD.addActionListener(evt -> showImage(getImgName()));
+
+  }
+
+  private String getImgName() {
+    return imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString();
+  }
+
+  private void commandDispather(Features features) {
+//    System.out.println("Selected command: " + commandDD.getSelectedItem() + " " + imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString());
+    System.out.println(commandDD.getSelectedItem().toString().split(" - ")[0]);
+
+    String[] splited = commandDD.getSelectedItem().toString().split(" - ");
+
 
   }
 
 
   public void showImage(String name) {
-    int[][][] imgList = this.processor.getImage(name);
-    int[] imgInfo = this.processor.getInfo(name);
-    BufferedImage convertedImg = convertImgToBufferImage(imgInfo, imgList);
-    sImageLabel.setIcon(new ImageIcon(convertedImg));
+    System.out.println(name);
+    updateNameList();
+    try {
+      int[][][] imgList = this.processor.getImage(name);
+      int[] imgInfo = this.processor.getInfo(name);
+      BufferedImage convertedImg = convertImgToBufferImage(imgInfo, imgList);
+      sImageLabel.setIcon(new ImageIcon(convertedImg));
+
+      String beforeName = imagenameDD.getSelectedItem().toString();
+      String[] splited = name.split("-", 2);
+      imagenameDD.setSelectedItem(splited[0]);
+
+      imagenameEffectDD.removeAllItems();
+      for (String effectname : processedImgNames.get(splited[0])) {
+        imagenameEffectDD.addItem(effectname);
+        if (effectname.equals(splited[1])) {
+          imagenameEffectDD.setSelectedItem(effectname);
+        }
+      }
+
+    } catch (NoSuchElementException nse) {
+      showDialog(JOptionPane.ERROR_MESSAGE, nse.getMessage());
+    }
   }
 
-  public void updateNameList(String showname) {
+  private void updateNameList() {
     String[] original = processor.getNameList();
     processedImgNames = new LinkedHashMap<>();
     for (String name : original) {
       String[] splited = name.split("-", 2);
-      System.out.println(splited);
       if (processedImgNames.containsKey(splited[0])) {
         ArrayList<String> tmp = processedImgNames.get(splited[0]);
         tmp.add(splited[1]);
@@ -267,23 +392,10 @@ public class JFrameView extends JFrame implements IView {
       }
     }
 
-    String[] splited = showname.split("-", 2);
     imagenameDD.removeAllItems();
     for (String name : processedImgNames.keySet()) {
       imagenameDD.addItem(name);
-      if (name.equals(splited[0])) {
-        imagenameDD.setSelectedItem(name);
-      }
     }
-
-    imagenameEffectDD.removeAllItems();
-    for (String name : processedImgNames.get(splited[0])) {
-      imagenameEffectDD.addItem(name);
-      if (name.equals(splited[1])) {
-        imagenameEffectDD.setSelectedItem(name);
-      }
-    }
-
   }
 
   private BufferedImage convertImgToBufferImage(int[] info, int[][][] image) {
@@ -299,9 +411,23 @@ public class JFrameView extends JFrame implements IView {
     return buffImage;
   }
 
-  public void showErrorDialog(String msg) {
-    JOptionPane.showMessageDialog(this, msg,
-            "Action Incomplete", JOptionPane.ERROR_MESSAGE);
+  public void showDialog(int type, String msg) {
+    String title = "";
+    switch (type) {
+      case JOptionPane.INFORMATION_MESSAGE:
+        title = "Action Info";
+        break;
+      case JOptionPane.ERROR_MESSAGE:
+        title = "Action Incomplete";
+        break;
+    }
+    JOptionPane.showMessageDialog(this, msg, title, type);
+  }
+
+  public void dialogAskImgAfterSplit(String[] options) {
+    String name = (String) JOptionPane.showInputDialog(this, "Which image you want to see?", "Split Image",
+            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+    showImage(name);
   }
 
 }

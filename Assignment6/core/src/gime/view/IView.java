@@ -8,7 +8,7 @@ public interface IView {
 
   void showImage(String name);
 
-  void updateNameList(String showname);
+  void showDialog(int type, String msg);
 
-  void showErrorDialog(String msg);
+  void dialogAskImgAfterSplit(String[] options);
 }
