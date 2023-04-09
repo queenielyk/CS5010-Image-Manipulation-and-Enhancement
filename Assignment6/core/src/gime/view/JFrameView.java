@@ -3,6 +3,7 @@ package gime.view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,11 +21,15 @@ public class JFrameView extends JFrame implements IView {
   private JPanel topbar;
   private JPanel namep;
   private JPanel btnp;
-  private JPanel imagep;
   private JPanel histogramp;
+
+  private JScrollPane scrollImage;
+  private JLabel sImageLabel;
 
   private JButton addBtn;
   private JButton saveBtn;
+  private JButton horizontalBtn;
+  private JButton verticalBtn;
 
   private JComboBox<String> commandDD;
   private JComboBox<String> imagenameDD;
@@ -33,6 +38,14 @@ public class JFrameView extends JFrame implements IView {
   private void initCommandsMap() {
     commandsMap.put("Color Transform - Red Component", "colorTrans red-component");
     commandsMap.put("Color Transform - Green Component", "colorTrans green-component");
+    commandsMap.put("Color Transform - Blue Component", "colorTrans blue-component");
+    commandsMap.put("Color Transform - Value", "colorTrans value-component");
+    commandsMap.put("Color Transform - Intensity", "colorTrans intensity-component");
+    commandsMap.put("Color Transform - Luma", "colorTrans luma-component");
+    commandsMap.put("Color Transform - Greyscale", "colorTrans greyscale");
+    commandsMap.put("Color Transform - Sepia", "colorTrans sepia");
+    commandsMap.put("Brighten", "brighten");
+    commandsMap.put("RGB combines", "rgb-combine");
   }
 
   public JFrameView(String caption) {
@@ -75,10 +88,45 @@ public class JFrameView extends JFrame implements IView {
     btnp.add(Box.createHorizontalGlue());
 
 
+    horizontalBtn = new JButton();
+    try {
+      Image img = ImageIO.read(getClass().getResource("resources/horizontal-flip.png"));
+      horizontalBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    } catch (Exception ex) {
+      System.out.println(ex.getMessage());
+    }
+    horizontalBtn.setOpaque(false);
+    horizontalBtn.setFocusPainted(false);
+    horizontalBtn.setBorderPainted(false);
+    horizontalBtn.setContentAreaFilled(false);
+    horizontalBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
+    horizontalBtn.setActionCommand("horizontal-flip");
+    btnp.add(horizontalBtn);
+
+    Dimension boxFiller = new Dimension(20, 30);
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
+
+    verticalBtn = new JButton();
+    try {
+      Image img = ImageIO.read(getClass().getResource("resources/vertical-flip.png"));
+      verticalBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    } catch (Exception ex) {
+      System.out.println(ex.getMessage());
+    }
+    verticalBtn.setOpaque(false);
+    verticalBtn.setFocusPainted(false);
+    verticalBtn.setBorderPainted(false);
+    verticalBtn.setContentAreaFilled(false);
+    verticalBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
+    verticalBtn.setActionCommand("vertical-flip");
+    btnp.add(verticalBtn);
+
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
+
     addBtn = new JButton();
     try {
       Image img = ImageIO.read(getClass().getResource("resources/add-new-50.png"));
-      addBtn.setIcon(new ImageIcon(img.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+      addBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     } catch (Exception ex) {
       System.out.println(ex.getMessage());
     }
@@ -87,15 +135,14 @@ public class JFrameView extends JFrame implements IView {
     addBtn.setBorderPainted(false);
     addBtn.setContentAreaFilled(false);
     addBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
-    addBtn.setActionCommand("addImage");
     btnp.add(addBtn);
 
-    btnp.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
     saveBtn = new JButton();
     try {
       Image img = ImageIO.read(getClass().getResource("resources/save-50.png"));
-      saveBtn.setIcon(new ImageIcon(img.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+      saveBtn.setIcon(new ImageIcon(img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     } catch (Exception ex) {
       System.out.println(ex.getMessage());
     }
@@ -104,27 +151,31 @@ public class JFrameView extends JFrame implements IView {
     saveBtn.setBorderPainted(false);
     saveBtn.setContentAreaFilled(false);
     saveBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Especially important
-    saveBtn.setActionCommand("saveImage");
     btnp.add(saveBtn);
 
-    btnp.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
     topbar.add(btnp);
 
     topbar.setBackground(Color.orange);
     topbar.setPreferredSize(new Dimension(this.getWidth(), 75));
 
-    imagep = new JPanel();
-    imagep.add(new JLabel("Image Panel"));
-    imagep.setBackground(Color.pink);
-    imagep.setPreferredSize(new Dimension(this.getWidth() / 2, 750 - 75));
+    sImageLabel = new JLabel();
+    scrollImage = new JScrollPane(sImageLabel);
+    try {
+      BufferedImage image = ImageIO.read(getClass().getResource("resources/Jellyfish.jpg"));
+      sImageLabel.setIcon(new ImageIcon(image));
+    } catch (Exception ex) {
+      System.out.println(ex.getMessage());
+    }
+    scrollImage.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - 75));
 
     histogramp = new JPanel();
     histogramp.add(new JLabel("Histogram Panel"));
     histogramp.setBackground(Color.yellow);
-    histogramp.setPreferredSize(new Dimension(this.getWidth() / 2, 750 - 75));
+    histogramp.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - 75));
 
     this.add(topbar, BorderLayout.NORTH);
-    this.add(imagep, BorderLayout.WEST);
+    this.add(scrollImage, BorderLayout.WEST);
     this.add(histogramp, BorderLayout.EAST);
 
     pack();
@@ -135,6 +186,11 @@ public class JFrameView extends JFrame implements IView {
 
   @Override
   public void addFeatures(Features features) {
+
+    horizontalBtn.addActionListener(evt -> System.out.println(evt.getActionCommand()));
+    verticalBtn.addActionListener(evt -> System.out.println(evt.getActionCommand()));
+
+
     addBtn.addActionListener(evt -> {
       JFileChooser addChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -161,14 +217,17 @@ public class JFrameView extends JFrame implements IView {
       System.out.println("Selected command: " + commandDD.getSelectedItem());
     });
 
-    imagenameDD.addActionListener(evt -> {
-      System.out.println("Selected command: " + imagenameDD.getSelectedItem());
-    });
+    imagenameDD.addActionListener(evt -> showImage());
 
-    imagenameEffectDD.addActionListener(evt -> {
-      System.out.println("Selected command: " + imagenameEffectDD.getSelectedItem());
-    });
-
+    imagenameEffectDD.addActionListener(evt -> showImage());
 
   }
+
+
+  private void showImage() {
+    System.out.println("Selected command: " + imagenameDD.getSelectedItem());
+    System.out.println("Selected command: " + imagenameEffectDD.getSelectedItem());
+  }
+
+
 }
