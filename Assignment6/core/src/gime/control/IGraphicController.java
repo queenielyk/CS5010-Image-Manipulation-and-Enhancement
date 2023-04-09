@@ -1,10 +1,8 @@
 package gime.control;
 
 import gime.view.IView;
-import gime.view.JFrameView;
-import ime.control.IController;
-import ime.model.ImageProcessor;
+import mime.model.MoreImageProcessor;
 
 public interface IGraphicController {
-  void runGUI(IView view, ImageProcessor model);
+  void runGUI(IView view, MoreImageProcessor model);
 }
