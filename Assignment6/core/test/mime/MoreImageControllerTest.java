@@ -4,12 +4,15 @@ import static org.junit.Assert.assertEquals;
 
 import ime.ImageControllerTest;
 import ime.control.IController;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+
 import mime.control.MoreImageController;
 import mime.model.MoreImageProcessor;
+
 import org.junit.Test;
 
 /**
@@ -141,6 +144,12 @@ public class MoreImageControllerTest extends ImageControllerTest {
     public int[] getInfo(String name) {
       log.append("Name: " + name + "\n");
       return new int[]{3, 3, 255};
+    }
+
+    @Override
+    public String[] getNameList() {
+      log.append("Name List: \n");
+      return new String[]{"img1", "img2"};
     }
 
   }

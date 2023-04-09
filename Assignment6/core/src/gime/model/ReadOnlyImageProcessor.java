@@ -17,4 +17,11 @@ public interface ReadOnlyImageProcessor {
    */
   int[] getInfo(String name);
 
+
+  /**
+   * A method to return all image names.
+   *
+   * @return image names in form of String[]
+   */
+  String[] getNameList();
 }

@@ -19,4 +19,9 @@ public class ReadOnlyImageProcessorImpl implements ReadOnlyImageProcessor {
   public int[] getInfo(String name) {
     return processor.getInfo(name);
   }
+
+  @Override
+  public String[] getNameList() {
+    return processor.getNameList();
+  }
 }

@@ -29,4 +29,20 @@ public class ProcessorTest {
     assertEquals(processor.getInfo("image").toString(), ro.getInfo("image").toString());
   }
 
+
+  @Test
+  public void testImageNameList() {
+    MoreImageProcessor processor = new MoreImageProcessorImpl();
+    ReadOnlyImageProcessor ro = new ReadOnlyImageProcessorImpl(processor);
+
+    processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image1");
+    processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image2");
+    processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image3");
+    processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image4");
+    processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image5");
+    for(String tmp: ro.getNameList()){
+      System.out.println(tmp);
+    }
+  }
+
 }

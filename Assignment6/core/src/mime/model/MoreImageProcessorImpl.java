@@ -398,5 +398,9 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     return infos.get(name);
   }
 
+  @Override
+  public String[] getNameList() {
+    return images.keySet().toArray(new String[0]);
+  }
 
 }
