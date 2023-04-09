@@ -5,6 +5,6 @@ import gime.view.JFrameView;
 import ime.control.IController;
 import ime.model.ImageProcessor;
 
-public interface IGraphicController extends IController {
-  void runGUI(IView view,ImageProcessor model);
+public interface IGraphicController {
+  void runGUI(IView view, ImageProcessor model);
 }

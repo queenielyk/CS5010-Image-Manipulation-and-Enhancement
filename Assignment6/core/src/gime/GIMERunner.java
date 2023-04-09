@@ -28,7 +28,7 @@ public class GIMERunner {
     }
     // GUI-Mode
     else {
-      GraphicImageController ctrl = new GraphicImageController(new InputStreamReader(System.in), System.out);
+      GraphicImageController ctrl = new GraphicImageController();
       ctrl.runGUI(new JFrameView("GIME APP"),new MoreImageProcessorImpl());
     }
   }
