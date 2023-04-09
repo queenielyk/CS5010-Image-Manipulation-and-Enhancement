@@ -4,15 +4,14 @@ import java.awt.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
-import gime.model.ReadOnlyImageProcessorImpl;
 
 
 import javax.imageio.ImageIO;
@@ -28,6 +27,7 @@ public class JFrameView extends JFrame implements IView {
   private JPanel btnp;
   private JPanel histogramp;
 
+  private JPanel imgp;
   private JScrollPane scrollImage;
   private JLabel sImageLabel;
 
@@ -43,7 +43,7 @@ public class JFrameView extends JFrame implements IView {
   private JComboBox<String> imagenameDD;
   private JComboBox<String> imagenameEffectDD;
 
-  private Map<String, ArrayList<String>> processedImgNames;
+  private Map<String, List<String>> processedImgNames;
 
   private void initCommandsMap() {
     commandsMap.put("Color Transform - Red Component", "colorTrans red-component");
@@ -220,7 +220,9 @@ public class JFrameView extends JFrame implements IView {
     topbar.setPreferredSize(new Dimension(this.getWidth(), 75));
 
     sImageLabel = new JLabel();
-    scrollImage = new JScrollPane(sImageLabel);
+    imgp = new JPanel(new GridBagLayout());
+    imgp.add(sImageLabel);
+    scrollImage = new JScrollPane(imgp);
     scrollImage.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - 75));
 
     histogramp = new JPanel();
@@ -325,7 +327,7 @@ public class JFrameView extends JFrame implements IView {
     });
 
     imagenameDD.addActionListener(evt -> {
-      ArrayList<String> names = processedImgNames.get(imagenameDD.getSelectedItem().toString());
+      List<String> names = processedImgNames.get(imagenameDD.getSelectedItem().toString());
       if (names.contains(imagenameEffectDD.getSelectedItem().toString())) {
         showImage(getImgName());
       } else {
@@ -383,10 +385,10 @@ public class JFrameView extends JFrame implements IView {
     for (String name : original) {
       String[] splited = name.split("-", 2);
       if (processedImgNames.containsKey(splited[0])) {
-        ArrayList<String> tmp = processedImgNames.get(splited[0]);
+        List<String> tmp = processedImgNames.get(splited[0]);
         tmp.add(splited[1]);
       } else {
-        ArrayList<String> tmp = new ArrayList<>();
+        List<String> tmp = new ArrayList<>();
         tmp.add(splited[1]);
         processedImgNames.put(splited[0], tmp);
       }
