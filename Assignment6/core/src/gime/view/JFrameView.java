@@ -1,19 +1,32 @@
 package gime.view;
 
-import java.awt.*;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
-
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridBagLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class JFrameView extends JFrame implements IView {
@@ -23,7 +36,9 @@ public class JFrameView extends JFrame implements IView {
   private JPanel topbar;
   private JPanel namep;
   private JPanel btnp;
-  private JPanel histogramp;
+  private JPanel histoPanel;
+
+  private Histogram histogram;
 
   private JPanel imgp;
   private JScrollPane scrollImage;
@@ -65,13 +80,13 @@ public class JFrameView extends JFrame implements IView {
 
     setPreferredSize(new Dimension(1750, 900));
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     pack();
 
     this.setLayout(new BorderLayout());
 
     topbar = new JPanel();
     topbar.setLayout(new BoxLayout(topbar, BoxLayout.X_AXIS));
-
 
     commandDD = new CustomJComboBox();
     for (String key : commandsMap.keySet()) {
@@ -134,7 +149,6 @@ public class JFrameView extends JFrame implements IView {
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
-
     try {
       verticalBtn = new CustomJButton("resources/vertical-flip.png");
     } catch (Exception ex) {
@@ -171,13 +185,18 @@ public class JFrameView extends JFrame implements IView {
     scrollImage = new JScrollPane(imgp);
     scrollImage.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - 75));
 
-    histogramp = new JPanel();
-    histogramp.add(new JLabel("Histogram Panel"));
-    histogramp.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - 75));
+    // ----------------------------------Histogram---------------------
+    histoPanel = new JPanel();
+    histoPanel.setLayout(new BorderLayout());
+    histogram = new Histogram();
+    histoPanel.setPreferredSize(new Dimension(this.getWidth() / 2-50, this.getHeight() - 75));
+    histoPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(30,30,30,30),"Histogram"));
+
+    histoPanel.add(histogram, BorderLayout.CENTER);
 
     this.add(topbar, BorderLayout.NORTH);
     this.add(scrollImage, BorderLayout.WEST);
-    this.add(histogramp, BorderLayout.EAST);
+    this.add(histoPanel, BorderLayout.EAST);
 
     pack();
     setLocationRelativeTo(null);
@@ -209,11 +228,10 @@ public class JFrameView extends JFrame implements IView {
       }
     });
 
-
     addBtn.addActionListener(evt -> {
       JFileChooser addChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "BMP, JPG, JPEG, PNG, PPM Images", "jpg", "jpeg", "bmp", "png", "ppm");
+          "BMP, JPG, JPEG, PNG, PPM Images", "jpg", "jpeg", "bmp", "png", "ppm");
       addChooser.setFileFilter(filter);
       int selected = addChooser.showOpenDialog(JFrameView.this);
       if (selected == JFileChooser.APPROVE_OPTION) {
@@ -250,10 +268,12 @@ public class JFrameView extends JFrame implements IView {
         String name = getImgName();
         String prefix = imagenameDD.getSelectedItem().toString();
         String[] options = processedImgNames.get(prefix).toArray(new String[0]);
-        String green = (String) JOptionPane.showInputDialog(this, "Choose GREEN layer", "Combine Image",
-                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        String blue = (String) JOptionPane.showInputDialog(this, "Choose BLUE layer", "Combine Image",
-                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        String green = (String) JOptionPane.showInputDialog(this, "Choose GREEN layer",
+            "Combine Image",
+            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        String blue = (String) JOptionPane.showInputDialog(this, "Choose BLUE layer",
+            "Combine Image",
+            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         features.rgbCombine(name, prefix + "-" + green, prefix + "-" + blue);
       } catch (NullPointerException ope) {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
@@ -263,8 +283,9 @@ public class JFrameView extends JFrame implements IView {
     brightnessBtn.addActionListener(evt -> {
       try {
         String name = getImgName();
-        String response = (String) JOptionPane.showInputDialog(this, "Brightness/Darkness level (-255 ~ 255)", "Brighten/Darken Image",
-                JOptionPane.QUESTION_MESSAGE, null, null, '0');
+        String response = (String) JOptionPane.showInputDialog(this,
+            "Brightness/Darkness level (-255 ~ 255)", "Brighten/Darken Image",
+            JOptionPane.QUESTION_MESSAGE, null, null, '0');
 
         int degree = Integer.parseInt(response);
         if (degree < -255 || degree > 255) {
@@ -276,10 +297,11 @@ public class JFrameView extends JFrame implements IView {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
       }
     });
-    
+
     commandDD.addActionListener(evt -> {
       try {
-        features.commandDispatcher(commandsMap.get(commandDD.getSelectedItem().toString()), getImgName());
+        features.commandDispatcher(commandsMap.get(commandDD.getSelectedItem().toString()),
+            getImgName());
       } catch (NullPointerException ope) {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
         commandDD.setSelectedIndex(-1);
@@ -303,7 +325,8 @@ public class JFrameView extends JFrame implements IView {
   }
 
   private String getImgName() {
-    return imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString();
+    return imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem()
+        .toString();
   }
 
 
@@ -314,7 +337,7 @@ public class JFrameView extends JFrame implements IView {
       int[] imgInfo = this.processor.getInfo(name);
       BufferedImage convertedImg = convertImgToBufferImage(imgInfo, imgList);
       sImageLabel.setIcon(new ImageIcon(convertedImg));
-
+      histogram.showHistogram(name);
       String beforeName = imagenameDD.getSelectedItem().toString();
       String[] splited = name.split("-", 2);
       imagenameDD.setSelectedItem(splited[0]);
@@ -330,6 +353,124 @@ public class JFrameView extends JFrame implements IView {
     } catch (NoSuchElementException nse) {
       showDialog(JOptionPane.ERROR_MESSAGE, nse.getMessage());
     }
+  }
+
+  private class Histogram extends JPanel {
+
+    int[][][] image;
+    int[] info;
+
+    public void showHistogram(String imgName) {
+      image = processor.getImage(imgName);
+      info = processor.getInfo(imgName);
+      repaint();
+    }
+
+    private int[] getCount(String mode) {
+      int[] count = new int[256];
+      switch (mode) {
+        case "R":
+          for (int row = 0; row < info[1]; row++) {
+            for (int col = 0; col < info[0]; col++) {
+              count[image[row][col][0]]++;
+            }
+          }
+          break;
+        case "G":
+          for (int row = 0; row < info[1]; row++) {
+            for (int col = 0; col < info[0]; col++) {
+              count[image[row][col][1]]++;
+            }
+          }
+          break;
+        case "B":
+          for (int row = 0; row < info[1]; row++) {
+            for (int col = 0; col < info[0]; col++) {
+              count[image[row][col][2]]++;
+            }
+          }
+          break;
+        case "I":
+          int intensity = -1;
+          for (int row = 0; row < info[1]; row++) {
+            for (int col = 0; col < info[0]; col++) {
+              if (image[row][col][0] == image[row][col][1]
+                  && image[row][col][1] == image[row][col][2]) {
+                intensity = image[row][col][0];
+              } else {
+                intensity = (int) (image[row][col][0] * 0.2126 + image[row][col][1] * 0.7152+image[row][col][2] * 0.0722);
+              }
+              count[intensity]++;
+            }
+          }
+          break;
+      }
+
+      return count;
+    }
+
+    private void drawLine(int[] count){
+
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+
+      if (image == null || info == null) {
+        return;
+      }
+
+      super.paintComponent(g);
+      int boarder=50;
+      int w = getWidth();
+      int h = getHeight();
+      int redCount[] = getCount("R");
+      int greenCount[] = getCount("G");
+      int blueCount[] = getCount("B");
+      int intensityCount[] = getCount("I");
+
+      //getMaxHeight
+      int maxCount = 0;
+      for (int i = 0; i <= 255; i++) {
+        maxCount = Math.max(redCount[i], maxCount);
+        maxCount = Math.max(greenCount[i], maxCount);
+        maxCount = Math.max(blueCount[i], maxCount);
+        maxCount = Math.max(intensityCount[i], maxCount);
+      }
+
+      int interval = (int) (w / 255.0);
+
+      for (int i = 0; i < 255; i++) {
+        //Draw RedLine
+        g.setColor(Color.RED);
+        g.drawLine(i * interval, (int) (h - (double) redCount[i] / (double) maxCount * h),
+            (i + 1) * interval,
+            (int) (h - (double) redCount[i + 1] / (double) maxCount * h));
+
+        //Draw GreenLine
+        g.setColor(Color.GREEN);
+        g.drawLine(i * interval, (int) (h - (double) greenCount[i] / (double) maxCount * h),
+            (i + 1) * interval,
+            (int) (h - (double) greenCount[i + 1] / (double) maxCount * h));
+
+        //Draw BlueLine
+        g.setColor(Color.blue);
+        g.drawLine(i * interval, (int) (h - (double) blueCount[i] / (double) maxCount * h),
+            (i + 1) * interval,
+            (int) (h - (double) blueCount[i + 1] / (double) maxCount * h));
+
+        //Draw Intensity Line
+        g.setColor(Color.black);
+        g.drawLine(i * interval, (int) (h - (double) intensityCount[i] / (double) maxCount * h),
+            (i + 1) * interval,
+            (int) (h - (double) intensityCount[i + 1] / (double) maxCount * h));
+
+        System.out.println("looping");
+      }
+      System.out.println("doneDrawing");
+
+    }
+
+
   }
 
   private void updateNameList() {
@@ -380,9 +521,11 @@ public class JFrameView extends JFrame implements IView {
   }
 
   public void dialogAskImgAfterSplit(String[] options) {
-    String name = (String) JOptionPane.showInputDialog(this, "Which image you want to see?", "Split Image",
-            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+    String name = (String) JOptionPane.showInputDialog(this, "Which image you want to see?",
+        "Split Image",
+        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
     showImage(name);
   }
+
 
 }
