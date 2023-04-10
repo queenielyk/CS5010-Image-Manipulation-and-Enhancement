@@ -1,5 +1,8 @@
 package gime.model;
 
+/**
+ * An interface indicates read-only methods that actually provided by an ImageProcessor.
+ */
 public interface ReadOnlyImageProcessor {
   /**
    * A method to return an image.
