@@ -11,20 +11,12 @@ public interface Features {
 
   void rgbCombine(String r, String g, String b);
 
-  void brighten(int level, String from, String to);
-
-  void greyscale(String mode, String from, String to);
+  void brighten(int level, String from);
 
   void vflip(String from);
 
   void hflip(String from);
 
-  void sepia(String from, String to);
-
-  void blur(String from, String to);
-
-  void sharpen(String from, String to);
-
-  void dither(String from, String to);
+  void commandDispatcher(String command, String from) throws IllegalArgumentException;
 
 }

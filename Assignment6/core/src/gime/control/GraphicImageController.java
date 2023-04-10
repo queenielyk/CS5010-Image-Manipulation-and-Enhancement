@@ -40,17 +40,16 @@ public class GraphicImageController implements IGraphicController, Features {
     try {
       MoreImageCommand cmd = new LoadInputStream(path, imgName);
       cmd.execute((MoreImageProcessor) model);
+      view.showImage(imgName);
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
-    view.showImage(imgName);
   }
 
   @Override
   public void save(String SavingPath, String ImgName) {
     try {
       MoreImageCommand cmd = new SaveOutStream(SavingPath, ImgName);
-      System.out.println();
       cmd.execute((MoreImageProcessor) model);
       view.showDialog(JOptionPane.INFORMATION_MESSAGE, "Completed!");
     } catch (Exception error) {
@@ -82,20 +81,23 @@ public class GraphicImageController implements IGraphicController, Features {
   }
 
   @Override
-  public void brighten(int level, String from, String to) {
+  public void brighten(int level, String from) {
     try {
-      ImageCommand cmd = new Brighten(level, from, to);
+      String name = from + "-" + (level < 0 ? "darken" : "brighten");
+      ImageCommand cmd = new Brighten(level, from, name);
       cmd.execute(model);
+      view.showImage(name);
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
-  @Override
-  public void greyscale(String mode, String from, String to) {
+  private void colorTrans(String mode, String from) {
     try {
-      MoreImageCommand cmd = new ColorTrans(mode, from, to);
+      String name = from + "-" + mode.split("-")[0];
+      MoreImageCommand cmd = new ColorTrans(mode, from, name);
       cmd.execute((MoreImageProcessor) model);
+      view.showImage(name);
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
@@ -106,10 +108,10 @@ public class GraphicImageController implements IGraphicController, Features {
     try {
       ImageCommand cmd = new Vflip(from, from + "-vflip");
       cmd.execute(model);
+      view.showImage(from + "-vflip");
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
-    view.showImage(from + "-vflip");
   }
 
   @Override
@@ -117,49 +119,52 @@ public class GraphicImageController implements IGraphicController, Features {
     try {
       ImageCommand cmd = new Hflip(from, from + "-hflip");
       cmd.execute(model);
-    } catch (Exception error) {
-      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
-    }
-    view.showImage(from + "-hflip");
-  }
-
-  @Override
-  public void sepia(String from, String to) {
-    try {
-      MoreImageCommand cmd = new ColorTrans("sepia", from, to);
-      cmd.execute((MoreImageProcessor) model);
+      view.showImage(from + "-hflip");
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
-  @Override
-  public void blur(String from, String to) {
+  private void filter(String mode, String from) {
     try {
-      MoreImageCommand cmd = new Filter("blur", from, to);
+      String name = from + "-" + mode;
+      MoreImageCommand cmd = new Filter(mode, from, name);
       cmd.execute((MoreImageProcessor) model);
+      view.showImage(name);
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
-  @Override
-  public void sharpen(String from, String to) {
+  private void dither(String from) {
+    String name = from + "-dither";
     try {
-      MoreImageCommand cmd = new Filter("sharpen", from, to);
+      MoreImageCommand cmd = new Dither(from, name);
       cmd.execute((MoreImageProcessor) model);
+      view.showImage(name);
     } catch (Exception error) {
       view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
     }
   }
 
-  @Override
-  public void dither(String from, String to) {
-    try {
-      MoreImageCommand cmd = new Dither(from, to);
-      cmd.execute((MoreImageProcessor) model);
-    } catch (Exception error) {
-      view.showDialog(JOptionPane.ERROR_MESSAGE, error.getMessage());
+  public void commandDispatcher(String command, String from) {
+    switch (command.split(" ")[0]) {
+      case "colorTrans":
+        colorTrans(command.split(" ")[1], from);
+        break;
+      case "sepia":
+        colorTrans(command, from);
+        break;
+      case "blur":
+      case "sharpen":
+        filter(command, from);
+        break;
+      case "dither":
+        dither(from);
+        break;
+      default:
+        throw new IllegalArgumentException("Action undefined");
     }
   }
+
 }
