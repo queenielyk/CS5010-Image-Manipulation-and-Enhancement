@@ -2,10 +2,18 @@ package gime.model;
 
 import mime.model.MoreImageProcessor;
 
+/**
+ * A class as an object adaptor, provides read-only on an image processor.
+ */
 public class ReadOnlyImageProcessorImpl implements ReadOnlyImageProcessor {
 
   ReadOnlyImageProcessor processor;
 
+  /**
+   * A constructor to construct a ReadOnlyImageProcessor by taking a MoreImageProcessor.
+   *
+   * @param processor a MoreImageProcessor
+   */
   public ReadOnlyImageProcessorImpl(MoreImageProcessor processor) {
     this.processor = processor;
   }
