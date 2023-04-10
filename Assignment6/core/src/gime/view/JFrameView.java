@@ -2,11 +2,10 @@ package gime.view;
 
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
-import ime.model.ImageProcessor;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,7 +27,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class JFrameView extends JFrame implements IView {
@@ -41,6 +40,7 @@ public class JFrameView extends JFrame implements IView {
 
   private Histogram histogram;
 
+  private JPanel imageGap;
   private JPanel imgp;
   private JScrollPane scrollImage;
   private JLabel sImageLabel;
@@ -180,23 +180,29 @@ public class JFrameView extends JFrame implements IView {
 
     topbar.setPreferredSize(new Dimension(this.getWidth(), 75));
 
+    imageGap = new JPanel();
+    imageGap.setPreferredSize(new Dimension(20, this.getHeight() - 75));
+
     sImageLabel = new JLabel();
     imgp = new JPanel(new GridBagLayout());
     imgp.add(sImageLabel);
     scrollImage = new JScrollPane(imgp);
-    scrollImage.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - 75));
+    scrollImage.setPreferredSize(new Dimension((this.getWidth() - 20) / 2, this.getHeight() - 75));
+    scrollImage.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
     // ----------------------------------Histogram---------------------
     histoPanel = new JPanel();
     histoPanel.setLayout(new BorderLayout());
     histogram = new Histogram();
-    histoPanel.setPreferredSize(new Dimension(this.getWidth() / 2-50, this.getHeight() - 75));
-    histoPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(30,30,30,30),"Histogram"));
+    histoPanel.setPreferredSize(new Dimension(this.getWidth() / 2 - 20, this.getHeight() - 75));
+    histoPanel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEmptyBorder(30, 30, 30, 30), "Histogram"));
 
     histoPanel.add(histogram, BorderLayout.CENTER);
 
     this.add(topbar, BorderLayout.NORTH);
-    this.add(scrollImage, BorderLayout.WEST);
+    this.add(imageGap, BorderLayout.WEST);
+    this.add(scrollImage, BorderLayout.CENTER);
     this.add(histoPanel, BorderLayout.EAST);
 
     pack();
@@ -232,7 +238,7 @@ public class JFrameView extends JFrame implements IView {
     addBtn.addActionListener(evt -> {
       JFileChooser addChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-          "BMP, JPG, JPEG, PNG, PPM Images", "jpg", "jpeg", "bmp", "png", "ppm");
+              "BMP, JPG, JPEG, PNG, PPM Images", "jpg", "jpeg", "bmp", "png", "ppm");
       addChooser.setFileFilter(filter);
       int selected = addChooser.showOpenDialog(JFrameView.this);
       if (selected == JFileChooser.APPROVE_OPTION) {
@@ -270,11 +276,9 @@ public class JFrameView extends JFrame implements IView {
         String prefix = imagenameDD.getSelectedItem().toString();
         String[] options = processedImgNames.get(prefix).toArray(new String[0]);
         String green = (String) JOptionPane.showInputDialog(this, "Choose GREEN layer",
-            "Combine Image",
-            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                "Combine Image", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         String blue = (String) JOptionPane.showInputDialog(this, "Choose BLUE layer",
-            "Combine Image",
-            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                "Combine Image", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         features.rgbCombine(name, prefix + "-" + green, prefix + "-" + blue);
       } catch (NullPointerException ope) {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
@@ -285,8 +289,8 @@ public class JFrameView extends JFrame implements IView {
       try {
         String name = getImgName();
         String response = (String) JOptionPane.showInputDialog(this,
-            "Brightness/Darkness level (-255 ~ 255)", "Brighten/Darken Image",
-            JOptionPane.QUESTION_MESSAGE, null, null, '0');
+                "Brightness/Darkness level (-255 ~ 255)", "Brighten/Darken Image",
+                JOptionPane.QUESTION_MESSAGE, null, null, '0');
 
         int degree = Integer.parseInt(response);
         if (degree < -255 || degree > 255) {
@@ -302,7 +306,7 @@ public class JFrameView extends JFrame implements IView {
     commandDD.addActionListener(evt -> {
       try {
         features.commandDispatcher(commandsMap.get(commandDD.getSelectedItem().toString()),
-            getImgName());
+                getImgName());
       } catch (NullPointerException ope) {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
         commandDD.setSelectedIndex(-1);
@@ -327,7 +331,7 @@ public class JFrameView extends JFrame implements IView {
 
   private String getImgName() {
     return imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem()
-        .toString();
+            .toString();
   }
 
 
@@ -338,8 +342,7 @@ public class JFrameView extends JFrame implements IView {
       int[] imgInfo = this.processor.getInfo(name);
       BufferedImage convertedImg = convertImgToBufferImage(imgInfo, imgList);
       sImageLabel.setIcon(new ImageIcon(convertedImg));
-      histogram.showHistogram(name,processor);
-      String beforeName = imagenameDD.getSelectedItem().toString();
+      histogram.showHistogram(name, processor);
       String[] splited = name.split("-", 2);
       imagenameDD.setSelectedItem(splited[0]);
 
@@ -407,8 +410,7 @@ public class JFrameView extends JFrame implements IView {
 
   public void dialogAskImgAfterSplit(String[] options) {
     String name = (String) JOptionPane.showInputDialog(this, "Which image you want to see?",
-        "Split Image",
-        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            "Split Image", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
     showImage(name);
   }
 
