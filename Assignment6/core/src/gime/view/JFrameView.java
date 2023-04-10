@@ -36,6 +36,7 @@ public class JFrameView extends JFrame implements IView {
 
   private JButton splitBtn;
   private JButton combineBtn;
+  private JButton brightnessBtn;
 
   private JComboBox<String> commandDD;
   private JComboBox<String> imagenameDD;
@@ -50,9 +51,8 @@ public class JFrameView extends JFrame implements IView {
     commandsMap.put("Color Transform - Value", "colorTrans value-component");
     commandsMap.put("Color Transform - Intensity", "colorTrans intensity-component");
     commandsMap.put("Color Transform - Luma", "colorTrans luma-component");
-    commandsMap.put("Color Transform - Greyscale", "colorTrans greyscale");
-    commandsMap.put("Color Transform - Sepia", "colorTrans sepia");
-    commandsMap.put("Brighten", "brighten");
+    commandsMap.put("Color Transform - Greyscale", "colorTrans luma-component");
+    commandsMap.put("Color Transform - Sepia", "sepia");
     commandsMap.put("Blur", "blur");
     commandsMap.put("Sharpen", "sharpen");
     commandsMap.put("Dither", "dither");
@@ -98,14 +98,22 @@ public class JFrameView extends JFrame implements IView {
     btnp.add(Box.createHorizontalGlue());
 
     try {
+      brightnessBtn = new CustomJButton("resources/brightness.png");
+    } catch (Exception ex) {
+      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
+    }
+    btnp.add(brightnessBtn);
+
+    Dimension boxFiller = new Dimension(20, 30);
+    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
+
+    try {
       splitBtn = new CustomJButton("resources/arrows.png");
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    splitBtn.setActionCommand("rgb-split");
     btnp.add(splitBtn);
 
-    Dimension boxFiller = new Dimension(20, 30);
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
 
     try {
@@ -113,7 +121,6 @@ public class JFrameView extends JFrame implements IView {
     } catch (Exception ex) {
       showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
     }
-    combineBtn.setActionCommand("rgb-combine");
     btnp.add(combineBtn);
 
     btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
@@ -247,21 +254,38 @@ public class JFrameView extends JFrame implements IView {
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         String blue = (String) JOptionPane.showInputDialog(this, "Choose BLUE layer", "Combine Image",
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        System.out.println(name + " " + green + " " + blue);
         features.rgbCombine(name, prefix + "-" + green, prefix + "-" + blue);
       } catch (NullPointerException ope) {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
       }
     });
 
-
-    commandDD.addActionListener(evt -> {
+    brightnessBtn.addActionListener(evt -> {
       try {
-        commandDispather(features);
+        String name = getImgName();
+        String response = (String) JOptionPane.showInputDialog(this, "Brightness/Darkness level (-255 ~ 255)", "Brighten/Darken Image",
+                JOptionPane.QUESTION_MESSAGE, null, null, '0');
+
+        int degree = Integer.parseInt(response);
+        if (degree < -255 || degree > 255) {
+          showDialog(JOptionPane.ERROR_MESSAGE, "Input level not in range");
+          return;
+        }
+        features.brighten(degree, name);
       } catch (NullPointerException ope) {
         showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+      }
+    });
+    
+    commandDD.addActionListener(evt -> {
+      try {
+        features.commandDispatcher(commandsMap.get(commandDD.getSelectedItem().toString()), getImgName());
+      } catch (NullPointerException ope) {
+        showDialog(JOptionPane.ERROR_MESSAGE, "Please load image before selecting an effect");
+        commandDD.setSelectedIndex(-1);
       } catch (Exception msg) {
         showDialog(JOptionPane.ERROR_MESSAGE, msg.getMessage());
+        commandDD.setSelectedIndex(-1);
       }
     });
 
@@ -282,18 +306,8 @@ public class JFrameView extends JFrame implements IView {
     return imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString();
   }
 
-  private void commandDispather(Features features) {
-//    System.out.println("Selected command: " + commandDD.getSelectedItem() + " " + imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem().toString());
-    System.out.println(commandDD.getSelectedItem().toString().split(" - ")[0]);
-
-    String[] splited = commandDD.getSelectedItem().toString().split(" - ");
-
-
-  }
-
 
   public void showImage(String name) {
-    System.out.println(name);
     updateNameList();
     try {
       int[][][] imgList = this.processor.getImage(name);
