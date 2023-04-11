@@ -111,7 +111,7 @@ class Histogram extends JPanel {
               (int) (h - (double) redCount[i + 1] / (double) maxCount * h));
 
       //Draw GreenLine
-      g.setColor(Color.GREEN);
+      g.setColor(new Color(53, 152, 20));
       g.drawLine(i * interval, (int) (h - (double) greenCount[i] / (double) maxCount * h),
               (i + 1) * interval,
               (int) (h - (double) greenCount[i + 1] / (double) maxCount * h));
