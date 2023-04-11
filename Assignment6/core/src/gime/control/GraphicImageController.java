@@ -19,12 +19,16 @@ import mime.control.command.LoadInputStream;
 import mime.control.command.SaveOutStream;
 import mime.model.MoreImageProcessor;
 
+/**
+ * A class to work as a Controller by implementing interface IGraphicController,
+ * and interface Features.
+ */
 public class GraphicImageController implements IGraphicController, Features {
 
   private ImageProcessor model;
   private IView view;
 
-
+  @Override
   public void runGUI(IView view, MoreImageProcessor model) {
     this.model = model;
     this.view = view;
@@ -147,6 +151,7 @@ public class GraphicImageController implements IGraphicController, Features {
     }
   }
 
+  @Override
   public void commandDispatcher(String command, String from) {
     switch (command.split(" ")[0]) {
       case "colorTrans":

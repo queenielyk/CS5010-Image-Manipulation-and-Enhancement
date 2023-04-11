@@ -29,6 +29,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * A class to implement the View (GUI) by using Swing.
+ * Also implement methods indicated at interface IView to allow Controller invoke a new view.
+ * This GUI provides effects, e.g. Color Transform, GreyScale, Blur, Sharpen, Dither, etc.
+ * User is able to load image save the image if the format is supported: bmp, jpg, jpeg, png, ppm.
+ * The View also shows the histogram along with the image.
+ */
 public class JFrameView extends JFrame implements IView {
 
   private final ReadOnlyImageProcessor processor;
@@ -60,6 +67,9 @@ public class JFrameView extends JFrame implements IView {
 
   private Map<String, List<String>> processedImgNames;
 
+  /**
+   * A private helper method to initial the mapping between each dropdown option and actual command.
+   */
   private void initCommandsMap() {
     commandsMap.put("Color Transform - Red Component", "colorTrans red-component");
     commandsMap.put("Color Transform - Green Component", "colorTrans green-component");
@@ -74,6 +84,12 @@ public class JFrameView extends JFrame implements IView {
     commandsMap.put("Dither", "dither");
   }
 
+  /**
+   * A constructor to construct a View, setting the title as the caption and have a read-only model.
+   *
+   * @param caption   the title of this GUI
+   * @param processor a read-only model
+   */
   public JFrameView(String caption, ReadOnlyImageProcessor processor) {
     super(caption);
     this.processor = processor;
@@ -329,12 +345,17 @@ public class JFrameView extends JFrame implements IView {
 
   }
 
+  /**
+   * A private helper method to get the name of image to be shown.
+   *
+   * @return name of image to be shown
+   */
   private String getImgName() {
     return imagenameDD.getSelectedItem().toString() + "-" + imagenameEffectDD.getSelectedItem()
             .toString();
   }
 
-
+  @Override
   public void showImage(String name) {
     updateNameList();
     try {
@@ -360,7 +381,9 @@ public class JFrameView extends JFrame implements IView {
   }
 
 
-
+  /**
+   * A private helper method to update the name list so the dropdown options are up-to-date.
+   */
   private void updateNameList() {
     String[] original = processor.getNameList();
     processedImgNames = new LinkedHashMap<>();
@@ -382,6 +405,13 @@ public class JFrameView extends JFrame implements IView {
     }
   }
 
+  /**
+   * A private helper method to convert the image from model to a BufferImage for showing.
+   *
+   * @param info  the info of image in form of int[]
+   * @param image the image content in form of int[][][]
+   * @return a BufferImage
+   */
   private BufferedImage convertImgToBufferImage(int[] info, int[][][] image) {
     BufferedImage buffImage = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_RGB);
     int[] rgb;
@@ -395,6 +425,7 @@ public class JFrameView extends JFrame implements IView {
     return buffImage;
   }
 
+  @Override
   public void showDialog(int type, String msg) {
     String title = "";
     switch (type) {
@@ -408,6 +439,7 @@ public class JFrameView extends JFrame implements IView {
     JOptionPane.showMessageDialog(this, msg, title, type);
   }
 
+  @Override
   public void dialogAskImgAfterSplit(String[] options) {
     String name = (String) JOptionPane.showInputDialog(this, "Which image you want to see?",
             "Split Image", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);

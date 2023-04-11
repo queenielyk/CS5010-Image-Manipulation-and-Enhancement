@@ -7,17 +7,32 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+/**
+ * A class extends JPanel and draw a Histogram on GUI.
+ */
 class Histogram extends JPanel {
 
   private int[][][] image;
   private int[] info;
 
+  /**
+   * A Constructor to construct a Histogram.
+   *
+   * @param imgName the name of image to be drawn
+   * @param model   a read-only model
+   */
   public void showHistogram(String imgName, ReadOnlyImageProcessor model) {
     image = model.getImage(imgName);
     info = model.getInfo(imgName);
     repaint();
   }
 
+  /**
+   * A private helper method to count the frequency of each RGB and Intensity value.
+   *
+   * @param mode the value to calculate on
+   * @return a list of frequency of the mode
+   */
   private int[] getCount(String mode) {
     int[] count = new int[256];
     switch (mode) {
