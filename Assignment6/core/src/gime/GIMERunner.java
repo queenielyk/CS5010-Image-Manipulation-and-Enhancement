@@ -1,6 +1,7 @@
 package gime;
 
 import gime.control.GraphicImageController;
+import gime.control.IGraphicController;
 import gime.model.ReadOnlyImageProcessorImpl;
 import gime.view.JFrameView;
 import ime.control.IController;
@@ -32,7 +33,7 @@ public class GIMERunner {
     }
     // GUI-Mode
     else {
-      GraphicImageController ctrl = new GraphicImageController();
+      IGraphicController ctrl = new GraphicImageController();
       MoreImageProcessor processor = new MoreImageProcessorImpl();
       ctrl.runGUI(new JFrameView("GIME APP", new ReadOnlyImageProcessorImpl(processor)), processor);
     }
