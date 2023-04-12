@@ -157,11 +157,21 @@ public class GraphicImageController implements IGraphicController {
   @Override
   public void commandDispatcher(String command, String from) {
     switch (command.split(" ")[0]) {
-      case "colorTrans" -> colorTrans(command.split(" ")[1], from);
-      case "sepia" -> colorTrans(command, from);
-      case "blur", "sharpen" -> filter(command, from);
-      case "dither" -> dither(from);
-      default -> throw new IllegalArgumentException("Action undefined");
+      case "colorTrans":
+        colorTrans(command.split(" ")[1], from);
+        break;
+      case "sepia":
+        colorTrans(command, from);
+        break;
+      case "blur":
+      case "sharpen":
+        filter(command, from);
+        break;
+      case "dither":
+        dither(from);
+        break;
+      default:
+        throw new IllegalArgumentException("Action undefined");
     }
   }
 
