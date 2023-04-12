@@ -34,14 +34,18 @@ public class ProcessorTest {
   public void testImageNameList() {
     MoreImageProcessor processor = new MoreImageProcessorImpl();
     ReadOnlyImageProcessor ro = new ReadOnlyImageProcessorImpl(processor);
+    String[] imageList = new String[]{"image1", "image2", "image3", "image4", "image5"};
 
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image1");
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image2");
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image3");
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image4");
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image5");
-    for(String tmp: ro.getNameList()){
-      System.out.println(tmp);
+
+    int count = 0;
+    for (String tmp : ro.getNameList()) {
+      assertEquals(imageList[count], tmp);
+      count++;
     }
   }
 
