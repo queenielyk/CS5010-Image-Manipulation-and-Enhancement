@@ -97,6 +97,12 @@ public class GraphicImageController implements IGraphicController {
     }
   }
 
+  /**
+   * A private method for dynamic dispatching commands to invoke ColorTrans.
+   *
+   * @param mode ColorTransform mode
+   * @param from the name of image in Model
+   */
   private void colorTrans(String mode, String from) {
     try {
       String name = from + "-" + mode.split("-")[0];
@@ -132,6 +138,12 @@ public class GraphicImageController implements IGraphicController {
     }
   }
 
+  /**
+   * A private method for dynamic dispatching commands to invoke Filtering.
+   *
+   * @param mode ColorTransform mode
+   * @param from the name of image in Model
+   */
   private void filter(String mode, String from) {
     try {
       String name = from + "-" + mode;
@@ -143,6 +155,11 @@ public class GraphicImageController implements IGraphicController {
     }
   }
 
+  /**
+   * A private method to invoke Dither.
+   *
+   * @param from the name of image in Model
+   */
   private void dither(String from) {
     String name = from + "-dither";
     try {

@@ -9,7 +9,10 @@ import mime.model.MoreImageProcessorImpl;
 
 import static org.junit.Assert.assertEquals;
 
-public class ProcessorTest {
+/**
+ * A test class for ReadOnlyImageProcessor.
+ */
+public class ReadOnlyImageProcessorTest {
 
   @Test(expected = ClassCastException.class)
   public void testCastingReadOnly() {

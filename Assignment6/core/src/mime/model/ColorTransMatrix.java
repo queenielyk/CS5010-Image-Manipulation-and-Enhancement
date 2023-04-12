@@ -1,5 +1,8 @@
 package mime.model;
 
+/**
+ * An Enum class to define all ColorTransform 2D matrix.
+ */
 public enum ColorTransMatrix {
   RED(new float[][]{{1, 0, 0}, {1, 0, 0}, {1, 0, 0}}),
   GREEN(new float[][]{{0, 1, 0}, {0, 1, 0}, {0, 1, 0}}),
@@ -11,10 +14,20 @@ public enum ColorTransMatrix {
 
   private final float[][] floats;
 
+  /**
+   * A private constructor to construct an Enum.
+   *
+   * @param floats the 2D matrix to hold
+   */
   private ColorTransMatrix(float[][] floats) {
     this.floats = floats;
   }
 
+  /**
+   * A method to return the ColorTrans matrix.
+   *
+   * @return a 2D matrix
+   */
   public float[][] getFloats() {
     return floats;
   }

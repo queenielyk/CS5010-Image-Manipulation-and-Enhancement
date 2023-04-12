@@ -6,7 +6,6 @@ import mime.model.BufferImageConverter;
 import mime.model.BufferImageConverterImpl;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
@@ -366,7 +365,11 @@ public class JFrameView extends JFrame implements IView {
     histogram.showHistogram(name, processor);
   }
 
-
+  /**
+   * A private method to refresh the showing of an image according to the selected image name.
+   *
+   * @param name the selected image name
+   */
   private void showImage(String name) {
     updateNameList();
     try {

@@ -1,7 +1,7 @@
 package gime.control;
 
 /**
- * A interface to indicate methods as protocols for the View to interact with.
+ * An interface to indicate methods as protocols for the View to interact with.
  */
 public interface Features {
 

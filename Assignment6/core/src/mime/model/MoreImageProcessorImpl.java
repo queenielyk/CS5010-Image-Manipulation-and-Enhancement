@@ -111,6 +111,13 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     }
   }
 
+  /**
+   * A protected helper method to apply the desired ColorTrans matrix on the current int[] rgb.
+   *
+   * @param matrixName the name of applied ColorTrans matrix.
+   * @param rgb        the current rgb in form of int[]
+   * @return the new rgb value in form of int[]
+   */
   protected final int[] applyColorTransMatrix(String matrixName, int[] rgb) {
     int[] newRGB = new int[3];
     float[][] matrix = ColorTransMatrix.valueOf(matrixName.split("-")[0].toUpperCase()).getFloats();

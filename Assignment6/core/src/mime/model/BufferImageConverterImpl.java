@@ -3,6 +3,9 @@ package mime.model;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
+/**
+ * A class implements interface BufferImageConverter.
+ */
 public class BufferImageConverterImpl implements BufferImageConverter {
   @Override
   public BufferedImage convertToBufferImg(int[] info, int[][][] image) {
