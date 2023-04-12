@@ -6,8 +6,8 @@ Professor: Amit Shesh
 
 ## Project idea
 
-We developed a text-based Image Process program with MVC design idea in assignment 4 and assignment 5.
-Moving to assignment 6, we implemented a view for this Image Process program.
+We developed a text-based Image Processing application with MVC design idea in assignment 4 and assignment 5.
+Moving to assignment 6, we implemented a view (GUI) for this Image Processing application.
 
 ## Project Structure
 
@@ -15,14 +15,18 @@ Moving to assignment 6, we implemented a view for this Image Process program.
 
 ## Overview
 
-We developed this project based on a Model + View + Controller (MVC) concept. Before assignment 6, this is a
-text-based program, where View is not supported.
-
-Start from assignment 6, a graphical user interface (GUI) is available. It allows users to interactively load, process and save images. Additionally, the GUI shows the histograms for an image.
+We developed this project based on a Model + View + Controller (MVC) concept. Before assignment 6, this is a text-based program, where View is not supported.
 
 In general, Controller takes input from users then ask Model to execute desired action(s); Model is where computation takes place.
 
 In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model if those operations are valid, return 'unknown' to user otherwise.
+
+Start from assignment 6, a graphical user interface (GUI) is available. It allows users to interactively load, process and save images. Additionally, the GUI shows the histograms for an image.
+
+To show the image and histogram effectively, we eventually adopted Model–view–viewmodel architectural pattern.
+
+With this design pattern, the View is allowed to get data from the Model directly without Controller's help. In contrast, any actions involved modifing data or computation, the View is prohibited to ask the Model to do so but the Controller.
+
 
 ## Format limitation
 
@@ -38,7 +42,7 @@ Overall, the supporting formats are:
 For those formats are not listed above, we are not able to provide any operations,
 even the most basic operations load and save.
 
-If an attempting image is not supported, the processor will throw exception.
+If an attempting image is not supported, the application will throw an exception.
 
 ## Controller
 
@@ -130,9 +134,10 @@ mime/model
     ├── AbsrtuctImageHandler.java
     ├── ImageHandler.java
     ├── ImageIOHandler.java
-    └── PpmHandler.java
+    ├── PpmHandler.java
+    └── BufferImageConverter.java
 ```
-`ImageHandler.java` is an interface that indicates what kind of actions a hadnler should have:
+`ImageHandler.java` is an interface that indicates what kind of actions a handler should have:
 - Read image
 - Get image
 - Get info
@@ -147,10 +152,12 @@ Once the controller recognized a command is related to read/write image, it will
 > 
 > bmp / jpg / jpeg / png → ImageIOHandler
 
+`BufferImageConverter.java` is an interface that indicates a converter method that converts an image from the Model into a BufferImage.
+`ImageIOHandler.java` implemented `BufferImageConverter.java`.
+
 ## Model
 
-**This model design is not compatible to the previous model design. For more details,
-read [Change Log.](#1-image-representation-linked-list---3d-array)**
+**The model design since Assignment 5 is not compatible to the model design in Assignment 4. For more details, read [Change Log.](#1-image-representation-linked-list---3d-array)**
 
 ``` bash
 ime/model
@@ -159,6 +166,10 @@ ime/model
 mime/model
     ├── MoreImageProcessor.java
     └── MoreImageProcessorImpl.java
+
+gime/model
+    ├── ReadOnlyImageProcessor.java
+    └── ReadOnlyImageProcessorImpl.java
 ```
 
 ### Data Structure
@@ -183,10 +194,10 @@ An image Dimension: 2x4
 ### Computation
 
 `ImageProcessor` is an interface indicates actions that an image processor should have:
-- Load
+- Load `@Deprecated`
 - Save `@Deprecated`
 - Combine
-- Greyscale
+- ~~Greyscale~~ Color Trans
     - red-component
     - green-component
     - blue-component
@@ -197,15 +208,24 @@ An image Dimension: 2x4
     - Horizontal
     - Vertical
 
-`MoreImageProcessor` is an interface extends `ImageProcessor` and indicates what kind of new actions a processor should have:
+`ReadOnlyImageProcessor` is an interface indicates read-only actions to be an object adopter of `MoreImageProcessor`. The read-only actions are:
+- Get
+    - Info
+    - Image
+    - Image Name List
 
+
+`MoreImageProcessor` is an interface extends both `ImageProcessor` and `ReadOnlyImageProcessor`.It also indicates what kind of new actions a processor should have:
+- Load
 - Dithering
-- Greyscale
+- ~~Greyscale~~ Color Trans
     - greyscale
     - sepia
 - Filter
     - Blur
     - Sharpen
+
+## View
 
 ## Instruction
 
@@ -231,7 +251,15 @@ An image Dimension: 2x4
    - sharpen sourceImg destImg
    ```
 
-2. Run packed `core.jar` file under root path on command promote with command lind option.
+2. Run `src/gime/GIMERunner.java` to start the program with GUI.
+   1. If no image is loaded, all Buttons and Dropdowns throw a dialog to show error message, except Button `load image`.
+   2. Users are allowed to load multiple images one-by-one.
+   3. For every new loaded image, we named it with it's filename but removed all existing `-`.
+   4. The application automatically named each image by appending `-{effect name}` to the current image name.
+   5. Users are able to switch between images.
+   6. The effect indicated at the left dropdown allows clicking multiple times.
+
+3. Run packed `core.jar` file under root path on command promote with command lind option.
     ```bash
     java -jar core.jar -file {script}
     ```
@@ -256,6 +284,17 @@ core/res
 ```
 
 ## Change Log
+
+### From Assignment 5 to Assignment 6
+
+#### 1. GUI
+
+#### 2. Move Read-Only methods from `MoreImageProcessor` to `ReadOnlyImageProcessor`
+
+#### 3. `ImageIOHandler` implements `BufferImageConverter`
+In assignment 5, the image conversion (int[][][] → BufferImage) was writen inside a method together with the saving methodology in `ImageIOHandler`.
+But, BufferImage is also required by the View to show the image. Therefore, we created a new interface `BufferImageConverter` which is implemented by `ImageIOHandler` by moving the conversion out as a method itself.
+With this design, the View is able to have a `BufferImageConverter` object to convert the image getting from the Model and show it without repeating the codes to do conversion.
 
 ### From Assignment 4 to Assignment 5
 
