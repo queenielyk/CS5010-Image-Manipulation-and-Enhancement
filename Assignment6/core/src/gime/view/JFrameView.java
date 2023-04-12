@@ -335,13 +335,13 @@ public class JFrameView extends JFrame implements IView {
     imagenameDD.addActionListener(evt -> {
       List<String> names = processedImgNames.get(imagenameDD.getSelectedItem().toString());
       if (names.contains(imagenameEffectDD.getSelectedItem().toString())) {
-        showImage(getImgName());
+        updateShowing(getImgName());
       } else {
-        showImage(imagenameDD.getSelectedItem().toString() + "-raw");
+        updateShowing(imagenameDD.getSelectedItem().toString() + "-raw");
       }
     });
 
-    imagenameEffectDD.addActionListener(evt -> showImage(getImgName()));
+    imagenameEffectDD.addActionListener(evt -> updateShowing(getImgName()));
 
   }
 
@@ -356,14 +356,19 @@ public class JFrameView extends JFrame implements IView {
   }
 
   @Override
-  public void showImage(String name) {
+  public void updateShowing(String name) {
+    showImage(name);
+    histogram.showHistogram(name, processor);
+  }
+
+
+  private void showImage(String name) {
     updateNameList();
     try {
       int[][][] imgList = this.processor.getImage(name);
       int[] imgInfo = this.processor.getInfo(name);
       BufferedImage convertedImg = convertImgToBufferImage(imgInfo, imgList);
       sImageLabel.setIcon(new ImageIcon(convertedImg));
-      histogram.showHistogram(name, processor);
       String[] splited = name.split("-", 2);
       imagenameDD.setSelectedItem(splited[0]);
 
@@ -443,7 +448,7 @@ public class JFrameView extends JFrame implements IView {
   public void dialogAskImgAfterSplit(String[] options) {
     String name = (String) JOptionPane.showInputDialog(this, "Which image you want to see?",
             "Split Image", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-    showImage(name);
+    updateShowing(name);
   }
 
 

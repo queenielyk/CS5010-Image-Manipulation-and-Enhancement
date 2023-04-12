@@ -15,11 +15,11 @@ public interface IView {
   void addFeatures(Features features);
 
   /**
-   * A method to initiate the GUI to show a specific image according to the name.
+   * A method to initiate the GUI to show a specific image and the histogram according to the name.
    *
    * @param name the name of image
    */
-  void showImage(String name);
+  void updateShowing(String name);
 
   /**
    * A method to initiate a dialog to send information to the user.
