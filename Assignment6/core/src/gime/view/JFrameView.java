@@ -2,6 +2,8 @@ package gime.view;
 
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
+import mime.model.BufferImageConverter;
+import mime.model.BufferImageConverterImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -67,6 +69,8 @@ public class JFrameView extends JFrame implements IView {
 
   private Map<String, List<String>> processedImgNames;
 
+  private BufferImageConverter biConverter;
+
   /**
    * A private helper method to initial the mapping between each dropdown option and actual command.
    */
@@ -93,6 +97,7 @@ public class JFrameView extends JFrame implements IView {
   public JFrameView(String caption, ReadOnlyImageProcessor processor) {
     super(caption);
     this.processor = processor;
+    this.biConverter = new BufferImageConverterImpl();
     initCommandsMap();
 
     setPreferredSize(new Dimension(1750, 900));
@@ -367,7 +372,7 @@ public class JFrameView extends JFrame implements IView {
     try {
       int[][][] imgList = this.processor.getImage(name);
       int[] imgInfo = this.processor.getInfo(name);
-      BufferedImage convertedImg = convertImgToBufferImage(imgInfo, imgList);
+      BufferedImage convertedImg = biConverter.convertToBufferImg(imgInfo, imgList);
       sImageLabel.setIcon(new ImageIcon(convertedImg));
       String[] splited = name.split("-", 2);
       imagenameDD.setSelectedItem(splited[0]);
@@ -408,26 +413,6 @@ public class JFrameView extends JFrame implements IView {
     for (String name : processedImgNames.keySet()) {
       imagenameDD.addItem(name);
     }
-  }
-
-  /**
-   * A private helper method to convert the image from model to a BufferImage for showing.
-   *
-   * @param info  the info of image in form of int[]
-   * @param image the image content in form of int[][][]
-   * @return a BufferImage
-   */
-  private BufferedImage convertImgToBufferImage(int[] info, int[][][] image) {
-    BufferedImage buffImage = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_RGB);
-    int[] rgb;
-    for (int row = 0; row < info[1]; row++) {
-      for (int col = 0; col < info[0]; col++) {
-        rgb = image[row][col];
-        Color c = new Color(rgb[0], rgb[1], rgb[2]);
-        buffImage.setRGB(col, row, c.getRGB());
-      }
-    }
-    return buffImage;
   }
 
   @Override

@@ -1,6 +1,5 @@
 package mime.model;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,11 +19,14 @@ import javax.imageio.ImageWriter;
  */
 public class ImageIOHandler extends AbsrtuctImageHandler {
 
+  private BufferImageConverter converter;
+
   /**
    * A constructor to construct an ImageIOHandler.
    */
   public ImageIOHandler() {
     super();
+    this.converter = new BufferImageConverterImpl();
   }
 
   @Override
@@ -61,15 +63,7 @@ public class ImageIOHandler extends AbsrtuctImageHandler {
   public void saveImage(OutputStream stream, String format, int[] info, int[][][] image)
           throws IOException {
 
-    BufferedImage buffImage = new BufferedImage(info[0], info[1], BufferedImage.TYPE_INT_RGB);
-    int[] rgb;
-    for (int row = 0; row < info[1]; row++) {
-      for (int col = 0; col < info[0]; col++) {
-        rgb = image[row][col];
-        Color c = new Color(rgb[0], rgb[1], rgb[2]);
-        buffImage.setRGB(col, row, c.getRGB());
-      }
-    }
+    BufferedImage buffImage = this.converter.convertToBufferImg(info, image);
 
     if (format.equals(".jpg") || format.equals("jpeg")) {
       ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName(format).next();
