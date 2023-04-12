@@ -78,7 +78,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * A helper method to check existence of  the to be processed image.
    *
    * @param name image to be processed
-   * @throws IllegalStateException image is not exist
+   * @throws NoSuchElementException image is not exist
    */
   protected final void checkImageExistence(String name) throws NoSuchElementException {
     if (!images.containsKey(name)) {
@@ -86,76 +86,57 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
     }
   }
 
+  @Override
   public void colorTrans(String mode, String from, String to) throws IllegalArgumentException {
 
     checkImageExistence(from);
 
     switch (mode) {
       case "red-component":
-        greyscaleLooper(from, to, rgb -> new int[]{rgb[0], rgb[0], rgb[0]});
-        break;
       case "green-component":
-        greyscaleLooper(from, to, rgb -> new int[]{rgb[1], rgb[1], rgb[1]});
-        break;
       case "blue-component":
-        greyscaleLooper(from, to, rgb -> new int[]{rgb[2], rgb[2], rgb[2]});
+      case "intensity-component":
+      case "sepia":
+        colortransLooper(from, to, rgb -> applyColorTransMatrix(mode, rgb));
         break;
       case "value-component":
-        greyscaleLooper(from, to, rgb -> new int[]{
-                calValueValue(rgb), calValueValue(rgb), calValueValue(rgb)
-        });
-        break;
-      case "intensity-component":
-        greyscaleLooper(from, to, rgb -> new int[]{
-                calIntensityValue(rgb), calIntensityValue(rgb), calIntensityValue(rgb)
-        });
+        colortransLooper(from, to, this::calValueValue);
         break;
       case "greyscale":
       case "luma-component":
-        greyscaleLooper(from, to, rgb -> new int[]{
-                calLumaValue(rgb), calLumaValue(rgb), calLumaValue(rgb)
-        });
-        break;
-      case "sepia":
-        greyscaleLooper(from, to, rgb -> new int[]{
-            (int) (0.393 * rgb[0] + 0.769 * rgb[1] + 0.189 * rgb[2]),
-            (int) (0.349 * rgb[0] + 0.686 * rgb[1] + 0.168 * rgb[2]),
-            (int) (0.272 * rgb[0] + 0.534 * rgb[1] + 0.131 * rgb[2])});
+        colortransLooper(from, to, rgb -> applyColorTransMatrix("luma-component", rgb));
         break;
       default:
-        throw new IllegalArgumentException("This grayscale component is not an option!");
+        throw new IllegalArgumentException(mode + " is not supported!");
     }
   }
 
-  /**
-   * A protected helper method to assist calculating value value.
-   *
-   * @param rgb int[red, green, blue] of a pixel
-   * @return the value value
-   */
-  protected final int calValueValue(int[] rgb) {
-    return Math.max(Math.max(rgb[0], rgb[1]), rgb[2]);
+  protected final int[] applyColorTransMatrix(String matrixName, int[] rgb) {
+    int[] newRGB = new int[3];
+    float[][] matrix = ColorTransMatrix.valueOf(matrixName.split("-")[0].toUpperCase()).getFloats();
+
+    for (int row = 0; row < 3; row++) {
+      float sum = 0;
+      for (int col = 0; col < 3; col++) {
+        sum += rgb[col] * matrix[row][col];
+      }
+      newRGB[row] = (int) sum;
+    }
+    return newRGB;
   }
 
   /**
-   * A protected helper method to assist calculating intensity value.
+   * A protected helper method to assist calculating value of value-component, which is the maximum value of rgb.
+   * Then return a int[max, max, max] as a new rgb value.
    *
    * @param rgb int[red, green, blue] of a pixel
-   * @return the intensity value
+   * @return int[max, max, max] where max is the maximum value of the original array
    */
-  protected final int calIntensityValue(int[] rgb) {
-    return (rgb[0] + rgb[1] + rgb[2]) / 3;
+  protected final int[] calValueValue(int[] rgb) {
+    int max = Math.max(Math.max(rgb[0], rgb[1]), rgb[2]);
+    return new int[]{max, max, max};
   }
 
-  /**
-   * A protected helper method to assist calculating luma value.
-   *
-   * @param rgb int[red, green, blue] of a pixel
-   * @return the luma value
-   */
-  protected final int calLumaValue(int[] rgb) {
-    return (int) (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]);
-  }
 
   /**
    * A helper method to loop over the component chain of the target image, meanwhile executing the
@@ -166,7 +147,7 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
    * @param to         new image's name
    * @param conversion function define how a new component to be constructed
    */
-  protected final void greyscaleLooper(String from, String to, Function<int[], int[]> conversion) {
+  protected final void colortransLooper(String from, String to, Function<int[], int[]> conversion) {
 
     int[][][] fromImage = images.get(from);
     int[] info = infos.get(from);

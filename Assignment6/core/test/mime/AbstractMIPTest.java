@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.NoSuchElementException;
 
 import javax.imageio.IIOException;
 
@@ -116,7 +117,7 @@ public abstract class AbstractMIPTest {
     processor.save("fake", "fake");
   }
 
-  @Test(expected = IllegalStateException.class)
+  @Test(expected = NoSuchElementException.class)
   public void testAdjustBrightnessNotExist() {
     processor.loadImage(new int[]{3, 3, 255}, new int[][][]{
             {{234, 232, 236}, {209, 194, 193}, {168, 150, 148}},
