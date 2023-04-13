@@ -67,6 +67,7 @@ ime/control
         ├── Save.java
         └── Vflip.java
 ```
+
 ``` bash
 Assignment 5 Script
 mime/control
@@ -79,6 +80,7 @@ mime/control
         ├── LoadInputStream.java
         └── SaveOutStream.java
 ```
+
 ``` bash
 Assignment 6 GUI
 gime/control
@@ -88,7 +90,9 @@ gime/control
 ```
 
 ### Design
-#### Text/Script 
+
+#### Text/Script
+
 Interface `IController` will only have two methods:
 
 - `processCommand(String command)`  takes single line of string from Input and delegate to creat
@@ -108,13 +112,17 @@ command to implements other command base on sequences of these atomic command.
 (For example, we can do RGB split by just use Greyscale three time.
 
 #### GUI
+
 `Features` will provide list of call back function to views.   
 `IGraphicController` will extend `Features` with one extra method:
+
 - `runGUI(IView,MoreImageProcessor)` which will take in the view and controller and start running
-represent a completely different control logic.
+  represent a completely different control logic.
 
 ### Control flow
+
 #### Text/Script
+
 The major control flow will be done inside `processCommand()` implementation, which takes a String
 command.
 
@@ -128,9 +136,10 @@ Finally, If the command string fall into one case and get created successfully. 
 the `cmd.execute()` to delegate the operations to the model.
 
 #### GUI
-`GraphicImageController` will just act as a bunch of features to view in order for view to bind to 
-action. 
-One of the method will be called when view actions was triggered by user. 
+
+`GraphicImageController` will just act as a bunch of features to view in order for view to bind to
+action.
+One of the method will be called when view actions was triggered by user.
 Then controller will use parse the input and build command and execute on the model
 and use method provide by view to update view accordingly to complete different task.
 
@@ -283,6 +292,16 @@ src/gime/view/
         └── vertical-flip.png
 ```
 
+`IVew.java` is an interface indicates methods that allow Controller to interact with.
+It is implemented by `JFramView`, where it contains all components showed on the GUI.
+
+We customized the JButton with no borders and showing icon only by implementing a class `CustomJButton extends JButton`,
+then placed all customization inside the constructor.
+Besides customizing the JButton, we also customized JCombox at `CustomJCombox extends JCombox`. We customized Jcombox to
+prevent triggering `ActionListener` if that action is not from user side.
+
+`Histogram extends JPanel` is a Panel automatically refresh and show the histogram of an image.
+
 ### Design
 
 We implemented the View by `javax.swing`.
@@ -316,15 +335,20 @@ There are three dropdowns and seven buttons at the topbar. The functionalities (
 9. Load Image (Icon Button)
 10. Save Image (Icon Button)
 
-**The application will throw an error dialog when pressing any buttons except `Load Image` if no image is loaded into the application.**
+**The application will throw an error dialog when pressing any buttons except `Load Image` if no image is loaded into
+the application.**
 
 #### Image Panel
+
 Automatically refresh the showing image if the user select an image is not the current one.
-Besides, if user selected the image name has not performed the same process as the previous, the application show the raw image in default.
+Besides, if user selected the image name has not performed the same process as the previous, the application show the
+raw image in default.
 
 #### Histogram Panel
+
 Automatically refresh the histogram of the showing image if the user select an image is not the current one.
 For color images, there are four lines ({Component} - {Line color}):
+
 - Red - Red
 - Green - Green
 - Blue - Blue
@@ -332,6 +356,22 @@ For color images, there are four lines ({Component} - {Line color}):
 
 For greyscale images, there is one line only.
 
+### Logistic
+
+All `ActionListener` are defined inside `addFeature(Features features)`, which is a method allows the Controller to
+provide callback functions.
+For any actions that needs to process an image, the View will pass the command and current image name to the Controller
+There could be some messages returned from the Controller or the Model, therefore the View provided some public methods
+for the Controller to interact with.
+
+1. The View provided a public method `updateShowing()` for the Controller to initiate a refresh on image and histogram.
+   We decided to hand this decision to the Controller because some images might be too big and need time to process.
+   This
+   methodology prevents the View from keep asking for the new image before it is done.
+2. The View provided a public method `showDialog()` for the Controller to initiate a dialog and show the message to the
+   users.
+3. The View provide a public method `dialogAskImgAfterSplit()` for the Controller to ask the user which image they want
+   to see after executing `RGB Splite`. The reason to provide this method to the Controller is as same as 1.
 
 ## Instruction
 
@@ -408,7 +448,8 @@ core/res
 
 ### From Assignment 5 to Assignment 6
 
-#### 1. GUI
+#### 1. New support to GUI
+
 A GUI is supported to allow a user to interactively load, process and save images.
 To know more about the GUI, please refer to [View (GUI)](#view-gui).
 
