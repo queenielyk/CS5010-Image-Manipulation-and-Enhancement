@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -41,16 +42,9 @@ public class JFrameView extends JFrame implements IView {
 
   private final ReadOnlyImageProcessor processor;
   private Map<String, String> commandsMap = new LinkedHashMap<>();
-  private JPanel topbar;
-  private JPanel namep;
-  private JPanel btnp;
-  private JPanel histoPanel;
 
   private Histogram histogram;
 
-  private JPanel imageGap;
-  private JPanel imgp;
-  private JScrollPane scrollImage;
   private JLabel sImageLabel;
 
   private JButton addBtn;
@@ -106,7 +100,7 @@ public class JFrameView extends JFrame implements IView {
 
     this.setLayout(new BorderLayout());
 
-    topbar = new JPanel();
+    JPanel topbar = new JPanel();
     topbar.setLayout(new BoxLayout(topbar, BoxLayout.X_AXIS));
 
     commandDD = new CustomJComboBox();
@@ -115,103 +109,24 @@ public class JFrameView extends JFrame implements IView {
     }
     commandDD.setSelectedIndex(-1);
     topbar.add(commandDD);
-
-    namep = new JPanel();
-    namep.setLayout(new BoxLayout(namep, BoxLayout.X_AXIS));
-    namep.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
-
-    imagenameDD = new CustomJComboBox();
-    namep.add(imagenameDD);
-
-    imagenameEffectDD = new CustomJComboBox();
-    namep.add(imagenameEffectDD);
-
-    namep.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
-    topbar.add(namep);
-
-    btnp = new JPanel();
-    btnp.setLayout(new BoxLayout(btnp, BoxLayout.X_AXIS));
-    btnp.add(Box.createHorizontalGlue());
-
-    try {
-      brightnessBtn = new CustomJButton("resources/brightness.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(brightnessBtn);
-
-    Dimension boxFiller = new Dimension(20, 30);
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-
-    try {
-      splitBtn = new CustomJButton("resources/arrows.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(splitBtn);
-
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-
-    try {
-      combineBtn = new CustomJButton("resources/intersection.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(combineBtn);
-
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-
-    try {
-      horizontalBtn = new CustomJButton("resources/horizontal-flip.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(horizontalBtn);
-
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-
-    try {
-      verticalBtn = new CustomJButton("resources/vertical-flip.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(verticalBtn);
-
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-
-    try {
-      addBtn = new CustomJButton("resources/add-new-50.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(addBtn);
-
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-
-    try {
-      saveBtn = new CustomJButton("resources/save-50.png");
-    } catch (Exception ex) {
-      showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
-    }
-    btnp.add(saveBtn);
-
-    btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
-    topbar.add(btnp);
+    topbar.add(initialNamePanel());
+    topbar.add(initialButtonPanel());
 
     topbar.setPreferredSize(new Dimension(this.getWidth(), 75));
 
-    imageGap = new JPanel();
+    // ----------------------------------Image---------------------
+    JPanel imageGap = new JPanel();
     imageGap.setPreferredSize(new Dimension(20, this.getHeight() - 75));
 
     sImageLabel = new JLabel();
-    imgp = new JPanel(new GridBagLayout());
+    JPanel imgp = new JPanel(new GridBagLayout());
     imgp.add(sImageLabel);
-    scrollImage = new JScrollPane(imgp);
+    JScrollPane scrollImage = new JScrollPane(imgp);
     scrollImage.setPreferredSize(new Dimension((this.getWidth() - 20) / 2, this.getHeight() - 75));
     scrollImage.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
     // ----------------------------------Histogram---------------------
-    histoPanel = new JPanel();
+    JPanel histoPanel = new JPanel();
     histoPanel.setLayout(new BorderLayout());
     histogram = new Histogram();
     histoPanel.setPreferredSize(new Dimension(this.getWidth() / 2 - 20, this.getHeight() - 75));
@@ -228,6 +143,98 @@ public class JFrameView extends JFrame implements IView {
     pack();
     setLocationRelativeTo(null);
     setVisible(true);
+  }
+
+  /**
+   * A private helper method to initial JPanel for name dropdowns.
+   *
+   * @return a JPanel with name dropdowns
+   */
+  private JPanel initialNamePanel() {
+    JPanel namep = new JPanel();
+    namep.setLayout(new BoxLayout(namep, BoxLayout.X_AXIS));
+    namep.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
+
+    imagenameDD = new CustomJComboBox();
+    namep.add(imagenameDD);
+
+    imagenameEffectDD = new CustomJComboBox();
+    namep.add(imagenameEffectDD);
+
+    namep.add(new Box.Filler(new Dimension(20, 25), new Dimension(20, 25), new Dimension(20, 25)));
+    return namep;
+  }
+
+  /**
+   * A customized FunctionalInterface for adding a JButton into a JPanel.
+   *
+   * @param <T> type of button
+   */
+  @FunctionalInterface
+  interface AddButton<T> {
+
+    /**
+     * A method to apply change.
+     *
+     * @param btn a button
+     */
+    public void apply(T btn);
+  }
+
+  /**
+   * A private helper method to initialize a JPanel for buttons.
+   *
+   * @return a JPanel with buttons
+   */
+  private JPanel initialButtonPanel() {
+    JPanel btnp = new JPanel();
+    btnp.setLayout(new BoxLayout(btnp, BoxLayout.X_AXIS));
+    btnp.add(Box.createHorizontalGlue());
+    Dimension boxFiller = new Dimension(20, 30);
+
+    /*
+      A lambda function to initial a JButton according to the give icon file path.
+     */
+    Function<String, JButton> initialButton = (path) -> {
+      JButton jButton = null;
+      try {
+        jButton = new CustomJButton(path);
+      } catch (Exception ex) {
+        JFrameView.this.showDialog(JOptionPane.ERROR_MESSAGE, ex.getMessage());
+      }
+      return jButton;
+    };
+
+    /*
+     * Implement customized FunctionInterface {@link AddButton}.
+     */
+    AddButton<JButton> adding = (jButton) -> {
+      btnp.add(jButton);
+      btnp.add(new Box.Filler(boxFiller, boxFiller, boxFiller));
+    };
+
+    brightnessBtn = initialButton.apply("resources/brightness.png");
+    adding.apply(brightnessBtn);
+
+    splitBtn = initialButton.apply("resources/arrows.png");
+    adding.apply(splitBtn);
+
+    combineBtn = initialButton.apply("resources/intersection.png");
+    adding.apply(combineBtn);
+
+    horizontalBtn = initialButton.apply("resources/horizontal-flip.png");
+    adding.apply(horizontalBtn);
+
+    verticalBtn = initialButton.apply("resources/vertical-flip.png");
+    adding.apply(verticalBtn);
+
+    addBtn = initialButton.apply("resources/add-new-50.png");
+    adding.apply(addBtn);
+
+    saveBtn = initialButton.apply("resources/save-50.png");
+    adding.apply(saveBtn);
+
+    return btnp;
   }
 
 
