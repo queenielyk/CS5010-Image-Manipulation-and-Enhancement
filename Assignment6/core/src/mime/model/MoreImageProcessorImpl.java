@@ -133,7 +133,8 @@ public class MoreImageProcessorImpl implements MoreImageProcessor {
   }
 
   /**
-   * A protected helper method to assist calculating value of value-component, which is the maximum value of rgb.
+   * A protected helper method to assist calculating value of value-component,
+   * which is the maximum value of rgb.
    * Then return a int[max, max, max] as a new rgb value.
    *
    * @param rgb int[red, green, blue] of a pixel
