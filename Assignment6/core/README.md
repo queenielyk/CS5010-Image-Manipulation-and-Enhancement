@@ -52,6 +52,7 @@ If an attempting image is not supported, the application will throw an exception
 ## Controller
 
 ``` bash
+Assignment 4 Text
 ime/control
     ├── IController.java
     ├── ImageController.java
@@ -66,9 +67,28 @@ ime/control
         ├── Save.java
         └── Vflip.java
 ```
+``` bash
+Assignment 5 Script
+mime/control
+    ├── MoreImageCommand.java
+    ├── MoreImageController.java
+    └── command
+        ├── ColorTrans.java
+        ├── Dither.java
+        ├── Filter.java
+        ├── LoadInputStream.java
+        └── SaveOutStream.java
+```
+``` bash
+Assignment 6 GUI
+gime/control
+    ├── Features.java
+    ├── IGraphicController
+    └── GraphicImageController
+```
 
 ### Design
-
+#### Text/Script 
 Interface `IController` will only have two methods:
 
 - `processCommand(String command)`  takes single line of string from Input and delegate to creat
@@ -85,29 +105,16 @@ model `MoreImageProcessor`, which is sequence of operation on model.
 
 We have several atomic commands like(`Save`,`Load`,`Greyscale` ..etc) and now we can use these
 command to implements other command base on sequences of these atomic command.   
-(For example, we can do RGB split by just use Greyscale three time.） This makes it easy for future
-extensions.
+(For example, we can do RGB split by just use Greyscale three time.
 
-We add few more class to extend a reused the previous /ime package inorder to support
-more features.
-
-``` bash
-mime/control
-    ├── MoreImageCommand.java
-    ├── MoreImageController.java
-    └── command
-        ├── ColorTrans.java
-        ├── Dither.java
-        ├── Filter.java
-        ├── LoadInputStream.java
-        └── SaveOutStream.java
-``` 
-
-After all these extension, we now support load image from Input-stream and Save to OutputStream
-instead of only file path.
+#### GUI
+`Features` will provide list of call back function to views.   
+`IGraphicController` will extend `Features` with one extra method:
+- `runGUI(IView,MoreImageProcessor)` which will take in the view and controller and start running
+represent a completely different control logic.
 
 ### Control flow
-
+#### Text/Script
 The major control flow will be done inside `processCommand()` implementation, which takes a String
 command.
 
@@ -119,6 +126,13 @@ checking to apply.
 
 Finally, If the command string fall into one case and get created successfully. We just call
 the `cmd.execute()` to delegate the operations to the model.
+
+#### GUI
+`GraphicImageController` will just act as a bunch of features to view in order for view to bind to 
+action. 
+One of the method will be called when view actions was triggered by user. 
+Then controller will use parse the input and build command and execute on the model
+and use method provide by view to update view accordingly to complete different task.
 
 ### Fields
 
@@ -352,7 +366,7 @@ For greyscale images, there is one line only.
     5. Users are able to switch between images.
     6. The effect indicated at the left dropdown allows clicking multiple times.
 
-3. Run packed `core.jar` file under root path on command promote with command lind option.
+3. Run packed `core.jar` file under root path on command promote with command line option.
     ```bash
    # Invoke the application to open and execute a script file then shut down.
     java -jar Program.jar -file {path-of-script-file}

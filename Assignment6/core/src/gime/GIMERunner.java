@@ -15,8 +15,17 @@ import mime.control.MoreImageController;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
 
+/**
+ * This is the main program class.
+ */
 public class GIMERunner {
 
+  /**
+   * Base on different command line options one of three mode will get run (TextCMD/Script/GUI).
+   *
+   * @param args command line arguments
+   * @throws IOException if path is not found or something when wrong with FileIO.
+   */
   public static void main(String[] args) throws IOException {
     int fileOption = Arrays.asList(args).indexOf("-file");
     int textOption = Arrays.asList(args).indexOf("-text");
