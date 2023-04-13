@@ -294,13 +294,13 @@ There are three dropdowns and seven buttons at the topbar. The functionalities (
     - Dither
 2. Loaded image file name (Dropdown)
 3. Effect applied in sequence (Dropdown)
-4. Adjust Brightness (Button)
-5. RGB-Split (Button)
-6. RGB-Combine (Button)
-7. Horizontal Flip (Button)
-8. Vertical Flip (Button)
-9. Load Image (Button)
-10. Save Image (Button)
+4. Adjust Brightness (Icon Button)
+5. RGB-Split (Icon Button)
+6. RGB-Combine (Icon Button)
+7. Horizontal Flip (Icon Button)
+8. Vertical Flip (Icon Button)
+9. Load Image (Icon Button)
+10. Save Image (Icon Button)
 
 **The application will throw an error dialog when pressing any buttons except `Load Image` if no image is loaded into the application.**
 
@@ -354,9 +354,22 @@ For greyscale images, there is one line only.
 
 3. Run packed `core.jar` file under root path on command promote with command lind option.
     ```bash
-    java -jar core.jar -file {script}
+   # Invoke the application to open and execute a script file then shut down.
+    java -jar Program.jar -file {path-of-script-file}
+   
+   # Invoke the application to open in an interactive text mode.
+   # Users are allowed to type the script and execute it one line at a time.
+    java -jar Program.jar -text
+    
+   # Invoke the application to open the GUI.
+   # This is the default opening action if users double-click on the jar file.
+    java -jar Program.jar
     ```
    > ex: java -jar core.jar -file res/newscript.text
+   >
+   > ex: java -jar core.jar -text
+   >
+   > ex: java -jar core.jar
 
    This scripts will run on images files under res/ folder and output file will be produced to the
    `res/ime/` and `res/mime/` folder.
@@ -382,6 +395,8 @@ core/res
 ### From Assignment 5 to Assignment 6
 
 #### 1. GUI
+A GUI is supported to allow a user to interactively load, process and save images.
+To know more about the GUI, please refer to [View (GUI)](#view-gui).
 
 #### 2. Interface Segregation: Move Read-Only methods from `MoreImageProcessor` to `ReadOnlyImageProcessor`
 
