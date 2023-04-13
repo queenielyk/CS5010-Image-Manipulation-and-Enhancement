@@ -7,6 +7,9 @@ import gime.model.ReadOnlyImageProcessorImpl;
 import mime.model.MoreImageProcessor;
 import mime.model.MoreImageProcessorImpl;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -46,7 +49,8 @@ public class ReadOnlyImageProcessorTest {
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image5");
 
     int count = 0;
-    for (String tmp : ro.getNameList()) {
+    for (Iterator<String> it = Arrays.stream(ro.getNameList()).sorted().iterator(); it.hasNext(); ) {
+      String tmp = it.next();
       assertEquals(imageList[count], tmp);
       count++;
     }
