@@ -1,7 +1,7 @@
-# CS5010 Assignment5: Image Manipulation and Enhancement V2.0
+# CS5010 Assignment6: Graphical Image Manipulation and Enhancement
 
 Member: Queenie, Cheng    
-Date: March 25 2023   
+Date: April 5 2023   
 Professor: Amit Shesh
 
 ## Instruction
@@ -28,11 +28,33 @@ Professor: Amit Shesh
    - sharpen sourceImg destImg
    ```
 
-2. Run packed `core.jar` file under root path on command promote with command lind option.
+2. Run `src/gime/GIMERunner.java` to start the program with GUI.
+    1. If no image is loaded, all Buttons and Dropdowns throw a dialog to show error message, except
+       Button `load image`.
+    2. Users are allowed to load multiple images one-by-one.
+    3. For every new loaded image, we named it with it's filename but removed all existing `-`.
+    4. The application automatically named each image by appending `-{effect name}` to the current image name.
+    5. Users are able to switch between images.
+    6. The effect indicated at the left dropdown allows clicking multiple times.
+
+3. Run packed `core.jar` file under root path on command promote with command line option.
     ```bash
-    java -jar core.jar -file {script}
+   # Invoke the application to open and execute a script file then shut down.
+    java -jar Program.jar -file {path-of-script-file}
+   
+   # Invoke the application to open in an interactive text mode.
+   # Users are allowed to type the script and execute it one line at a time.
+    java -jar Program.jar -text
+    
+   # Invoke the application to open the GUI.
+   # This is the default opening action if users double-click on the jar file.
+    java -jar Program.jar
     ```
    > ex: java -jar core.jar -file res/newscript.text
+   >
+   > ex: java -jar core.jar -text
+   >
+   > ex: java -jar core.jar
 
    This scripts will run on images files under res/ folder and output file will be produced to the
    `res/ime/` and `res/mime/` folder.
