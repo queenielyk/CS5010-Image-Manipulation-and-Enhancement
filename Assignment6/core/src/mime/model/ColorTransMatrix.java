@@ -9,11 +9,11 @@ public enum ColorTransMatrix {
   BLUE(new float[][]{{0, 0, 1}, {0, 0, 1}, {0, 0, 1}}),
   VALUE(new float[][]{{1, 0, 0}, {1, 0, 0}, {1, 0, 0}}),
   INTENSITY(new float[][]{{1 / 3F, 1 / 3F, 1 / 3F}, {1 / 3F, 1 / 3F, 1 / 3F},
-          {1 / 3F, 1 / 3F, 1 / 3F}}),
+      {1 / 3F, 1 / 3F, 1 / 3F}}),
   LUMA(new float[][]{{0.2126F, 0.7152F, 0.0722F}, {0.2126F, 0.7152F, 0.0722F},
-          {0.2126F, 0.7152F, 0.0722F}}),
+      {0.2126F, 0.7152F, 0.0722F}}),
   SEPIA(new float[][]{{0.393F, 0.769F, 0.189F}, {0.349F, 0.686F, 0.168F},
-          {0.272F, 0.534F, 0.131F}});
+      {0.272F, 0.534F, 0.131F}});
 
   private final float[][] floats;
 

@@ -1,16 +1,14 @@
 package gime;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import gime.model.ReadOnlyImageProcessor;
 import gime.model.ReadOnlyImageProcessorImpl;
-import mime.model.MoreImageProcessor;
-import mime.model.MoreImageProcessorImpl;
-
 import java.util.Arrays;
 import java.util.Iterator;
-
-import static org.junit.Assert.assertEquals;
+import mime.model.MoreImageProcessor;
+import mime.model.MoreImageProcessorImpl;
+import org.junit.Test;
 
 /**
  * A test class for ReadOnlyImageProcessor.
@@ -49,7 +47,8 @@ public class ReadOnlyImageProcessorTest {
     processor.loadImage(new int[]{1, 1, 255}, new int[][][]{{{255, 255, 255}}}, "image5");
 
     int count = 0;
-    for (Iterator<String> it = Arrays.stream(ro.getNameList()).sorted().iterator(); it.hasNext(); ) {
+    for (Iterator<String> it =
+        Arrays.stream(ro.getNameList()).sorted().iterator(); it.hasNext(); ) {
       String tmp = it.next();
       assertEquals(imageList[count], tmp);
       count++;

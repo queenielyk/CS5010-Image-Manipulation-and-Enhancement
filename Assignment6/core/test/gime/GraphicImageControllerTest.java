@@ -16,7 +16,7 @@ import org.junit.Test;
 
 
 /**
- * This is a test class for {@link GraphicImageController}。
+ * This is a test class for {@link GraphicImageController}.
  */
 public class GraphicImageControllerTest {
 

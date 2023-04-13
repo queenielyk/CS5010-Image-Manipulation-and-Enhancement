@@ -2,9 +2,6 @@ package gime.view;
 
 import gime.control.Features;
 import gime.model.ReadOnlyImageProcessor;
-import mime.model.BufferImageConverter;
-import mime.model.BufferImageConverterImpl;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -16,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -30,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import mime.model.BufferImageConverter;
+import mime.model.BufferImageConverterImpl;
 
 /**
  * A class to implement the View (GUI) by using Swing.
@@ -435,6 +433,8 @@ public class JFrameView extends JFrame implements IView {
       case JOptionPane.ERROR_MESSAGE:
         title = "Action Incomplete";
         break;
+      default:
+        title = "Unknown Dialog Message";
     }
     JOptionPane.showMessageDialog(this, msg, title, type);
   }

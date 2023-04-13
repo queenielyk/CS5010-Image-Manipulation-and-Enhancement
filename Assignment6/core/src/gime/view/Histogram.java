@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 /**
  * A class extends JPanel and draw a Histogram on GUI.
  */
-class Histogram extends JPanel {
+public class Histogram extends JPanel {
 
   private int[][][] image;
   private int[] info;
@@ -63,8 +63,8 @@ class Histogram extends JPanel {
                 && image[row][col][1] == image[row][col][2]) {
               intensity = image[row][col][0];
             } else {
-              intensity = (int) (image[row][col][0] * 0.2126 +
-                  image[row][col][1] * 0.7152
+              intensity = (int) (image[row][col][0] * 0.2126
+                  + image[row][col][1] * 0.7152
                   + image[row][col][2] * 0.0722);
             }
             count[intensity]++;
