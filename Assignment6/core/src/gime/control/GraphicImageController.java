@@ -1,7 +1,5 @@
 package gime.control;
 
-import javax.swing.JOptionPane;
-
 import gime.view.IView;
 import ime.control.ImageCommand;
 import ime.control.command.Brighten;
@@ -10,7 +8,7 @@ import ime.control.command.RgbCombine;
 import ime.control.command.RgbSplit;
 import ime.control.command.Vflip;
 import ime.model.ImageProcessor;
-
+import javax.swing.JOptionPane;
 import mime.control.MoreImageCommand;
 import mime.control.command.ColorTrans;
 import mime.control.command.Dither;
@@ -51,9 +49,9 @@ public class GraphicImageController implements IGraphicController {
   }
 
   @Override
-  public void save(String SavingPath, String ImgName) {
+  public void save(String savingPath, String imgName) {
     try {
-      MoreImageCommand cmd = new SaveOutStream(SavingPath, ImgName);
+      MoreImageCommand cmd = new SaveOutStream(savingPath, imgName);
       cmd.execute((MoreImageProcessor) model);
       view.showDialog(JOptionPane.INFORMATION_MESSAGE, "Completed!");
     } catch (Exception error) {

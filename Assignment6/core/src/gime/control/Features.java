@@ -9,17 +9,17 @@ public interface Features {
    * A method to load an image from file.
    *
    * @param path    the pathname of the image file
-   * @param ImgName the name of image in Model
+   * @param imgName the name of image in Model
    */
-  void loadImage(String path, String ImgName);
+  void loadImage(String path, String imgName);
 
   /**
    * A method of save an image to file.
    *
-   * @param SavingPath the pathname to save the image file
-   * @param ImgName    the name of image in Model
+   * @param savingPath the pathname to save the image file
+   * @param imgName    the name of image in Model
    */
-  void save(String SavingPath, String ImgName);
+  void save(String savingPath, String imgName);
 
   /**
    * A method to split an image into R, G, B mode individually.

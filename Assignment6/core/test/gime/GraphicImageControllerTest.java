@@ -16,11 +16,11 @@ import org.junit.Test;
 
 
 /**
- * This is a test class for {@link GraphicImageController}
+ * This is a test class for {@link GraphicImageController}。
  */
 public class GraphicImageControllerTest {
 
-  private StringBuilder modelLog ;
+  private StringBuilder modelLog;
   private StringBuilder viewLog;
   private IGraphicController ctrl;
   private MoreImageProcessor processor;
@@ -36,7 +36,7 @@ public class GraphicImageControllerTest {
   }
 
 
-  private static class  MockView implements IView {
+  private static class MockView implements IView {
 
     protected final StringBuilder log;
 
@@ -74,7 +74,7 @@ public class GraphicImageControllerTest {
         + "Image:[[[234, 232, 236], [209, 194, 193], [168, 150, 148]], "
         + "[[234, 230, 231], [194, 184, 187], [116, 99, 101]], "
         + "[[211, 203, 206], [170, 150, 150], [70, 42, 43]]] "
-        + "name:cat-raw\n",modelLog.toString());
+        + "name:cat-raw\n", modelLog.toString());
   }
 
   @Test
@@ -83,32 +83,29 @@ public class GraphicImageControllerTest {
     ctrl.loadImage("res/cat.xxx", "cat");
 
     assertEquals("Controller:" + ctrl + "\n"
-        + "type:0 msg:Handler do not support:xxxformat\n"
-        , viewLog.toString());
-    assertEquals("",modelLog.toString());
+        + "type:0 msg:Handler do not support:xxxformat\n", viewLog.toString());
+    assertEquals("", modelLog.toString());
   }
 
   @Test
-  public void saveImageTest(){
+  public void saveImageTest() {
     ctrl.runGUI(view, processor);
     ctrl.save("res/cat.ppm", "cat");
     assertEquals("Controller:" + ctrl + "\n"
-            + "type:1 msg:Completed!\n"
-        , viewLog.toString());
+        + "type:1 msg:Completed!\n", viewLog.toString());
     assertEquals("Name: cat\n"
-        + "Name: cat\n",modelLog.toString());
+        + "Name: cat\n", modelLog.toString());
   }
 
 
   @Test
-  public void rgbSplitTestValid(){
+  public void rgbSplitTestValid() {
     ctrl.runGUI(view, processor);
     ctrl.loadImage("res/cat.ppm", "cat");
     ctrl.rgbSplit("cat-raw");
     assertEquals("Controller:" + ctrl + "\n"
-            + "name:cat-raw\n"
-            + "options:[cat-raw-r, cat-raw-g, cat-raw-b]\n"
-        , viewLog.toString());
+        + "name:cat-raw\n"
+        + "options:[cat-raw-r, cat-raw-g, cat-raw-b]\n", viewLog.toString());
     assertEquals("Info:[3, 3, 255] "
         + "Image:[[[234, 232, 236], [209, 194, 193], [168, 150, 148]], "
         + "[[234, 230, 231], [194, 184, 187], [116, 99, 101]], "
@@ -116,57 +113,52 @@ public class GraphicImageControllerTest {
         + "name:cat-raw\n"
         + "Mode:red-component From:cat-raw To:cat-raw-r\n"
         + "Mode:green-component From:cat-raw To:cat-raw-g\n"
-        + "Mode:blue-component From:cat-raw To:cat-raw-b\n",modelLog.toString());
+        + "Mode:blue-component From:cat-raw To:cat-raw-b\n", modelLog.toString());
   }
 
   @Test
-  public void rgbCombineTest(){
+  public void rgbCombineTest() {
     ctrl.runGUI(view, processor);
-    ctrl.rgbCombine("red","green","blue");
+    ctrl.rgbCombine("red", "green", "blue");
     assertEquals("Controller:" + ctrl + "\n"
-            + "name:red-combine\n"
-        , viewLog.toString());
-    assertEquals("R:red G:green B:blue To:red-combine\n",modelLog.toString());
+        + "name:red-combine\n", viewLog.toString());
+    assertEquals("R:red G:green B:blue To:red-combine\n", modelLog.toString());
   }
 
   @Test
-  public void brightenTest(){
+  public void brightenTest() {
     ctrl.runGUI(view, processor);
-    ctrl.brighten(50,"cat");
+    ctrl.brighten(50, "cat");
     assertEquals("Controller:" + ctrl + "\n"
-            + "name:cat-brighten\n"
-        , viewLog.toString());
-    assertEquals("From:cat Add:50 To:cat-brighten\n",modelLog.toString());
+        + "name:cat-brighten\n", viewLog.toString());
+    assertEquals("From:cat Add:50 To:cat-brighten\n", modelLog.toString());
   }
 
   @Test
-  public void vflipTest(){
+  public void vflipTest() {
     ctrl.runGUI(view, processor);
     ctrl.vflip("cat");
     assertEquals("Controller:" + ctrl + "\n"
-            + "name:cat-vflip\n"
-        , viewLog.toString());
-    assertEquals("From:cat To:cat-vflip\n",modelLog.toString());
+        + "name:cat-vflip\n", viewLog.toString());
+    assertEquals("From:cat To:cat-vflip\n", modelLog.toString());
   }
 
   @Test
-  public void hflipTest(){
+  public void hflipTest() {
     ctrl.runGUI(view, processor);
     ctrl.hflip("cat");
     assertEquals("Controller:" + ctrl + "\n"
-            + "name:cat-hflip\n"
-        , viewLog.toString());
-    assertEquals("From:cat To:cat-hflip\n",modelLog.toString());
+        + "name:cat-hflip\n", viewLog.toString());
+    assertEquals("From:cat To:cat-hflip\n", modelLog.toString());
   }
 
   @Test
-  public void commandTest(){
+  public void commandTest() {
     ctrl.runGUI(view, processor);
-    ctrl.commandDispatcher("sepia","cat");
+    ctrl.commandDispatcher("sepia", "cat");
     assertEquals("Controller:" + ctrl + "\n"
-            + "name:cat-sepia\n"
-        , viewLog.toString());
-    assertEquals("Mode:sepia From:cat To:cat-sepia\n",modelLog.toString());
+        + "name:cat-sepia\n", viewLog.toString());
+    assertEquals("Mode:sepia From:cat To:cat-sepia\n", modelLog.toString());
   }
 
 }
