@@ -15,18 +15,23 @@ Moving to assignment 6, we implemented a view (GUI) for this Image Processing ap
 
 ## Overview
 
-We developed this project based on a Model + View + Controller (MVC) concept. Before assignment 6, this is a text-based program, where View is not supported.
+We developed this project based on a Model + View + Controller (MVC) concept. Before assignment 6, this is a text-based
+program, where View is not supported.
 
-In general, Controller takes input from users then ask Model to execute desired action(s); Model is where computation takes place.
+In general, Controller takes input from users then ask Model to execute desired action(s); Model is where computation
+takes place.
 
-In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model if those operations are valid, return 'unknown' to user otherwise.
+In our infrastructure, Controller takes input from user. Invokes desired action(s) provided by Model if those operations
+are valid, return 'unknown' to user otherwise.
 
-Start from assignment 6, a graphical user interface (GUI) is available. It allows users to interactively load, process and save images. Additionally, the GUI shows the histograms for an image.
+Start from assignment 6, a graphical user interface (GUI) is available. It allows users to interactively load, process
+and save images. Additionally, the GUI shows the histograms for an image.
 
 To show the image and histogram effectively, we eventually adopted Model–view–viewmodel architectural pattern.
 
-With this design pattern, the View is allowed to get data from the Model directly without Controller's help. In contrast, any actions involved modifing data or computation, the View is prohibited to ask the Model to do so but the Controller.
-
+With this design pattern, the View is allowed to get data from the Model directly without Controller's help. In
+contrast, any actions involved modifying data or computation, the View is prohibited to ask the Model to do so but the
+Controller.
 
 ## Format limitation
 
@@ -83,7 +88,7 @@ command to implements other command base on sequences of these atomic command.
 (For example, we can do RGB split by just use Greyscale three time.） This makes it easy for future
 extensions.
 
-We add few more class to extend an reused the previous /ime package inorder to support 
+We add few more class to extend a reused the previous /ime package inorder to support
 more features.
 
 ``` bash
@@ -128,36 +133,49 @@ This makes the controller capable to take not just *System.in/ out* but also fil
 
 ## Read/Write Image
 
-This program support various image format, however they need a different way to read/write. We isolated this handling to keep the dependency of Model.
+This program support various image format, however they need a different way to read/write. We isolated this handling to
+keep the dependency of Model.
+
 ```bash
 mime/model
     ├── AbsrtuctImageHandler.java
     ├── ImageHandler.java
     ├── ImageIOHandler.java
     ├── PpmHandler.java
-    └── BufferImageConverter.java
+    ├── BufferImageConverter.java
+    └── BufferImageConverterImpl.java
 ```
+
+`BufferImageConverter.java` is an interface indicates a converter method that converts an image from the Model into a
+BufferImage.
+`BufferImageConverterImpl.java` implemented `BufferImageConverter.java`.
+This is an object can be used when saving an image with ImageIO into OutputStream or showing image on our GUI.
+
 `ImageHandler.java` is an interface that indicates what kind of actions a handler should have:
+
 - Read image
 - Get image
 - Get info
 - Save image
 
-`AbstractImageHandler.java` is an abstract class to implement methods that indicated by interface `ImageHandler.java` and each concrete class behaves the same.
+`AbstractImageHandler.java` is an abstract class to implement methods that indicated by interface `ImageHandler.java`
+and each concrete class behaves the same.
 
-`ImageIOHandler.java` and `PpmHandler.java` extends `AbstractImageHandler.java` and implements methods that the behavior is depends on itself.
+`ImageIOHandler.java` and `PpmHandler.java` extends `AbstractImageHandler.java` and implements methods that the behavior
+is depends on itself.
+Additionally, `ImageIOHandler.java` has an `BufferImageConverter` object in order to convert the image from the Model
+into a BufferImage for ImageIO to save the image into a file.
 
-Once the controller recognized a command is related to read/write image, it will determine which handler it should invoke based on the format of that image.
+Once the controller recognized a command is related to read/write image, it will determine which handler it should
+invoke based on the format of that image.
 > ppm → PpmHandler
-> 
+>
 > bmp / jpg / jpeg / png → ImageIOHandler
-
-`BufferImageConverter.java` is an interface that indicates a converter method that converts an image from the Model into a BufferImage.
-`ImageIOHandler.java` implemented `BufferImageConverter.java`.
 
 ## Model
 
-**The model design since Assignment 5 is not compatible to the model design in Assignment 4. For more details, read [Change Log.](#1-image-representation-linked-list---3d-array)**
+**The model design since Assignment 5 is not compatible to the model design in Assignment 4. For more details,
+read [Change Log.](#1-image-representation-linked-list--3d-array)**
 
 ``` bash
 ime/model
@@ -193,7 +211,11 @@ An image Dimension: 2x4
 
 ### Computation
 
+**Interface design of assignment 6 is different to assignment 5. For more details,
+read [Change Log.](#2-interface-segregation-move-read-only-methods-from-moreimageprocessor-to-readonlyimageprocessor)**
+
 `ImageProcessor` is an interface indicates actions that an image processor should have:
+
 - Load `@Deprecated`
 - Save `@Deprecated`
 - Combine
@@ -208,14 +230,17 @@ An image Dimension: 2x4
     - Horizontal
     - Vertical
 
-`ReadOnlyImageProcessor` is an interface indicates read-only actions to be an object adopter of `MoreImageProcessor`. The read-only actions are:
+`ReadOnlyImageProcessor` is an interface indicates read-only actions to be an object adopter of `MoreImageProcessor`.
+The read-only actions are:
+
 - Get
     - Info
     - Image
     - Image Name List
 
+`MoreImageProcessor` is an interface extends both `ImageProcessor` and `ReadOnlyImageProcessor`.It also indicates what
+kind of new actions a processor should have:
 
-`MoreImageProcessor` is an interface extends both `ImageProcessor` and `ReadOnlyImageProcessor`.It also indicates what kind of new actions a processor should have:
 - Load
 - Dithering
 - ~~Greyscale~~ Color Trans
@@ -225,7 +250,74 @@ An image Dimension: 2x4
     - Blur
     - Sharpen
 
-## View
+## View (GUI)
+
+```bash
+src/gime/view/
+    ├── CustomJButton.java
+    ├── CustomJComboBox.java
+    ├── Histogram.java
+    ├── IView.java
+    ├── JFrameView.java
+    └── resources
+        ├── add-new-50.png
+        ├── arrows.png
+        ├── brightness.png
+        ├── horizontal-flip.png
+        ├── intersection.png
+        ├── save-50.png
+        └── vertical-flip.png
+```
+
+### Design
+
+We implemented the View by `javax.swing`.
+
+In our GUI design, we have a topbar for dropdowns and buttons, an image panel to show selected image, and a histogram
+panel to show the histogram of the selected image.
+
+#### Topbar
+
+There are three dropdowns and seven buttons at the topbar. The functionalities (from left to right) are:
+
+1. Effects (Dropdown)
+    - Color Transform - Red Component
+    - Color Transform - Green Component
+    - Color Transform - Blue Component
+    - Color Transform - Value
+    - Color Transform - Intensity
+    - Color Transform - Luma
+    - Color Transform - Greyscale
+    - Color Transform - Sepia
+    - Blur
+    - Sharpen
+    - Dither
+2. Loaded image file name (Dropdown)
+3. Effect applied in sequence (Dropdown)
+4. Adjust Brightness (Button)
+5. RGB-Split (Button)
+6. RGB-Combine (Button)
+7. Horizontal Flip (Button)
+8. Vertical Flip (Button)
+9. Load Image (Button)
+10. Save Image (Button)
+
+**The application will throw an error dialog when pressing any buttons except `Load Image` if no image is loaded into the application.**
+
+#### Image Panel
+Automatically refresh the showing image if the user select an image is not the current one.
+Besides, if user selected the image name has not performed the same process as the previous, the application show the raw image in default.
+
+#### Histogram Panel
+Automatically refresh the histogram of the showing image if the user select an image is not the current one.
+For color images, there are four lines ({Component} - {Line color}):
+- Red - Red
+- Green - Green
+- Blue - Blue
+- Intensity - Black
+
+For greyscale images, there is one line only.
+
 
 ## Instruction
 
@@ -252,12 +344,13 @@ An image Dimension: 2x4
    ```
 
 2. Run `src/gime/GIMERunner.java` to start the program with GUI.
-   1. If no image is loaded, all Buttons and Dropdowns throw a dialog to show error message, except Button `load image`.
-   2. Users are allowed to load multiple images one-by-one.
-   3. For every new loaded image, we named it with it's filename but removed all existing `-`.
-   4. The application automatically named each image by appending `-{effect name}` to the current image name.
-   5. Users are able to switch between images.
-   6. The effect indicated at the left dropdown allows clicking multiple times.
+    1. If no image is loaded, all Buttons and Dropdowns throw a dialog to show error message, except
+       Button `load image`.
+    2. Users are allowed to load multiple images one-by-one.
+    3. For every new loaded image, we named it with it's filename but removed all existing `-`.
+    4. The application automatically named each image by appending `-{effect name}` to the current image name.
+    5. Users are able to switch between images.
+    6. The effect indicated at the left dropdown allows clicking multiple times.
 
 3. Run packed `core.jar` file under root path on command promote with command lind option.
     ```bash
@@ -271,6 +364,7 @@ An image Dimension: 2x4
 ## Citation
 
 Copyright of following images used is owned by Cheng Shi and authorized to use for this assignment.
+
 ```bash
 core/res
    ├── cat.ppm
@@ -289,12 +383,38 @@ core/res
 
 #### 1. GUI
 
-#### 2. Move Read-Only methods from `MoreImageProcessor` to `ReadOnlyImageProcessor`
+#### 2. Interface Segregation: Move Read-Only methods from `MoreImageProcessor` to `ReadOnlyImageProcessor`
 
-#### 3. `ImageIOHandler` implements `BufferImageConverter`
-In assignment 5, the image conversion (int[][][] → BufferImage) was writen inside a method together with the saving methodology in `ImageIOHandler`.
-But, BufferImage is also required by the View to show the image. Therefore, we created a new interface `BufferImageConverter` which is implemented by `ImageIOHandler` by moving the conversion out as a method itself.
-With this design, the View is able to have a `BufferImageConverter` object to convert the image getting from the Model and show it without repeating the codes to do conversion.
+In assignment 5, the `MoreImageProcessor` provides methods `getInfo` and `getImage` for the Controller to save images
+into OutputStream.
+In assignment 6, the View needs a read-only Model to show the image effectively without the permission to perform image
+processing.
+Hence, we adopted Interface Segregation.
+This is done by:
+
+```java
+interface ReadOnlyImageProcessor {
+  int[] getInfo();
+
+  int[][][] getImage();
+}
+
+interface MoreImageProcessor extends ReadOnlyImageProcessor {
+}
+
+class MoreImageProcessorImpl implements MoreImageProcessor {
+}
+```
+
+#### 3. `BufferImageConverterImpl` implements `BufferImageConverter`
+
+In assignment 5, the image conversion (int[][][] → BufferImage) was written inside a method together with the saving
+methodology in `ImageIOHandler`.
+But, BufferImage is also required by the View to show the image. Therefore, we created a new
+interface `BufferImageConverter` which is implemented by `BufferImageConverterImpl` and moved the conversion out as a
+method itself.
+With this design, the View is able to have a `BufferImageConverter` object to convert the image getting from the Model
+and show it without repeating the codes to do conversion.
 
 ### From Assignment 4 to Assignment 5
 
@@ -305,7 +425,7 @@ however this is not convenient for us to apply filter matrix.
 Therefore, we used 3D-Array instead of Linked List in assignment 5.
 Even there is a change in our data structure, assignment 4 is still supporting on it's own.
 
-### 2. Support more image operations
+#### 2. Support more image operations
 
 This latest version supports more image operations, such as:
 
@@ -316,7 +436,7 @@ This latest version supports more image operations, such as:
     - Sepia
 - Dithering
 
-### 3. Support more image format
+#### 3. Support more image format
 
 While assignment 4 only support ASCII PPM image,
 Assignment 5 supports:
