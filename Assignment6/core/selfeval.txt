@@ -1,0 +1,26 @@
+2. 
+[0.75]
+
+1.In assignment 4, we use Linked List to store an image; in assignment 5, we use 3D-Array to store an image.
+core/README.md Line491
+
+2.In assignment 4, our Model handled I/O. In assignment 5, we moved reading/writing image out from the Model to ImageHandler which is called by controller. So model does not involved in I/O. But for assignment 6, the JLabel of the GUI needs a BufferImage too. So we moved the conversion process (int[][][] → BufferImage) away from ImageIOHandler. We created a new interface BufferImageConverter which is implemented by BufferImageConverterImp. Now, ImageIOHandler and JFrameView has an BufferImageConverter to process the conversion.
+core/README.md Line157
+core/README.md Line479
+
+3.
+In our design, the View sends events to the Controller only when the user asked to process an image. If the user switch to show different images, the View will not send events to the Controller.
+
+To process an image, the Controller is a observer and the View is an observable object. The Controller provides methods for the View to callback when an corresponing button is clicked by the users, such as loading or saving images. Once the Controller finished handling the event, the Controller notice the View to refresh the showing image and histogram.
+
+Here is an simplified flow:
+user click button on the View → the View send an event to the Controller → the Controller is working → the Controller finished working → the Controller tell the View process completed, show the image
+
+On the other hand, if there is an error since the Controller received the event, the Controller is able to tigger a dialog to show the error message to the user.
+
+4.
+If the functionalities that the GUI provided are as same as the current one, then just the initialization of the GUI should be replaced to be the new one(src/gime/GIMERunner.java:47). Except this, no Controller or Model needs to be modified.
+
+We indicated all functionalities at `view/IView.java`, which is implemented by our View `view/JFrameView.java`. If the functionalities of the GUI unchange, the reimplementation should implements `view/IView.java`. In such case, the Controller is interacting with the same type of obejct.
+-----
+- Change the initialization of the implementation class (src/gime/GIMERunner.java:47)
