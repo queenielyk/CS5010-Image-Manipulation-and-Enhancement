@@ -1,0 +1,57 @@
+load ourExamplePPM.ppm ourExample
+
+brighten 10 ourExample ourExample-brighter
+
+brighten -10 ourExample ourExample-darker
+
+greyscale red-component ourExample ourExample-red
+
+greyscale green-component ourExample ourExample-green
+
+greyscale blue-component ourExample ourExample-blue
+
+greyscale value-component ourExample ourExample-value
+
+greyscale luma-component ourExample ourExample-luma
+
+greyscale intensity-component ourExample ourExample-intensity
+
+vertical-flip ourExample ourExample-vertical
+
+save verticalflipped.jpg ourExample-vertical
+
+horizontal-flip ourExample ourExample-horizontal
+
+save horizontalflipped.bmp ourExample-horizontal
+
+rgb-split ourExample ourExample-red ourExample-green ourExample-blue
+
+rgb-combine ourExample-combine ourExample-red ourExample-green ourExample-blue
+
+save combine.png ourExample-combine
+
+save ourExample-combine.ppm ourExample-combine
+
+load dog.png dog
+
+blur dog dog-blurred
+
+save dog-blurred.png dog-blurred
+
+sharpen dog dog-sharpen
+
+save dog-sharpen.png dog-sharpen
+
+greyscale dog dog-greyscaled
+
+save dog-greyscaled.bmp dog-greyscaled
+
+dither dog dog-dithered
+
+save dog-dithered.jpg dog-dithered
+
+sepia dog dog-sepiaed
+
+save dog-sepiaed.png dog-sepiaed
+
+run scriptFileWithRun.txt

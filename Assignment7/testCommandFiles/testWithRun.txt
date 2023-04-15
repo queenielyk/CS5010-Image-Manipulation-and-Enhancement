@@ -1,0 +1,1 @@
+run testCommandFiles/commandsForTest.txt

@@ -1,0 +1,7 @@
+#loading
+load testPPMfolder/test.ppm test
+
+#brighten koala by adding 10  
+brighten 10 test test-brighter
+
+save resultPPMfolder/result.ppm test-brighter

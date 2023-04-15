@@ -1,0 +1,2 @@
+load testPPMfolder/test.ppm test
+brjsfub 10 test test-brighter
