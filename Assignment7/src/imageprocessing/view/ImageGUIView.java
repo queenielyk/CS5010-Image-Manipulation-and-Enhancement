@@ -53,6 +53,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
   private final JButton sharpen;
   private final JButton sepia;
   private final JButton dither;
+  private final JButton mosaic;
   private final JLabel imageLabel;
 
   /**
@@ -148,6 +149,16 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     brighten.setActionCommand("Brighten");
     brighten.setEnabled(false);
     brightenPanel.add(brighten);
+
+    //mosaic
+    JPanel mosaicPanel = new JPanel();
+    mosaicPanel.setLayout(new FlowLayout());
+    dialogBoxesPanel.add(mosaicPanel);
+
+    mosaic = new JButton("Mosaic");
+    mosaic.setActionCommand("Mosaic");
+    mosaic.setEnabled(false);
+    mosaicPanel.add(mosaic);
 
     //greyscale
     JPanel greyscalePanel = new JPanel();
@@ -254,6 +265,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     dither.setActionCommand("Dither");
     dither.setEnabled(false);
     ditherPanel.add(dither);
+
 
     //image operations
     JPanel imagePanel = new JPanel();

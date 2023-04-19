@@ -168,7 +168,7 @@ public class LogicController {
           throw new ImageNotFoundException(commandWords[2] + " image does not exist.");
         }
         imageNames.add(commandWords[3]);
-        commandType.add(new Mosaic(commandWords[1],commandWords[2],Integer.parseInt(commandWords[3])));
+        commandType.add(new Mosaic(commandWords[2],commandWords[3],Integer.valueOf(commandWords[1])));
         break;
       case "rgb-split":
         //rgb-split koala koala-red koala-green koala-blue

@@ -1,0 +1,25 @@
+load img.png dog
+
+blur dog dog-blurred
+
+save dog-blurred.png dog-blurred
+
+sharpen dog dog-sharpen
+
+save dog-sharpen.png dog-sharpen
+
+greyscale dog dog-greyscaled
+
+save dog-greyscaled.png dog-greyscaled
+
+dither dog dog-dithered
+
+save dog-dithered.png dog-dithered
+
+sepia dog dog-sepiaed
+
+save dog-sepiaed.png dog-sepiaed
+
+mosaic 1000 dog dog-mosaic
+
+save dog-mosaic.png dog-mosaic

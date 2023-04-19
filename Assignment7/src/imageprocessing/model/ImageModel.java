@@ -1,6 +1,7 @@
 package imageprocessing.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -45,26 +46,88 @@ public class ImageModel implements IImageModel {
   @Override
   public IImageModel mosaic(int seed) {
     List<IPixel> resultImg = new ArrayList<>();
-    List<IPixel> seedPix = new ArrayList<>();
+    List<List<Integer>> seedClusterList = new ArrayList<>();
+
 
     //get random seed pixels
+    List<Integer> rand = new ArrayList<>();
     for (int i = 0; i < seed; i++) {
       int randomNum = ThreadLocalRandom.current().nextInt(0, width * height + 1);
-      seedPix.add(this.image.get(randomNum));
+      rand.add(randomNum);
+    }
+    Collections.sort(rand);
+    for (Integer integer : rand) {
+      //put index of seed at position zero
+      List<Integer> cluster = new ArrayList<>();
+      cluster.add(integer);
+      seedClusterList.add(cluster);
     }
 
     //pair pixel with seedPix
+    //Go through each pixel of image
     for (IPixel p : image) {
-      int px = image.indexOf(p)+1 % width;
-      int py = image.indexOf(p) % height;
-      for (IPixel s : seedPix) {
-        int sx = image.indexOf(s) % width;
-        int sy = image.indexOf(s) % height;
+      int px = HelpIndexOf(image,p) % width;
+      int py = HelpIndexOf(image,p) / height;
+      List<Integer> match = null;
+      double curDis;
+      double MinDis = Double.MAX_VALUE;
 
+      //Go through all cluster
+      for (List<Integer> cluster : seedClusterList) {
+        int sx = cluster.get(0) % width;
+        int sy = cluster.get(0) / height;
+        curDis = Math.hypot(Math.abs(sy - py), Math.abs(sx - px));
+        //Update if Shorter Distance
+        if (curDis < MinDis) {
+          MinDis = curDis;
+          match = cluster;
+        }
+      }
+
+      //add p to the closest cluster
+      List<Integer> temp = match;
+      match.add(HelpIndexOf(image,p));
+      seedClusterList.set(seedClusterList.indexOf(match), temp);
+    }
+
+    //Avg all pixel in cluster
+    IPixel[] resultArr = new IPixel[height * width];
+    for (List<Integer> cluster : seedClusterList) {
+      System.out.println(cluster);
+      int R = 0;
+      int G = 0;
+      int B = 0;
+      for (int i : cluster) {
+        R += image.get(i).getRed();
+        G += image.get(i).getGreen();
+        B += image.get(i).getBlue();
+      }
+      R /= cluster.size();
+      G /= cluster.size();
+      B /= cluster.size();
+
+      for (int i : cluster) {
+        resultArr[i] = new Pixel(R, G, B);
       }
     }
 
-    return null;
+    int count = 0;
+    for (IPixel p : resultArr) {
+      count++;
+      System.out.println(count + "-" + p.getRed() + "," + p.getBlue() + "," + p.getGreen());
+      resultImg.add(p);
+    }
+    System.out.println("size" + resultImg.size());
+    return new ImageModel(height, width, maxValue, resultImg);
+  }
+
+  private int HelpIndexOf(List<IPixel> list, IPixel p) {
+    if(p != null){
+      for(int i=0;i<list.size();i++){
+        if(p==list.get(i)) return i;
+      }
+    }
+    return -1;
   }
 
   @Override

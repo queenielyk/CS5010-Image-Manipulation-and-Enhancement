@@ -48,6 +48,18 @@ public class ControllerTest {
       return null;
     }
 
+    /**
+     * Execute the mosaic command.
+     *
+     * @param seed the seed for mosaic cluster algorithm
+     * @return - a new processed image object
+     */
+    @Override
+    public IImageModel mosaic(int seed) {
+      mockLog.append(seed);
+      return null;
+    }
+
     @Override
     public IImageModel greyscale(String component) throws IllegalArgumentException {
       mockLog.append(component);

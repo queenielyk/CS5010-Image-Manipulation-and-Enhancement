@@ -43,6 +43,19 @@ public class ReadWriteImageTest {
   }
 
   @Test
+  public void mosaic() throws InvalidFileException, IOException {
+    String destinationImageName = "destinationImage";
+    String filePath = "testPNGfolder/img.png";
+    String fileOperations = "load";
+
+    initialize(destinationImageName, filePath, fileOperations);
+
+    IImageModel actualImageModel = this.readWriteImage.readFromFile();
+    initialize("sourceImage", "testPNGfolder/img123.png", "save");
+    this.readWriteImage.saveToFile(actualImageModel.mosaic(100));
+  }
+
+  @Test
   public void saveToFile() throws InvalidFileException, IOException {
     String sourceImageName = "sourceImage";
     String filePath = "testPNGfolder/test123.png";

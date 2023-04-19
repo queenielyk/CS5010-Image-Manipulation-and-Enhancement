@@ -1,4 +1,4 @@
-load res\ourExamplePPM.ppm ourExample
+load ourExamplePPM.ppm ourExample
 
 brighten 10 ourExample ourExample-brighter
 
@@ -26,7 +26,7 @@ rgb-combine ourExample-combine ourExample-red ourExample-green ourExample-blue
 
 save ourExample-combine.ppm ourExample-combine
 
-load res\dog.png dog
+load dog.png dog
 
 blur dog dog-blurred
 
