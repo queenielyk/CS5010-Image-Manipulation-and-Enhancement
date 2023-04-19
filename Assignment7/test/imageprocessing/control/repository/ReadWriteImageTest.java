@@ -51,7 +51,7 @@ public class ReadWriteImageTest {
     initialize(destinationImageName, filePath, fileOperations);
 
     IImageModel actualImageModel = this.readWriteImage.readFromFile();
-    initialize("sourceImage", "testPNGfolder/img123.png", "save");
+    initialize("sourceImage", "testPNGfolder/img-mosaic.png", "save");
     this.readWriteImage.saveToFile(actualImageModel.mosaic(100));
   }
 
