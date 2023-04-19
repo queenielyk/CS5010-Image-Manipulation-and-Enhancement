@@ -19,6 +19,13 @@ public interface IImageModel {
   IImageModel brightenImage(int increment);
 
   /**
+   * Execute the mosaic command.
+   * @param seed the seed for mosaic cluster algorithm
+   * @return - a new processed image object
+   */
+  IImageModel mosaic(int seed);
+
+  /**
    * Executes the "greyscale" command.
    * Converts a colour image into a greyscale image.
    *

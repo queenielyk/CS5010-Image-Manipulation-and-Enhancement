@@ -16,6 +16,7 @@ import imageprocessing.control.imagecommands.Dither;
 import imageprocessing.control.imagecommands.Filter;
 import imageprocessing.control.imagecommands.Greyscale;
 import imageprocessing.control.imagecommands.HorizontalFlip;
+import imageprocessing.control.imagecommands.Mosaic;
 import imageprocessing.control.imagecommands.Transformation;
 import imageprocessing.control.imagecommands.VerticalFlip;
 import imageprocessing.control.repository.ReadWriteImage;
@@ -157,7 +158,17 @@ public class LogicController {
         } else {
           throw new InvalidInputException(commandWords[0] + " command entered is wrong.");
         }
-
+        break;
+      case "mosaic":
+        if(commandWords.length != 4){
+          //mosaic num-seeds source-image-name dest-image-name.
+          throw new InvalidInputException(commandWords[0]+" command entered is wrong.");
+        }
+        if (!imageNames.contains(commandWords[2])) {
+          throw new ImageNotFoundException(commandWords[2] + " image does not exist.");
+        }
+        imageNames.add(commandWords[3]);
+        commandType.add(new Mosaic(commandWords[1],commandWords[2],Integer.parseInt(commandWords[3])));
         break;
       case "rgb-split":
         //rgb-split koala koala-red koala-green koala-blue

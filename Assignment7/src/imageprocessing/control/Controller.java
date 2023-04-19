@@ -66,6 +66,7 @@ public class Controller implements IController {
   @Override
   public void goController() {
     try {
+
       if (this.isCommandLineArg) {
         runCommand("run " + scan.nextLine());
       } else {
@@ -73,6 +74,7 @@ public class Controller implements IController {
         String userInput;
 
         while (takeInput) {
+
           this.imageView.showUserInputMessage();
           userInput = scan.nextLine();
 
@@ -92,15 +94,7 @@ public class Controller implements IController {
 
       this.imageView.showOutput("Successfully processed commands.");
       scan.close();
-    } catch (ImageNotFoundException e) {
-      imageView.showOutput(e.getMessage());
-    } catch (InvalidInputException e) {
-      imageView.showOutput(e.getMessage());
-    } catch (InvalidFileException e) {
-      imageView.showOutput(e.getMessage());
-    } catch (FileNotFoundException e) {
-      imageView.showOutput(e.getMessage());
-    } catch (IOException e) {
+    } catch (ImageNotFoundException | InvalidFileException | InvalidInputException | IOException e) {
       imageView.showOutput(e.getMessage());
     }
   }
@@ -108,11 +102,7 @@ public class Controller implements IController {
   private void processCommands(String userInput) {
     try {
       userCommands.add(logicController.parseCommand(userInput));
-    } catch (ImageNotFoundException e) {
-      imageView.showOutput(e.getMessage());
-    } catch (InvalidInputException e) {
-      imageView.showOutput(e.getMessage());
-    } catch (IllegalArgumentException e) {
+    } catch (ImageNotFoundException | InvalidInputException | IllegalArgumentException e) {
       imageView.showOutput(e.getMessage());
     }
   }

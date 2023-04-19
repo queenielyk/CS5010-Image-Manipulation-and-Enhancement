@@ -2,11 +2,11 @@ package imageprocessing.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * This class represents an 8 bit image.
- * It implements IImageModel.
- * An image has a List of Pixel, height, width and maximum pixel value.
+ * This class represents an 8 bit image. It implements IImageModel. An image has a List of Pixel,
+ * height, width and maximum pixel value.
  */
 public class ImageModel implements IImageModel {
   private final int height;
@@ -40,6 +40,31 @@ public class ImageModel implements IImageModel {
     }
 
     return new ImageModel(this.height, this.width, this.maxValue, image);
+  }
+
+  @Override
+  public IImageModel mosaic(int seed) {
+    List<IPixel> resultImg = new ArrayList<>();
+    List<IPixel> seedPix = new ArrayList<>();
+
+    //get random seed pixels
+    for (int i = 0; i < seed; i++) {
+      int randomNum = ThreadLocalRandom.current().nextInt(0, width * height + 1);
+      seedPix.add(this.image.get(randomNum));
+    }
+
+    //pair pixel with seedPix
+    for (IPixel p : image) {
+      int px = image.indexOf(p)+1 % width;
+      int py = image.indexOf(p) % height;
+      for (IPixel s : seedPix) {
+        int sx = image.indexOf(s) % width;
+        int sy = image.indexOf(s) % height;
+
+      }
+    }
+
+    return null;
   }
 
   @Override
@@ -371,8 +396,8 @@ public class ImageModel implements IImageModel {
   }
 
   /**
-   * Overriding hashcode such that 2 images with the same width, height,
-   * and list of pixels have the same hashvalue.
+   * Overriding hashcode such that 2 images with the same width, height, and list of pixels have the
+   * same hashvalue.
    *
    * @return - hashcode of the image object
    */
