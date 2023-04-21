@@ -4,7 +4,7 @@
 
 ### 1. Insufficient Information Provided for Error Handling
 
-Senders specified their only excpetions types for some potential cases,
+Senders specified their only exceptions types for some potential cases,
 e.g. `ImageNotFoundException`, `InvalidFileException`, ...
 However, when they simply output `e.getMessage()` at `control/Controller.java:105`, we are unable to understand that the
 message is indicating an exception if it's because of `IllegalArgumentException`.
@@ -42,7 +42,7 @@ Image is visible on local after executing `quit`:
 !["ExecuteAfterQuit"](res/CodeReview-Captures/ExecuteAfterQuit.png)
 
 While the GUI shows updated image and histogram simultaneously, images saved from text-based program are not visible
-immediately, which is abnormal to users. If this is a deisgn based on a specific concern or reason, this difference
+immediately, which is abnormal to users. If this is a design based on a specific concern or reason, this difference
 should be highlighted in `README.md`.
 
 ### 3. Failure on Handling NULL input
@@ -51,6 +51,12 @@ Started the program with text-based, press `enter` directly without entering any
 gracefully.
 
 !["Null Input"](res/CodeReview-Captures/NullInput.png)
+
+### 4. Variable Type Should Be Interface Type
+`csontrol/LogicController.java:34`
+> ~~`private final HashMap<String, IImageModel> images;`~~
+>
+> `private final Map<String, IImageModel> images;`
 
 ## Documentation critique
 
@@ -71,10 +77,10 @@ Remove/Do not add `-` between the parameter's name and the explanation when writ
 
 ### 2. Insufficient Information Provided at README.md
 
-#### Suggesttion
+#### Suggestion
 
 A good markdown is to let users, who might be completely unfamiliar with your program, understand your design and how to
-use. Put on a user hat when writing the markdown may help you to fugire out what contents should be included.
+use. Put on a user hat when writing the markdown may help you to figure out what contents should be included.
 
 #### 1. Markdown Style
 
@@ -86,7 +92,7 @@ Preview the markdown before publish. Utilize elements to emphasis sections, keyw
 
 #### 2. Insufficient Instructions on `How to use our program`
 
-`README.md:82-90` specified how to excute this program without future explanations. Specifically, when users execute the
+`README.md:82-90` specified how to execute this program without future explanations. Specifically, when users execute the
 program with text mode, `README.md`, `USEME.md`, and `Console` has no information about the accepted commands.
 
 ##### Suggestion
