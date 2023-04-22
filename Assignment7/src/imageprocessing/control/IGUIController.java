@@ -15,6 +15,8 @@ public interface IGUIController extends IController {
 
   BufferedImage brightenCommand(String increment);
 
+  BufferedImage mosaicCommand(String seed);
+
   BufferedImage greyscaleCommand(String component);
 
   BufferedImage splitCommand(String component);

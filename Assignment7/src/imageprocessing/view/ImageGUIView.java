@@ -1,34 +1,37 @@
 package imageprocessing.view;
 
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
+import imageprocessing.control.IGUIController;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JFileChooser;
-import javax.swing.JSpinner;
-import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import imageprocessing.control.IGUIController;
-
 /**
- * This class implements IImageGUIView. It is responsible for GUI's view.
- * It contains the components that construct the GUI.
+ * This class implements IImageGUIView. It is responsible for GUI's view. It contains the components
+ * that construct the GUI.
  */
 public class ImageGUIView extends JFrame implements IImageGUIView {
+
   private final JPanel mainPanel;
   private final JButton fileOpenButton;
   private final JLabel fileOpenDisplay;
@@ -36,6 +39,8 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
   private final JPanel histogramPanel;
   private final JLabel fileSaveDisplay;
   private final JSpinner brightenIncrementValue;
+  private final JSpinner mosaicIncrementValue;
+
   private final JButton brighten;
   private final JComboBox greyscaleOptions;
   private final JButton greyscale;
@@ -155,6 +160,11 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     mosaicPanel.setLayout(new FlowLayout());
     dialogBoxesPanel.add(mosaicPanel);
 
+    mosaicIncrementValue = new JSpinner(new SpinnerNumberModel(500, 500, 1000, 100));
+    mosaicIncrementValue.setEnabled(false);
+    mosaicPanel.add(mosaicIncrementValue);
+    mosaicIncrementValue.setPreferredSize(new Dimension(50, 25));
+
     mosaic = new JButton("Mosaic");
     mosaic.setActionCommand("Mosaic");
     mosaic.setEnabled(false);
@@ -266,7 +276,6 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     dither.setEnabled(false);
     ditherPanel.add(dither);
 
-
     //image operations
     JPanel imagePanel = new JPanel();
     imagePanel.setBorder(BorderFactory.createTitledBorder("Image"));
@@ -298,7 +307,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     fileOpenButton.addActionListener(e -> {
       final JFileChooser fChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "PPM, JPG, PNG, BMP Images", "ppm", "jpg", "png", "bmp");
+          "PPM, JPG, PNG, BMP Images", "ppm", "jpg", "png", "bmp");
       fChooser.setFileFilter(filter);
       File f = null;
       BufferedImage image = null;
@@ -319,7 +328,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     });
 
     brightenIncrementValue.addChangeListener(e ->
-            brighten.setEnabled((int) (brightenIncrementValue.getValue()) != 0));
+        brighten.setEnabled((int) (brightenIncrementValue.getValue()) != 0));
 
     brighten.addActionListener(e -> {
       String increment = brightenIncrementValue.getValue().toString();
@@ -330,6 +339,27 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
 
         changeHistogram(controller);
       }
+    });
+
+    //----------------------------------Mosaic---------------------------
+    mosaic.addActionListener(e -> {
+      try {
+        // Display loading image
+        imageLabel.setIcon(new ImageIcon(new URL(
+            "https://www.khoury.northeastern.edu/home/sc971008/cs5010/loading.gif")));
+      } catch (MalformedURLException ex) {
+        throw new RuntimeException(ex);
+      }
+      new Thread(() -> { // Create a new thread to execute mosaicCommand()
+        String seed = mosaicIncrementValue.getValue().toString();
+        ImageIcon mosaicImage = new ImageIcon(
+            controller.mosaicCommand(seed)); // Call mosaicCommand()
+        SwingUtilities.invokeLater(() -> { // Display the mosaic image in the main thread
+          imageLabel.setIcon(mosaicImage);
+          changeHistogram(controller);
+        });
+      }).start();
+      changeHistogram(controller);
     });
 
     greyscale.addActionListener(e -> {
@@ -381,7 +411,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
 
       final JFileChooser fChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "PPM, JPG, PNG, BMP Images", "ppm", "jpg", "png", "bmp");
+          "PPM, JPG, PNG, BMP Images", "ppm", "jpg", "png", "bmp");
       fChooser.setFileFilter(filter);
 
       if (fChooser.showOpenDialog(fileSelectButton) == JFileChooser.APPROVE_OPTION) {
@@ -484,5 +514,8 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     splitOptions.setEnabled(true);
     fileSaveButton.setEnabled(true);
     brightenIncrementValue.setEnabled(true);
+    mosaicIncrementValue.setEnabled(true);
+    mosaic.setEnabled(true);
   }
+
 }

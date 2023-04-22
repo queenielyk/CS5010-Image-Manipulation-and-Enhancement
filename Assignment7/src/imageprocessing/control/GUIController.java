@@ -78,6 +78,12 @@ public class GUIController implements IGUIController {
   }
 
   @Override
+  public BufferedImage mosaicCommand(String seed){
+    String mosaic = "mosaic" + " " + seed + " " + this.currentImage + " " + this.currentImage;
+    return addCommand(mosaic,this.currentImage);
+  }
+
+  @Override
   public BufferedImage greyscaleCommand(String component) {
     //greyscale value-component koala koala-greyscale
     //greyscale koala koala-greyscale
@@ -228,7 +234,8 @@ public class GUIController implements IGUIController {
         img.setRGB(j, i, pixelColor.getRGB());
       }
     }
-
     return img;
   }
+
+
 }
