@@ -1,18 +1,18 @@
-# CS5010 Assignment7: Mosaic
-
+# CS5010 Assignment 7: Mosaic
 Member: Queenie, Cheng    
 Date: April 24 2023   
 Professor: Amit Shesh
 
 ## Project Idea
-
 Given the code provided, we implemented the image `mosaic` features to the APP for all
 GUI/Text/Script.
 
 ## Instruction
 ```bash
-Command : mosaic seed srcImgName resultImgName
-(ex. mosaic 500 cat cat-mosaic)
+Text Mode:
+- mosaic seed srcImgName resultImgName (ex. mosaic 500 cat cat-mosaic)
+Smaple Script:
+- java -jar Assignment7.jar -file mosaicScript.txt
 ```
 
 ## Implementation Details
@@ -23,8 +23,7 @@ In the provided code, the `IImageModel` was design to represent an image instanc
 stores width and height and List of `IPixels`.   
 Each Pixel stores only RGB values but no coordinates. And they overwrote equals() and hashcode() so
 any pixel with same RGB values is same is their design, which makes it hard to implements mosaic
-base without coordinate info.
-
+base without coordinate information.  
 We had to write our own indexOf() method, so we can get the coordinate of each pixel.
 Then we generate random clusters and match the image pixels with the cluster and average them to get
 the resulting image.
@@ -41,8 +40,7 @@ in `checkCommandType`.
 ### View
 
 Their GUI View was well-structured and lay out was designed well enough, so we just add a new
-JPanel. We just bind mosaic operations as an ActionListener to the button.   
-
+JPanel. We just bind mosaic operations as an ActionListener to the button.  
 Since some operation might take long time. So we preload the loading icon to the ImageLabel. 
 Then we fire up a new thread to execute the image operations. Once the
 new thread got processed, invokes the change to the main thread.
