@@ -94,7 +94,8 @@ public class Controller implements IController {
 
       this.imageView.showOutput("Successfully processed commands.");
       scan.close();
-    } catch (ImageNotFoundException | InvalidFileException | InvalidInputException | IOException e) {
+    } catch (ImageNotFoundException | InvalidFileException | InvalidInputException
+             | IOException e) {
       imageView.showOutput(e.getMessage());
     }
   }

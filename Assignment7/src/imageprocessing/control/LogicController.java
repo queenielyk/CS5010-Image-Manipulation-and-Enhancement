@@ -71,8 +71,8 @@ public class LogicController {
     String[] commandWords;
     command = command.toLowerCase();
 
-    if (command.substring(0, command.indexOf(' ')).equalsIgnoreCase("load") ||
-            command.substring(0, command.indexOf(' ')).equalsIgnoreCase("save")) {
+    if (command.substring(0, command.indexOf(' ')).equalsIgnoreCase("load")
+            || command.substring(0, command.indexOf(' ')).equalsIgnoreCase("save")) {
       commandWords = new String[3];
 
       commandWords[0] = command.substring(0, command.indexOf(' '));
@@ -160,15 +160,16 @@ public class LogicController {
         }
         break;
       case "mosaic":
-        if(commandWords.length != 4){
+        if (commandWords.length != 4) {
           //mosaic num-seeds source-image-name dest-image-name.
-          throw new InvalidInputException(commandWords[0]+" command entered is wrong.");
+          throw new InvalidInputException(commandWords[0] + " command entered is wrong.");
         }
         if (!imageNames.contains(commandWords[2])) {
           throw new ImageNotFoundException(commandWords[2] + " image does not exist.");
         }
         imageNames.add(commandWords[3]);
-        commandType.add(new Mosaic(commandWords[2],commandWords[3],Integer.valueOf(commandWords[1])));
+        commandType.add(new Mosaic(commandWords[2], commandWords[3],
+                Integer.valueOf(commandWords[1])));
         break;
       case "rgb-split":
         //rgb-split koala koala-red koala-green koala-blue

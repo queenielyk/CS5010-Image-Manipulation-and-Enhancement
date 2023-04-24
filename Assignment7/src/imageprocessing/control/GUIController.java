@@ -78,9 +78,9 @@ public class GUIController implements IGUIController {
   }
 
   @Override
-  public BufferedImage mosaicCommand(String seed){
+  public BufferedImage mosaicCommand(String seed) {
     String mosaic = "mosaic" + " " + seed + " " + this.currentImage + " " + this.currentImage;
-    return addCommand(mosaic,this.currentImage);
+    return addCommand(mosaic, this.currentImage);
   }
 
   @Override
