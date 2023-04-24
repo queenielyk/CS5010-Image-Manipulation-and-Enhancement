@@ -27,8 +27,8 @@ the resulting image.
 
 Even though controller design was kind of overcomplicated probably due to trying to reuse the
 Text/Script based logic on GUI controller. And one weird design is the all command queued when
-entered and only get executed after quit.
-But thankful to the command design patter, The controller logic of provided enough. None of the
+entered and only get executed after quit.  
+But thankful to the command design pattern, The controller logic of provided was enough. None of the
 control flow have to be changed but just add a `Mosaic` ImageCommand class and add a switch case
 in `checkCommandType`.
 
