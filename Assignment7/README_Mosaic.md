@@ -9,6 +9,12 @@ Professor: Amit Shesh
 Given the code provided, we implemented the image `mosaic` features to the APP for all
 GUI/Text/Script.
 
+## Instruction
+```bash
+Command : mosaic seed srcImgName resultImgName
+(ex. mosaic 500 cat cat-mosaic)
+```
+
 ## Implementation Details
 
 ### Model

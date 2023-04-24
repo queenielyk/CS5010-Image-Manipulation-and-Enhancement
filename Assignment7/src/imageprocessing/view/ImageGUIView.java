@@ -160,7 +160,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
     mosaicPanel.setLayout(new FlowLayout());
     dialogBoxesPanel.add(mosaicPanel);
 
-    mosaicIncrementValue = new JSpinner(new SpinnerNumberModel(500, 500, 1000, 100));
+    mosaicIncrementValue = new JSpinner(new SpinnerNumberModel(200, 100, 2000, 100));
     mosaicIncrementValue.setEnabled(false);
     mosaicPanel.add(mosaicIncrementValue);
     mosaicIncrementValue.setPreferredSize(new Dimension(50, 25));
