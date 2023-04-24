@@ -448,8 +448,8 @@ public class ImageModel implements IImageModel {
    */
   @Override
   public boolean equals(Object o) {
-    if (o instanceof IImageModel imageModel) {
-
+    if (o instanceof IImageModel) {
+      IImageModel imageModel = (IImageModel) o;
       if (this.getHeight() != imageModel.getHeight() || this.getWidth() != imageModel.getWidth()) {
         return false;
       }
