@@ -1,25 +1,25 @@
-load img.png dog
+load mosaic_samplecat.png cat
 
-blur dog dog-blurred
+blur cat cat-blurred
 
-save dog-blurred.png dog-blurred
+save cat-blurred.png cat-blurred
 
-sharpen dog dog-sharpen
+sharpen cat cat-sharpen
 
-save dog-sharpen.png dog-sharpen
+save cat-sharpen.png cat-sharpen
 
-greyscale dog dog-greyscaled
+greyscale cat cat-greyscaled
 
-save dog-greyscaled.png dog-greyscaled
+save cat-greyscaled.png cat-greyscaled
 
-dither dog dog-dithered
+dither cat cat-dithered
 
-save dog-dithered.png dog-dithered
+save cat-dithered.png cat-dithered
 
-sepia dog dog-sepiaed
+sepia cat cat-sepiaed
 
-save dog-sepiaed.png dog-sepiaed
+save cat-sepiaed.png cat-sepiaed
 
-mosaic 1000 dog dog-mosaic
+mosaic 1000 cat cat-mosaic
 
-save dog-mosaic.png dog-mosaic
+save cat-mosaic.png cat-mosaic

@@ -304,6 +304,7 @@ public class ImageModel implements IImageModel {
 
         image.add(new Pixel(newPixel, newPixel, newPixel));
 
+        //right
         if (j + 1 < this.width) {
           red = (int) (getRespectivePixelColorValue(i, j + 1, "red")
               + 7d / 16d * error);
@@ -315,6 +316,7 @@ public class ImageModel implements IImageModel {
           this.image.set(i * width + j + 1, new Pixel(red, green, blue));
         }
 
+        //next-row-left
         if (j - 1 >= 0 && i + 1 < this.height) {
           red = (int) (getRespectivePixelColorValue(i + 1, j - 1, "red")
               + 3d / 16d * error);
@@ -326,6 +328,7 @@ public class ImageModel implements IImageModel {
           this.image.set((i + 1) * width + j - 1, new Pixel(red, green, blue));
         }
 
+        //below in next row
         if (i + 1 < this.height) {
           red = (int) (getRespectivePixelColorValue(i + 1, j, "red")
               + 5d / 16d * error);
@@ -337,6 +340,7 @@ public class ImageModel implements IImageModel {
           this.image.set((i + 1) * width + j, new Pixel(red, green, blue));
         }
 
+        //next-row-right
         if (i + 1 < this.height && j + 1 < this.width) {
           red = (int) (getRespectivePixelColorValue(i + 1, j + 1, "red")
               + 1d / 16d * error);
