@@ -53,10 +53,37 @@ gracefully.
 !["Null Input"](res/CodeReview-Captures/NullInput.png)
 
 ### 4. Variable Type Should Be Interface Type
-`csontrol/LogicController.java:34`
+
+`control/LogicController.java:34`
 > ~~`private final HashMap<String, IImageModel> images;`~~
 >
 > `private final Map<String, IImageModel> images;`
+
+### 5. Incorrect `dither` image
+
+An image looks uncanny after applying `dither` for multiple times.
+
+!["Incorrect dither image"](res/CodeReview-Captures/dog-d.png)
+
+```bash
+# testing script
+load res/dog.png dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+dither dog-d dog-d
+save res/dog-d.png dog-d
+```
+
+We added a test class (`test/imageprocessing/model/FailDitherTest.java : testDitherByReceiver`) to double-check the
+correctness of `dither`
+as well, but got `AssertionError`.
 
 ## Documentation critique
 
@@ -92,7 +119,8 @@ Preview the markdown before publish. Utilize elements to emphasis sections, keyw
 
 #### 2. Insufficient Instructions on `How to use our program`
 
-`README.md:82-90` specified how to execute this program without future explanations. Specifically, when users execute the
+`README.md:82-90` specified how to execute this program without future explanations. Specifically, when users execute
+the
 program with text mode, `README.md`, `USEME.md`, and `Console` has no information about the accepted commands.
 
 ##### Suggestion
@@ -101,6 +129,28 @@ Include commands menu in `README.md`, `USEME.md`, and `Console (program starts)`
 
 ## Design/Code Strengths
 
+1. Command design pattern
+2. Interface for all classes
+
 ## Design/Code Limitations
 
+### 1. GUI: Unable to combine split images
+
+In text-based, users are able to process each split images after `rgb-split`, then combine three images; In
+GUI, `Combine` images required user to select images from local drive, thereby the images previously processed
+are not able to combining into one.
+
+### 2. GUI: Unable to undo process / Use previous image
+
+In text-based, users are able to process each image by specifying the source name and destination name. The GUI doesn't
+provide such option or undo, so users have to re-load an image everytime if they do not that effect after processing the image.
+
+### 3. GUI: Insufficient TextBox width for `Brighten`
+While `-100` is a valid input, the TextBox is unable to show the whole input, but part of them, e.g. `-10`.
+
 ## Suggestions
+
+### 1. Bigger image for image processing test
+
+To assert the implementation correctness comprehensively, it would be better to use a bigger image (e.g. 3x3 pixels)
+instead of 1x1 pixel only.
