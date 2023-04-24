@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Contain an assertion test for Dither, to further supporting the implementation issue.
+ */
 public class FailDitherTest {
   @Test
   public void testDitherByReceiver() {
