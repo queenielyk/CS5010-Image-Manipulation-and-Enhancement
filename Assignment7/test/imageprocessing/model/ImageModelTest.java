@@ -96,6 +96,19 @@ public class ImageModelTest {
   }
 
   @Test
+  public void testMosaic() {
+    resultPixels.add(new Pixel(15, 13, 10));
+    resultPixels.add(new Pixel(15, 13, 10));
+    resultPixels.add(new Pixel(15, 13, 10));
+    resultPixels.add(new Pixel(15, 13, 10));
+    resultPixels.add(new Pixel(15, 13, 10));
+    resultPixels.add(new Pixel(15, 13, 10));
+    ImageModel mosaicImageModel = new ImageModel(2, 3, 255, resultPixels);
+    assertEquals(new ImageModel(2, 3, 255, resultPixels).mosaic(5)
+        , mosaicImageModel.mosaic(5));
+  }
+
+  @Test
   public void testGetImage() {
     resultPixels.add(new Pixel(10, 12, 13));
     assertEquals(resultPixels

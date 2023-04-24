@@ -3,7 +3,8 @@ package imageprocessing.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
+
 
 /**
  * This class represents an 8 bit image. It implements IImageModel. An image has a List of Pixel,
@@ -51,8 +52,9 @@ public class ImageModel implements IImageModel {
 
     //get random seed pixels
     List<Integer> rand = new ArrayList<>();
+    Random generator = new Random(seed);
     for (int i = 0; i < seed; i++) {
-      int randomNum = ThreadLocalRandom.current().nextInt(0, width * height + 1);
+      int randomNum = generator.nextInt(width*height);
       rand.add(randomNum);
     }
     Collections.sort(rand);
@@ -90,17 +92,17 @@ public class ImageModel implements IImageModel {
       seedClusterList.set(seedClusterList.indexOf(match), temp);
     }
 
+
     //Avg all pixel in cluster
     IPixel[] resultArr = new IPixel[height * width];
     for (List<Integer> cluster : seedClusterList) {
-      System.out.println(cluster);
       int R = 0;
       int G = 0;
       int B = 0;
-      for (int i : cluster) {
-        R += image.get(i).getRed();
-        G += image.get(i).getGreen();
-        B += image.get(i).getBlue();
+      for (int i = 1 ; i < cluster.size();i++) {
+        R += image.get(cluster.get(i)).getRed();
+        G += image.get(cluster.get(i)).getGreen();
+        B += image.get(cluster.get(i)).getBlue();
       }
       R /= cluster.size();
       G /= cluster.size();

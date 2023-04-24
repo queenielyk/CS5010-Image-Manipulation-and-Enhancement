@@ -1,5 +1,6 @@
 package imageprocessing.control;
 
+import imageprocessing.control.imagecommands.Mosaic;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -159,6 +160,26 @@ public class ControllerTest {
     bright.executeCommand(sourceImageModels);
 
     assertEquals(expectedImageModel.toString(), logs.toString());
+  }
+
+  @Test
+  public void testMosaicMock() throws InvalidFileException, IOException {
+    StringBuilder logs = new StringBuilder();
+    List<IImageModel> sourceImageModels = new ArrayList<>();
+
+    List<IPixel> image = new ArrayList<>();
+    image.add(new Pixel(10, 12, 13));
+    String imageName = "koala";
+    int height = 1;
+    int width = 1;
+    int maxValue = 200;
+
+    IImageModel mockImageModel = new MockImageModel(height, width, maxValue, image, logs);
+    sourceImageModels.add(mockImageModel);
+
+    IImageCommand mosaic = new Mosaic(imageName,"koala-mosaic",10);
+    mosaic.executeCommand(sourceImageModels);
+    assertEquals("10",logs.toString());
   }
 
   @Test

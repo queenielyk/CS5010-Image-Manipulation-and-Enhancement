@@ -361,6 +361,7 @@ public class ImageGUIView extends JFrame implements IImageGUIView {
       }).start();
       changeHistogram(controller);
     });
+    //----------------------------------Mosaic---------------------------
 
     greyscale.addActionListener(e -> {
       String component = greyscaleOptions.getSelectedItem().toString();
