@@ -4,15 +4,15 @@ Date: April 24 2023
 Professor: Amit Shesh
 
 ## Project Idea
-Given the code provided, we implemented the image `mosaic` features to the APP for all
-GUI/Text/Script.
+Given the code provided, we implemented the image `mosaic` features to the APP for all GUI/Text/Script.
 
 ## Instruction
 ```bash
-Text Mode:
-- mosaic seed srcImgName resultImgName (ex. mosaic 500 cat cat-mosaic)
-Smaple Script:
-- java -jar Assignment7.jar -file mosaicScript.txt
+# Text Mode
+mosaic {seed} {srcImgName} {resultImgName} (ex. mosaic 500 cat cat-mosaic)
+
+# Sample Script
+java -jar Assignment7.jar -file mosaicScript.txt
 ```
 
 ## Implementation Details
