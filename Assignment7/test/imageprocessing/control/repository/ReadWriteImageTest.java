@@ -1,23 +1,22 @@
 package imageprocessing.control.repository;
 
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import imageprocessing.control.exceptionhandler.InvalidFileException;
 import imageprocessing.model.IImageModel;
 import imageprocessing.model.IPixel;
 import imageprocessing.model.ImageModel;
 import imageprocessing.model.Pixel;
-
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
 
 /**
  * Tests ReadWriteImage Class.
  */
 public class ReadWriteImageTest {
+
   IReadWrite readWriteImage;
 
   private void initialize(String imageName, String filePath, String fileOperations) {
@@ -42,18 +41,6 @@ public class ReadWriteImageTest {
     assertEquals(expectedImageModel, actualImageModel);
   }
 
-  @Test
-  public void mosaic() throws InvalidFileException, IOException {
-    String destinationImageName = "destinationImage";
-    String filePath = "testPNGfolder/img.png";
-    String fileOperations = "load";
-
-    initialize(destinationImageName, filePath, fileOperations);
-
-    IImageModel actualImageModel = this.readWriteImage.readFromFile();
-    initialize("sourceImage", "testPNGfolder/img-mosaic.png", "save");
-    this.readWriteImage.saveToFile(actualImageModel.mosaic(100));
-  }
 
   @Test
   public void saveToFile() throws InvalidFileException, IOException {

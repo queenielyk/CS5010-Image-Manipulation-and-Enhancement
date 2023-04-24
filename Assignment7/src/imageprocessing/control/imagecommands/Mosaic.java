@@ -1,12 +1,15 @@
 package imageprocessing.control.imagecommands;
 
+import imageprocessing.control.exceptionhandler.InvalidFileException;
+import imageprocessing.model.IImageModel;
 import java.io.IOException;
 import java.util.List;
 
-import imageprocessing.control.exceptionhandler.InvalidFileException;
-import imageprocessing.model.IImageModel;
-
+/**
+ * This represents a Mosaic operation to the image.
+ */
 public class Mosaic extends ImageCommand {
+
   private final int seed;
 
   /**
@@ -22,7 +25,8 @@ public class Mosaic extends ImageCommand {
   }
 
   @Override
-  public IImageModel executeCommand(List<IImageModel> sourceImageModels) throws IOException, InvalidFileException {
+  public IImageModel executeCommand(List<IImageModel> sourceImageModels)
+      throws IOException, InvalidFileException {
     return sourceImageModels.get(0).mosaic(this.seed);
   }
 }

@@ -66,7 +66,7 @@ public class ImageModel implements IImageModel {
     return seedClusterList;
   }
 
-  private int HelpIndexOf(List<IPixel> list, IPixel p) {
+  private int helpIndexOf(List<IPixel> list, IPixel p) {
     if (p != null) {
       for (int i = 0; i < list.size(); i++) {
         if (p == list.get(i)) {
@@ -77,15 +77,15 @@ public class ImageModel implements IImageModel {
     return -1;
   }
 
-  private void MatchImgPixelWithCluster(List<List<Integer>> seedClusterList) {
+  private void matchImgPixelWithCluster(List<List<Integer>> seedClusterList) {
     //pair pixel with seedPix
     //Go through each pixel of image
     for (IPixel p : image) {
-      int px = HelpIndexOf(image, p) % width;
-      int py = HelpIndexOf(image, p) / height;
+      int px = helpIndexOf(image, p) % width;
+      int py = helpIndexOf(image, p) / height;
       List<Integer> match = null;
       double curDis;
-      double MinDis = Double.MAX_VALUE;
+      double minDis = Double.MAX_VALUE;
 
       //Go through all cluster
       for (List<Integer> cluster : seedClusterList) {
@@ -93,14 +93,14 @@ public class ImageModel implements IImageModel {
         int sy = cluster.get(0) / height;
         curDis = Math.hypot(Math.abs(sy - py), Math.abs(sx - px));
         //Update if Shorter Distance
-        if (curDis < MinDis) {
-          MinDis = curDis;
+        if (curDis < minDis) {
+          minDis = curDis;
           match = cluster;
         }
       }
       //add p to the closest cluster
       List<Integer> temp = match;
-      match.add(HelpIndexOf(image, p));
+      match.add(helpIndexOf(image, p));
       seedClusterList.set(seedClusterList.indexOf(match), temp);
     }
   }
@@ -108,24 +108,24 @@ public class ImageModel implements IImageModel {
   @Override
   public IImageModel mosaic(int seed) {
     List<List<Integer>> seedClusterList = getClusterList(seed);
-    MatchImgPixelWithCluster(seedClusterList);
+    matchImgPixelWithCluster(seedClusterList);
 
     //Avg all pixel in cluster
     IPixel[] resultArr = new IPixel[height * width];
     for (List<Integer> cluster : seedClusterList) {
-      int R = 0;
-      int G = 0;
-      int B = 0;
+      int r = 0;
+      int g = 0;
+      int b = 0;
       for (int i = 1; i < cluster.size(); i++) {
-        R += image.get(cluster.get(i)).getRed();
-        G += image.get(cluster.get(i)).getGreen();
-        B += image.get(cluster.get(i)).getBlue();
+        r += image.get(cluster.get(i)).getRed();
+        g += image.get(cluster.get(i)).getGreen();
+        b += image.get(cluster.get(i)).getBlue();
       }
-      R /= cluster.size();
-      G /= cluster.size();
-      B /= cluster.size();
+      r /= cluster.size();
+      g /= cluster.size();
+      b /= cluster.size();
       for (int i : cluster) {
-        resultArr[i] = new Pixel(R, G, B);
+        resultArr[i] = new Pixel(r, g, b);
       }
     }
 
@@ -207,12 +207,12 @@ public class ImageModel implements IImageModel {
     List<IPixel> sourceGreenImage = sourceGreenModel.getImage();
     List<IPixel> sourceBlueImage = sourceBlueModel.getImage();
 
-    if (checkEqualityOf3ImagesProperties(this.height, sourceGreenModel.getHeight()
-        , sourceBlueModel.getHeight())) {
+    if (checkEqualityOf3ImagesProperties(this.height, sourceGreenModel.getHeight(),
+        sourceBlueModel.getHeight())) {
       throw new IllegalArgumentException("The Images provided do not have the same Height.");
     }
-    if (checkEqualityOf3ImagesProperties(this.width, sourceGreenModel.getWidth()
-        , sourceBlueModel.getWidth())) {
+    if (checkEqualityOf3ImagesProperties(this.width, sourceGreenModel.getWidth(),
+        sourceBlueModel.getWidth())) {
       throw new IllegalArgumentException("The Images provided do not have the same Width.");
     }
 
@@ -448,8 +448,7 @@ public class ImageModel implements IImageModel {
    */
   @Override
   public boolean equals(Object o) {
-    if (o instanceof IImageModel) {
-      IImageModel imageModel = (IImageModel) o;
+    if (o instanceof IImageModel imageModel) {
 
       if (this.getHeight() != imageModel.getHeight() || this.getWidth() != imageModel.getWidth()) {
         return false;
