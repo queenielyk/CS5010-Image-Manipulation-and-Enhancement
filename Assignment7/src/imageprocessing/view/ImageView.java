@@ -19,7 +19,7 @@ public class ImageView implements IImageView {
 
   @Override
   public void showUserInputMessage() {
-    out.println("Enter image command (to quit the program enter q): ");
+    out.println("Enter image command (to execute and quit the program enter q): ");
   }
 
   @Override
